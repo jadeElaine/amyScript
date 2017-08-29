@@ -1,6 +1,6 @@
 mutable Integer experience( 0 );
 
-Function onUpdate <Boolean> () {
+Function on_update <Boolean> () {
     print("you have " + to_string(experience) + " experience!");
     String entry( lower( input() ) );
     if( entry == "quit" )

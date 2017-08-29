@@ -157,7 +157,7 @@ mutable FSM stateMachine {
 # # # # # # # # # # # # # # # # # # #
 #  Game introduction and main loop  #
 # # # # # # # # # # # # # # # # # # #
-Function onLoad <Nil> () {
+Function on_load <Nil> () {
     cls();
     print("   The city of Graradragonsville IS UNDER ATTACK!   ...AGAIN!\n");
     print("Ever since that asshole Momo escaped from the local prison, he has been\n");
@@ -174,7 +174,7 @@ Function onLoad <Nil> () {
     stateMachine.change(pole);
 };
 
-Function onUpdate <Boolean> () {
+Function on_update <Boolean> () {
     stateMachine.force_update();
     return !quitTrigger;
 };
