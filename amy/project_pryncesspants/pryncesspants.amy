@@ -157,22 +157,24 @@ mutable FSM stateMachine {
 # # # # # # # # # # # # # # # # # # #
 #  Game introduction and main loop  #
 # # # # # # # # # # # # # # # # # # #
-cls();
-print("   The city of Graradragonsville IS UNDER ATTACK!   ...AGAIN!\n");
-print("Ever since that asshole Momo escaped from the local prison, he has been\n");
-print("terrorizing the place with GIANT FUCKING MECHANICAL DINOSAURS! :0\n\n");
-print("   The local law enforcement squad has tried and failed to contain the\n");
-print("situation, leaving once-great landmarks laid to waste and the city itself to\n");
-print("the mercy of the merciless mecha-repitilian mercenaries..\n\n");
-print("   Only a true hero could possibly absolve this situation now. Only a very\n");
-print("heroic, very specific hero, which is YOU! That most vigilant and capable\n");
-print("of caped vigilantes...\n\n");
-print("   PRYNCESS PANTS!\n\n");
-print("------------------------------------------------------");
+Function onLoad <Nil> () {
+    cls();
+    print("   The city of Graradragonsville IS UNDER ATTACK!   ...AGAIN!\n");
+    print("Ever since that asshole Momo escaped from the local prison, he has been\n");
+    print("terrorizing the place with GIANT FUCKING MECHANICAL DINOSAURS! :0\n\n");
+    print("   The local law enforcement squad has tried and failed to contain the\n");
+    print("situation, leaving once-great landmarks laid to waste and the city itself to\n");
+    print("the mercy of the merciless mecha-repitilian mercenaries..\n\n");
+    print("   Only a true hero could possibly absolve this situation now. Only a very\n");
+    print("heroic, very specific hero, which is YOU! That most vigilant and capable\n");
+    print("of caped vigilantes...\n\n");
+    print("   PRYNCESS PANTS!\n\n");
+    print("------------------------------------------------------");
 
-stateMachine.change(pole);
-while( !quitTrigger )
-{
+    stateMachine.change(pole);
+};
+
+Function onUpdate <Boolean> () {
     stateMachine.force_update();
-}
-
+    return !quitTrigger;
+};
