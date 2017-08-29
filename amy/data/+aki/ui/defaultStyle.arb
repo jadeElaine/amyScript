@@ -1,0 +1,291 @@
+ImageParam
+{
+	Texture ""
+	Tint WHITE
+	GridSize < 1 1 >
+	TileId < 0 0 >
+	Slicing < 0 1 0 1 >
+}
+
+BitmapFont
+{
+	Texture data/+aki/font/garamondExport.png
+	Size 16
+	Tint WHITE
+}
+
+Base
+{
+	Visible true
+	Enabled true
+	Localization ""
+	Tooltip ""
+	Children <>
+}
+
+Image
+{
+	
+}
+
+Label
+{
+	Font BitmapFont
+	Center true
+	Text ""
+}
+
+Button
+{
+	Font BitmapFont
+	UnpressedImage 
+	{ 
+		Texture data/+aki/ui/assets/buttonUnpressed.tif
+		Tint WHITE
+		GridSize < 1 1 >
+		TileId < 0 0 >
+		Slicing < .3 .7 .3 .7 >
+	}
+	PressedImage 
+	{ 
+		Texture data/+aki/ui/assets/buttonPressed.tif
+		Tint WHITE
+		GridSize < 1 1 >
+		TileId < 0 0 >
+		Slicing < .3 .7 .3 .7 >
+	}
+	HighlightImage
+	{ 
+		Texture data/+aki/ui/assets/buttonHighlight.tif
+		Tint WHITE
+		GridSize < 1 1 >
+		TileId < 0 0 >
+		Slicing < .3 .7 .3 .7 >
+	}
+	Text ""
+}
+
+Slider
+{
+	Bar 
+	{ 
+		Texture data/+aki/ui/assets/sliderBar.tif
+		Tint WHITE
+		GridSize < 1 1 >
+		TileId < 0 0 >
+		Slicing < .3 .7 0 1 >
+	}
+	Nugget 
+	{ 
+		Texture data/+aki/ui/assets/sliderNugget.tif
+		Tint WHITE
+		GridSize < 1 1 >
+		TileId < 0 0 >
+		Slicing < 0 1 0 1 >
+	}
+	BackWidth 0
+	NuggetWidth 0
+}
+
+Scrollbar
+{
+	Bar
+	{
+		Texture data/+aki/ui/assets/textfieldBackground.png
+		Tint WHITE
+		GridSize < 1 1 >
+		TileId < 0 0 >
+		Slicing < .3 .7 .3 .7 >
+	}
+	Nugget Button
+	Button Button
+	MaxValue 100
+	ButtonStep 1
+	BarStep 10
+	Vertical false
+	NuggetSize 0
+	ButtonSize 0
+}
+
+ProgressBar
+{
+	Transition
+	{
+		Texture data/+aki/ui/assets/leftToRightFade.png
+		Tint WHITE
+		GridSize < 1 1 >
+		TileId < 0 0 >
+		Slicing < 0 1 0 1 >
+	}
+	Background
+	{
+		Texture data/+aki/ui/assets/textfieldBackground.png
+		Tint WHITE
+		GridSize < 1 1 >
+		TileId < 0 0 >
+		Slicing < .3 .7 .3 .7 >
+	}
+	Foreground
+	{
+		Texture ""
+		Tint WHITE
+		GridSize < 1 1 >
+		TileId < 0 0 >
+		Slicing < 0 1 0 1 >
+	}
+	Value 0
+}
+
+ImageSampler
+{
+	ImageFile ""
+	MinRange 16 
+	MaxRange 256
+	Range 128 
+	RangeStep 16
+}
+
+TextField
+{
+	Font BitmapFont
+	Background
+	{
+		Texture data/+aki/ui/assets/textfieldBackground.png
+		Tint WHITE
+		GridSize < 1 1 >
+		TileId < 0 0 >
+		Slicing < .3 .7 .3 .7 >
+	}
+	MaxLength 256
+	WordWrap false
+	CanNewLine false
+	Obscure false
+	Centered false
+	Text ""
+}
+
+Radio
+{
+	Font BitmapFont
+	Items < >
+}
+
+Dropdown
+{
+	Font BitmapFont
+	UnpressedImage 
+	{ 
+		Texture data/+aki/ui/assets/buttonUnpressed.tif
+		Tint WHITE
+		GridSize < 1 1 >
+		TileId < 0 0 >
+		Slicing < .3 .7 .3 .7 >
+	}
+	PressedImage 
+	{ 
+		Texture data/+aki/ui/assets/buttonPressed.tif
+		Tint WHITE
+		GridSize < 1 1 >
+		TileId < 0 0 >
+		Slicing < .3 .7 .3 .7 >
+	}
+	HighlightImage
+	{ 
+		Texture data/+aki/ui/assets/buttonHighlight.tif
+		Tint WHITE
+		GridSize < 1 1 >
+		TileId < 0 0 >
+		Slicing < .3 .7 .3 .7 >
+	}
+	DropImage
+	{ 
+		Texture data/+aki/ui/assets/dropdown.tif
+		Tint WHITE
+		GridSize < 1 1 >
+		TileId < 0 0 >
+		Slicing < .3 .7 .3 .7 >
+	}
+	Items < >
+}
+
+ListBox
+{
+	Font BitmapFont
+	Background
+	{
+		Texture data/+aki/ui/assets/textfieldBackground.png
+		Tint WHITE
+		GridSize < 1 1 >
+		TileId < 0 0 >
+		Slicing < .3 .7 .3 .7 >
+	}
+	Items < >
+}
+
+DirBox
+{
+	Font BitmapFont
+	Background
+	{
+		Texture data/+aki/ui/assets/textfieldBackground.png
+		Tint WHITE
+		GridSize < 1 1 >
+		TileId < 0 0 >
+		Slicing < .3 .7 .3 .7 >
+	}
+	Path "."
+	Items < >
+}
+
+FileBox
+{
+	Font BitmapFont
+	Background
+	{
+		Texture data/+aki/ui/assets/textfieldBackground.png
+		Tint WHITE
+		GridSize < 1 1 >
+		TileId < 0 0 >
+		Slicing < .3 .7 .3 .7 >
+	}
+	Path "."
+	Filter ".*"
+	Items < >
+}
+
+Frame
+{
+	ScrollDelegate ""
+}
+
+FrameGrid
+{
+	ScrollDelegate ""
+	MaxRowItems 0
+	MaxRowWidth 0
+}
+
+FrameTabs
+{
+}
+
+InputConfigAnalog
+{
+	Font BitmapFont
+	LabelPercent 0.2
+	AxisPercent 0.2
+	OutputPercent 0.08
+	InvertWidth 96
+	InvertText "Invert"
+	DeadzoneText "Deadzone"
+	SensitivityText "Sensitivity"
+	Text ""
+}
+
+InputConfigDigital
+{
+	Font BitmapFont
+	LabelPercent 0.2
+	MaskerWidth 96
+	Text ""
+}

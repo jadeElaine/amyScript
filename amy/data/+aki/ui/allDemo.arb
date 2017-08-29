@@ -1,0 +1,195 @@
+Name Main
+X { 1 < EXACT EDGE 20 0 0 > 2 < EXACT EDGE -20 1 1 > }
+Y { 1 < EXACT EDGE 20 0 0 > 2 < EXACT EDGE -20 1 1 > }
+
+Children
+{
+	# GENERATION_1
+	Image
+	{
+		Texture FRAME
+		Slicing < .3 .3 .7 .7 >
+	}
+	Label
+	{
+		Name TestLabel
+		Zone < 16 16 128 16 >
+		Text "Label Text"
+	}
+	Button
+	{
+		Name TestButton
+		Zone < 16 32 128 16 >
+		Text Button
+	}
+	Image
+	{
+		Name TestImage
+		Zone < 160 16 64 64 >
+	}
+	
+	# GENERATION_2
+	Dropdown
+	{
+		Name TestDropdown
+		Zone < 16 64 128 256 >
+		Items
+		{
+			Item Option1
+			Item Option2
+			Item Option3
+			Item Option4
+		}
+	}
+	Radio
+	{
+		Name TestRadio
+		Zone < 16 128 128 64 >
+		Items
+		{
+			Item Channel1
+			Item Channel2
+			Item Channel3
+			Item Channel4
+		}
+	}
+	Slider
+	{
+		Name TestSlider
+		Zone < 16 208 128 16 >
+	}
+	ImageSampler
+	{
+		Name TestImageSampler
+		Zone < -16 16 256 256 > Anchor < 1 0 > Origin < 1 0 >
+		Tooltip "Butt face"
+	}
+	
+	# GENERATION_3
+	TextField
+	{
+		Name TestTextField
+		Zone < 160 128 384 384 >
+		CanNewLine true
+	}
+	ListBox
+	{
+		Name TestListBox
+		Zone < 160 520 384 100 >
+		Items
+		{
+			Item List1
+			Item List2
+			Item List3
+			Item List4
+		}
+	}
+	DirBox
+	{
+		Name TestDirBox
+		Zone < 16 230 128 220 >
+	}
+	FileBox
+	{
+		Name TestFileBox
+		Zone < 16 480 128 220 >
+	}
+	
+	# GENERATION_4
+	InputConfigDigital
+	{
+		Zone < 160 630 800 16 >
+		Text Digital
+	}
+	InputConfigAnalog
+	{
+		Zone < 160 650 800 16 >
+		Text Analog
+	}
+	
+	FrameTabs
+	{
+		Name TestTabs
+		Zone < -16 288 272 256 > Anchor < 1 0 > Origin < 1 0 >
+		Tab:Scroll
+		{
+			Frame
+			{
+				ScrollDelegate Bars
+				Children
+				{
+					Button
+					{
+						Zone < 0 0 128 16 >
+						Text B1
+					}
+					Button
+					{
+						Zone < 200 0 128 16 >
+						Text B2
+					}
+					Button
+					{
+						Zone < 100 100 128 16 >
+						Text B3
+					}
+					Button
+					{
+						Zone < 0 200 128 16 >
+						Text B4
+					}
+					Button
+					{
+						Zone < 200 200 128 16 >
+						Text B5
+					}
+				}
+			}
+		}
+		Tab:Swipe
+		{
+			Frame
+			{
+				ScrollDelegate Swipe
+				Children
+				{
+					Button
+					{
+						Zone < 0 0 128 16 >
+						Text SB1
+					}
+					Button
+					{
+						Zone < 200 0 128 16 >
+						Text SB2
+					}
+					Button
+					{
+						Zone < 100 150 128 16 >
+						Text SB3
+					}
+					Button
+					{
+						Zone < 0 300 128 16 >
+						Text SB4
+					}
+					Button
+					{
+						Zone < 200 300 128 16 >
+						Text SB5
+					}
+				}
+			}
+		}
+		Tab:Grid
+		{
+			FrameGrid
+			{
+				Name Grid
+				ScrollDelegate Bars
+				MaxRowWidth 256
+				MaxRowItems 3
+			}
+		}
+	}
+}

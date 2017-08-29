@@ -1,0 +1,2 @@
+These assets are meant to be used as the default fallbacks for the +fx module.  
+They are free use, and should be distributed with any project which includes the FX project.

@@ -1,0 +1,178 @@
+mutable Boolean quitTrigger( false );
+String badTextResponse( "That made no sense whatsoever." );
+
+mutable Dictionary items {
+    pants : Dictionary {
+        defaultResponse : "The pants give you the power of sexy.. and crimefighting!"
+    },
+    key : Dictionary {
+        defaultResponse : "There isn't anything here to unlock, but you practice turning the KEY anyway."
+    }
+};
+
+Function buildHelperString <String> ( links : Array ) {
+    mutable String result = " [";
+
+    Array itemKeys( items.keys() );
+    mutable Boolean first( true );
+    for( mutable Integer i=0; i<itemKeys.size(); i+=1 )
+    {
+        if( first ) { first = false; } else { result += ", "; }
+        result += "USE " + upper(itemKeys[i]);
+    }
+    for( mutable Integer i=0; i<links.size(); i+=1 )
+    {
+        if( first ) { first = false; } else { result += ", "; }
+        result += "GO " + upper(links[i]);
+    }
+    
+    result += "]>";
+    return result;
+};
+
+# # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # #
+#  Main io function to determine what to do from the player's input #
+# # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # #
+Function processInput <String> ( hostState : FSMState ) {
+    print( buildHelperString( hostState.links ) );
+    String entry( lower( input() ) );
+    
+    # quit game
+    if( entry == "quit" )
+    { 
+        quitTrigger = true; 
+        return "";
+    }
+    
+    # transition to other states with "go"
+    for( mutable Integer i=0; i<hostState.links.size(); i+=1 )
+    {
+        if( entry == "go " + hostState.links[i] )
+        {
+            return hostState.links[i];
+        }
+    }
+    
+    # use items in area
+    Array itemKeys( items.keys() );
+    for( mutable Integer i=0; i<itemKeys.size(); i+=1 )
+    {
+        if( entry == "use " + itemKeys[i] )
+        {
+            if( hostState.contains_key( "on_" + itemKeys[i] ) )
+            {
+                return hostState["on_" + itemKeys[i]]();
+            }
+            else
+            {
+                print( "\n   " + items[itemKeys[i]].defaultResponse );
+                return "";
+            }
+        }
+    }
+    
+    print( "You typed " + entry + "\n\n" );
+    return "";
+};
+
+# # # # # # # # # # # # # # # # # #
+#  Definitions of all game states #
+# # # # # # # # # # # # # # # # # #
+mutable FSM stateMachine {
+    pole : { 
+        on_update : Function <String> ( timeStep : Real ) { 
+            print("\n\n   You stand atop of a telephone POLE. The wind buffets your hair about\n");
+            print("epically. You look really awesome and stuff, but maybe you should think about\n");
+            print("hopping down to the STREET.\n\n");
+            return processInput( this );
+        },
+        
+        links : Array <String> { street }
+    },
+    street : {
+        on_update : Function <String> ( timeStep : Real ) {
+            print("\n\n   The STREET is mostly deserted, since everyone is inside hiding from Momo and\n");
+            print("his Mechasaurs.\n");
+            print("   The old town SQUARE is nearby, or there's always epic telephone POLE\n");
+            print("standing to be done.\n\n");
+            return processInput( this );
+        },
+        links : Array <String> { square, pole }
+    },
+    square : {
+        on_update : Function <String> ( timeStep : Real ) {
+            print("\n\n   This is the old town SQUARE of what is now the city of Graradragonsville.\n");
+            print("A statue of Igjhklyhl the Valiant stands at its center, with a young Failagon\n");
+            print("whelp at his feet.\n");
+            print("   There are four areas on each side of the SQUARE: the BANK, the PRISON, the\n");
+            print("DRIVETHRU and the STREET.\n\n");
+            return processInput( this );
+        },
+        links : Array <String> { bank, prison, drivethru, street }
+    },
+    bank : {
+        on_update : Function <String> ( timeStep : Real ) {
+            print("\n\n   Holy fuck a bank and it's getting held up by a mecha-dactyl arrrgh!\n");
+            print("The mechadactyl can kill you and stuff, and we get a bad ending if you are not\nteh smart.\n\n");
+            return processInput( this );
+        },
+        links : Array <String> { square }
+    },
+    prison : {
+        on_update : Function <String> ( timeStep : Real ) {
+            print("\n\n   You stand inside the Graradragonsville PRISON. Some of the city's most\n");
+            print("notorious criminals are held here. Most of them have you to thank for it.\n\n");
+            return processInput( this );
+        },
+        on_key : Function <String> () {
+            print("\n\n   Dude.  that is a fucking terrible idea...\n\n");
+            return "";
+        },
+        links : Array <String> { square }
+    },
+    drivethru : {
+        on_update : Function <String> ( timeStep : Real ) {
+            print("\n\n   Next door is the CLEANERS. You can also return to the SQUARE.\n\n");
+            return processInput( this );
+        },
+        links : Array <String> { square, cleaners }
+    },
+    cleaners : {
+        on_update : Function <String> ( timeStep : Real ) {
+            print("\n\n   You can enter the cleaners, but need a KEY to do... something.\n\n");
+            return processInput( this );
+        },
+        on_key : Function <String> () {
+            print("\n\n   You unlock the secret victory box...\n\n");
+            print("AND EVERYTHING IS FIXED AND YOU WIN!\n\n");
+            input();
+            
+            quitTrigger = true;
+            return "";
+        },
+        links : Array <String> { drivethru }
+    }
+};
+
+# # # # # # # # # # # # # # # # # # #
+#  Game introduction and main loop  #
+# # # # # # # # # # # # # # # # # # #
+cls();
+print("   The city of Graradragonsville IS UNDER ATTACK!   ...AGAIN!\n");
+print("Ever since that asshole Momo escaped from the local prison, he has been\n");
+print("terrorizing the place with GIANT FUCKING MECHANICAL DINOSAURS! :0\n\n");
+print("   The local law enforcement squad has tried and failed to contain the\n");
+print("situation, leaving once-great landmarks laid to waste and the city itself to\n");
+print("the mercy of the merciless mecha-repitilian mercenaries..\n\n");
+print("   Only a true hero could possibly absolve this situation now. Only a very\n");
+print("heroic, very specific hero, which is YOU! That most vigilant and capable\n");
+print("of caped vigilantes...\n\n");
+print("   PRYNCESS PANTS!\n\n");
+print("------------------------------------------------------");
+
+stateMachine.change(pole);
+while( !quitTrigger )
+{
+    stateMachine.force_update();
+}
+

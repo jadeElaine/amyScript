@@ -1,0 +1,3 @@
+These assets are meant to be used as the default fallbacks for the +tara module.  
+They are free use.  The shader should be included with any project that relies on tara.
+The spinelet model is used by the tara test project, but is not necessary to child projects using tara.

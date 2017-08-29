@@ -1,0 +1,25 @@
+resolution < 0 0 >
+fullscreen 1
+resizeable 0
+
+shader 1
+vbo 1
+displaylist 1
+framebuffer 1
+antialias 0
+
+soundfrequency 48000
+soundchannels 16
+soundchunksize 2048
+
+listenport 2056
+webpemfile ""
+profilelog ""
+bitmapfont "data/+aki/font/garamondExport.png"
+uipath "data/+aki/ui/assets"
+language english
+stellarepo ""
+mnemosynerepo ""
+mnemosyneindustryfiles ""
+heartbeatSonglist "local/heartbeatSonglist.arb"
+prefermodules < >
