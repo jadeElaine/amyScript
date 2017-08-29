@@ -1,0 +1,39 @@
+mutable Vector2D position(100, 100);
+
+Function on_load <Nil> () {
+    input_hide_mouse();
+};
+
+Function on_update <Boolean> () {
+
+    if( input_press( escape ) )
+    {
+        return false;
+    }
+
+    if( input_press( up ) )
+    {
+        position.y -= 10;
+    }
+    if( input_press( down ) )
+    {
+        position.y += 10;
+    }
+
+    return true;
+};
+
+Function on_2d <Nil> () {  
+    graphics_box( IntegerVector2D(0,0), graphics_get_resolution(), Color(blue) );
+
+    Integer screenCenter(graphics_get_resolution().x()/2);
+    graphics_print_centered( screenCenter, 8, "Press escape to quit", white );
+    
+    IntegerVector2D mouseCursor( input_cursor() );
+    graphics_line(mouseCursor, mouseCursor + IntegerVector2D(-10, 5), Color(yellow) );
+    graphics_line(mouseCursor, mouseCursor + IntegerVector2D(10, 5), Color(yellow) );
+    graphics_line(mouseCursor, mouseCursor + IntegerVector2D(0, -10), Color(yellow) );
+       
+    graphics_box_centered( position, 20, Color(red) );
+    graphics_box_centered( position, 10, Color(yellow) );    
+};
