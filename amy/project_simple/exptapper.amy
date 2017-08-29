@@ -1,16 +1,24 @@
 mutable Integer experience( 0 );
 
 Function on_update <Boolean> () {
-    print("you have " + to_string(experience) + " experience!");
-    String entry( lower( input() ) );
-    if( entry == "quit" )
+
+    if( input_press( escape ) )
     {
         return false;
     }
-    if( entry == "win" )
+
+    if( input_press( space ) )
     {
         experience += 100;
     }
     
     return true;
+};
+
+Function on_2d <Nil> () {  
+    Integer screenCenter(graphics_get_resolution().x()/2);
+    
+    graphics_print_centered( screenCenter, 8, "Press Spacebar to get more experience, escape to quit", white );
+    
+    graphics_print( 0, 80, "Experience " + experience, red );
 };
