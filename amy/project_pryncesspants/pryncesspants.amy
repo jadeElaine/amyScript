@@ -158,6 +158,8 @@ mutable FSM stateMachine {
 #  Game introduction and main loop  #
 # # # # # # # # # # # # # # # # # # #
 Function on_load <Nil> () {
+    graphics_print(0,0, "This game is meant to be played in the console, type \"quit\" when done", grey);
+
     console_clear();
     console_print("   The city of Graradragonsville IS UNDER ATTACK!   ...AGAIN!\n");
     console_print("Ever since that asshole Momo escaped from the local prison, he has been\n");

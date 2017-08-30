@@ -20,5 +20,5 @@ Function on_2d <Nil> () {
     
     graphics_print_centered( screenCenter, 8, "Press Spacebar to get more experience, escape to quit", white );
     
-    graphics_print( 0, 80, "Experience " + experience, red );
+    graphics_print( 0, 80, "Experience " + experience, yellow );
 };
