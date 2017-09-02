@@ -1,5 +1,5 @@
-resolution < 0 0 >
-fullscreen 1
+resolution < 1024 768 >
+fullscreen 0
 resizeable 0
 
 shader 1
