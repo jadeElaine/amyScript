@@ -1,11 +1,11 @@
 
 Function on_load <Nil> () {
     input_hide_mouse();
+    load_player();
 };
 
 Function on_update <Boolean> () {
-	Real deltaTime(1.0/60.0);
-	
+		
     if( input_press( escape ) )
     {
         return false;
@@ -17,18 +17,18 @@ Function on_update <Boolean> () {
 
 
 Function on_2d <Nil> () {  
-    graphics_box( IntegerVector2D(0,0), graphics_get_resolution(), Color(blue) );
+    graphics_box( IntegerVector2D(0,0), graphics_get_resolution(), Color("9e9e9e"));
 
     Integer screenCenter(graphics_get_resolution().x()/2);
-    graphics_print_centered( screenCenter, 8, "Press escape to quit", white );
+    graphics_print_centered( screenCenter, 8, "Press escape to quit", "000000" );
     
-    IntegerVector2D mouseCursor( input_cursor() );
+    IntegerVector2D mouseCursor( input_cursor());
     graphics_line(mouseCursor, mouseCursor + IntegerVector2D(-10, 5), Color(yellow) );
     graphics_line(mouseCursor, mouseCursor + IntegerVector2D(10, 5), Color(yellow) );
     graphics_line(mouseCursor, mouseCursor + IntegerVector2D(0, -10), Color(yellow) );
     
     draw_player();
        
-    graphics_print_centered( screenCenter, 30, to_string(position.x)+ " "+ to_string(position.y));
-    graphics_print_centered( screenCenter, 60, to_string(direction.x)+ " "+ to_string(direction.y));
+    graphics_print_centered( screenCenter, 30, "Thor's coordinates: " + to_string(position.x)+ " "+ to_string(position.y), "000000");
+    graphics_print_centered( screenCenter, 60, "Hammer coordinates: " + to_string(hammerPosition.x)+ " "+ to_string(hammerPosition.y), "000000");
 };
