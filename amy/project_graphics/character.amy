@@ -8,7 +8,7 @@ Real hoverTime (2.0);
 mutable Real hoverTicker (0.0);
 
 Function fly_back_player <Nil> () {
-	
+
 };
 
 Function update_player <Nil> () {
