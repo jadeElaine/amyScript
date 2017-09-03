@@ -1,0 +1,23 @@
+
+Function on_load <Nil> () {
+    input_hide_mouse();
+};
+
+Function on_update <Boolean> () {
+
+    if( input_press( escape ) )
+    {
+        return false;
+    }
+
+    return true;
+};
+
+
+Function on_2d <Nil> () {  
+    graphics_box( IntegerVector2D(0,0), graphics_get_resolution(), Color(blue) );
+
+    Integer screenCenter(graphics_get_resolution().x()/2);
+    graphics_print_centered( screenCenter, 8, "FPS: " + to_string(get_fps()), white );
+    graphics_print_centered( screenCenter, 24, "DT: " + to_string(get_delta_time()), white );
+};
