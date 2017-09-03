@@ -1,0 +1,73 @@
+mutable Vector2D position(100, 100);
+mutable Vector2D direction(0, 0);
+Integer playerSize(20);
+Real playerSpeed(400.0);
+Integer hammerSize(10);
+Real hammerSpeed(1024.0);
+Real hoverTime (2.0);
+mutable Real hoverTicker (0.0);
+
+Function fly_back_player <Nil> () {
+	
+};
+
+Function update_player <Nil> () {
+	# wasd movement controls
+    if( input( w ))
+    {
+        position.y -= playerSpeed*deltaTime;
+    }
+    if( input( s ))
+    {
+        position.y += playerSpeed*deltaTime;
+    }
+    if( input( a ))
+    {
+        position.x -= playerSpeed*deltaTime;
+    }
+    if( input( d ))
+    {
+        position.x += playerSpeed*deltaTime;
+    }
+    position = bind_on_screen(position,playerSize);
+
+    # arrow hammer controls
+    mutable Boolean isHammerControlled(false);
+
+    if( input( up ) )
+    {
+        direction.y -= hammerSpeed*deltaTime;
+        isHammerControlled = true;
+    }
+    if( input( down ) )
+    {
+        direction.y += hammerSpeed*deltaTime;
+        isHammerControlled = true;
+    }
+    if( input( left ) )
+    {
+        direction.x -= hammerSpeed*deltaTime;
+        isHammerControlled = true;
+    }
+    if( input( right ) )
+    {
+        direction.x += hammerSpeed*deltaTime;
+        isHammerControlled = true;
+    }
+    if( isHammerControlled) {
+    	hoverTicker = 0.0;
+    }
+    else
+   	{
+   		hoverTicker += deltaTime;
+   		if (hoverTicker > hoverTime)
+   		{
+   			fly_back_player();
+   		}
+   	}
+};
+
+Function draw_player <Nil> () {
+	graphics_box_centered( position, playerSize*2, Color(red) );
+    graphics_box_centered( position+ direction, 10, Color(yellow) );	
+};
