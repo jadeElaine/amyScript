@@ -1,0 +1,81 @@
+mutable Vector2D position (100, 100);
+Integer playerSize (20);
+Real playerSpeed (400.0);
+Integer hammerSize (10);
+Real hammerSpeed (1024.0);
+Real hoverTime (2.0);
+mutable Real hoverTicker (0.0);
+Vector2D hammerRestingPosition (-15, -15);
+mutable Vector2D hammerPosition (hammerRestingPosition);
+mutable Integer characterDirection (0);
+
+Function update_player <Nil> () {
+    Real deltaTime(1.0/60.0);
+	# wasd movement controls
+    if (input(w))
+    {
+        position.y -= playerSpeed * deltaTime;
+        characterDirection = 90;
+    }
+    if (input(s))
+    {
+        position.y += playerSpeed * deltaTime;
+        characterDirection = 180;
+    }
+    if (input(a))
+    {
+        position.x -= playerSpeed * deltaTime;
+        characterDirection = 270;
+    }
+    if (input(d))
+    {
+        position.x += playerSpeed * deltaTime;
+        characterDirection = 360;
+    }
+    position = bind_on_screen(position, playerSize);
+
+    # arrow hammer controls
+    mutable Boolean isHammerControlled(false);
+
+    if (input(up))
+    {
+        hammerPosition.y -= hammerSpeed * deltaTime;
+        isHammerControlled = true;
+    }
+    if (input(down))
+    {
+        hammerPosition.y += hammerSpeed * deltaTime;
+        isHammerControlled = true;
+    }
+    if (input(left))
+    {
+        hammerPosition.x -= hammerSpeed * deltaTime;
+        isHammerControlled = true;
+    }
+    if (input(right))
+    {
+        hammerPosition.x += hammerSpeed * deltaTime;
+        isHammerControlled = true;
+    }
+    if (isHammerControlled) 
+    {
+    	hoverTicker = 0.0;
+    }
+    else
+   	{
+   		hoverTicker += deltaTime;
+   		if (hoverTicker > hoverTime)
+   		{
+   			hammerPosition = move_to_point(hammerPosition, hammerRestingPosition, hammerSpeed * deltaTime);
+   		}
+   	}
+};
+
+Function load_player <Nil> () {
+    position = to_vector2d(graphics_get_resolution() / 2);
+};
+
+Function draw_player <Nil> () {
+	graphics_box_centered(position, playerSize * 2, Color("2e2e2e"));
+    graphics_box_centered(position + hammerPosition, 10, Color(yellow));	
+};
