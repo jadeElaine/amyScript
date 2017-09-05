@@ -25,7 +25,7 @@ Function on_update <Boolean> () {
 };
 
 Function on_2d <Nil> () {  
-    Integer screenCenter(graphics_get_resolution().x()/2);
+    Integer screenCenter(graphics_get_resolution().x/2);
     
     graphics_print_centered( screenCenter, 8, "Press Spacebar to get more experience, escape to quit", white );
     

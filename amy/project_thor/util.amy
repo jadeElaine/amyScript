@@ -10,13 +10,13 @@ Function bind_on_screen <Vector2D>(originalPosition:Vector2D, size:Integer) {
 	{
 		result.y = size;
 	}
-	if (result.x + size > resolution.x())
+	if (result.x + size > resolution.x)
 	{
-		result.x = resolution.x() - size;
+		result.x = resolution.x - size;
 	}
-	if (result.y + size > resolution.y())
+	if (result.y + size > resolution.y)
 	{
-		result.y = resolution.y() - size;
+		result.y = resolution.y - size;
 	}
 
 	return result;
@@ -24,7 +24,7 @@ Function bind_on_screen <Vector2D>(originalPosition:Vector2D, size:Integer) {
 
 Function move_to_point <Vector2D> (originalPosition:Vector2D, goal:Vector2D, step:Real) {
     mutable Vector2D result(originalPosition);
-    Vector2D directionToGoal((goal - result).unit());
+    Vector2D directionToGoal((goal - result).normalized());
     Vector2D stepVector(directionToGoal*step);
     if (stepVector.magnitude() >(goal - result).magnitude())
     {
