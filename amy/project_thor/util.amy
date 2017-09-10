@@ -1,6 +1,6 @@
 Function bind_on_screen <Vector2D>(originalPosition:Vector2D, size:Integer) {
 	mutable Vector2D result(originalPosition);
-	IntegerVector2D resolution(graphics_get_resolution());
+	IntegerVector2D resolution(graphics.get_resolution());
 	
 	if (result.x - size < 0)
 	{

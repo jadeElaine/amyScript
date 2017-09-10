@@ -3,12 +3,12 @@ mutable Integer pLevel( 1 );
 
 Function on_update <Boolean> () {
 
-    if( input_press( escape ) )
+    if( input.press( escape ) )
     {
         return false;
     }
 
-    if( input_press( space ) )
+    if( input.press( space ) )
     {
         if( experience < 2000)
         {
@@ -25,10 +25,10 @@ Function on_update <Boolean> () {
 };
 
 Function on_2d <Nil> () {  
-    Integer screenCenter(graphics_get_resolution().x/2);
+    Integer screenCenter(graphics.get_resolution().x/2);
     
-    graphics_print_centered( screenCenter, 8, "Press Spacebar to get more experience, escape to quit", white );
+    graphics.print_centered( screenCenter, 8, "Press Spacebar to get more experience, escape to quit", white );
     
-    graphics_print( 0, 40, "Level: " + pLevel, "7d7d7d" );
-    graphics_print( 0, 80, "Experience: " + experience, "7e7e7e" );
+    graphics.print( 0, 40, "Level: " + pLevel, "7d7d7d" );
+    graphics.print( 0, 80, "Experience: " + experience, "7e7e7e" );
 };

@@ -1,17 +1,18 @@
 resolution < 1024 768 >
-fullscreen 0
-resizeable 0
+fullscreen false
+resizeable false
 
-shader 1
-vbo 1
-displaylist 1
-framebuffer 1
+shader true
+vbo true
+displaylist true
+framebuffer true
 antialias 0
 
 soundfrequency 48000
 soundchannels 16
 soundchunksize 2048
 
+maxframerate 0
 listenport 2056
 webpemfile ""
 profilelog ""

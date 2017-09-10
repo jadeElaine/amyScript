@@ -12,22 +12,22 @@ mutable Integer characterDirection (0);
 Function update_player <Nil> () {
     Real deltaTime(1.0/60.0);
 	# wasd movement controls
-    if (input(w))
+    if (input.hold(w))
     {
         position.y -= playerSpeed * deltaTime;
         characterDirection = 90;
     }
-    if (input(s))
+    if (input.hold(s))
     {
         position.y += playerSpeed * deltaTime;
         characterDirection = 180;
     }
-    if (input(a))
+    if (input.hold(a))
     {
         position.x -= playerSpeed * deltaTime;
         characterDirection = 270;
     }
-    if (input(d))
+    if (input.hold(d))
     {
         position.x += playerSpeed * deltaTime;
         characterDirection = 360;
@@ -37,22 +37,22 @@ Function update_player <Nil> () {
     # arrow hammer controls
     mutable Boolean isHammerControlled(false);
 
-    if (input(up))
+    if (input.hold(up))
     {
         hammerPosition.y -= hammerSpeed * deltaTime;
         isHammerControlled = true;
     }
-    if (input(down))
+    if (input.hold(down))
     {
         hammerPosition.y += hammerSpeed * deltaTime;
         isHammerControlled = true;
     }
-    if (input(left))
+    if (input.hold(left))
     {
         hammerPosition.x -= hammerSpeed * deltaTime;
         isHammerControlled = true;
     }
-    if (input(right))
+    if (input.hold(right))
     {
         hammerPosition.x += hammerSpeed * deltaTime;
         isHammerControlled = true;
@@ -72,10 +72,10 @@ Function update_player <Nil> () {
 };
 
 Function load_player <Nil> () {
-    position = to_vector2d(graphics_get_resolution() / 2);
+    position = to_vector2d(graphics.get_resolution() / 2);
 };
 
 Function draw_player <Nil> () {
-	graphics_box_centered(position, playerSize * 2, Color("2e2e2e"));
-    graphics_box_centered(position + hammerPosition, 10, Color(yellow));	
+	graphics.box_centered(position, playerSize * 2, "2e2e2e");
+    graphics.box_centered(position + hammerPosition, 10, yellow);
 };
