@@ -1,0 +1,6 @@
+
+# amy files in subdirectories cause all functions to be placed in a dictionary container object
+# this function will automatically be available as "util.get_content"
+Function get_content <Wildcard> () {
+    return cyan;
+};

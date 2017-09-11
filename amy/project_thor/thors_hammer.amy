@@ -23,9 +23,9 @@ Function on_2d <Nil> () {
     graphics.print_centered( screenCenter, 8, "Press escape to quit", "000000" );
     
     IntegerVector2D mouseCursor( input.cursor());
-    graphics.line(mouseCursor, mouseCursor + IntegerVector2D(-10, 5), yellow );
-    graphics.line(mouseCursor, mouseCursor + IntegerVector2D(10, 5), yellow );
-    graphics.line(mouseCursor, mouseCursor + IntegerVector2D(0, -10), yellow );
+    graphics.line(mouseCursor, mouseCursor + IntegerVector2D(-10, 5), 1, yellow );
+    graphics.line(mouseCursor, mouseCursor + IntegerVector2D(10, 5), 1, yellow );
+    graphics.line(mouseCursor, mouseCursor + IntegerVector2D(0, -10), 1, yellow );
     
     draw_player();
     

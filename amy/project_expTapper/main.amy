@@ -1,0 +1,34 @@
+mutable Integer experience( 0 );
+mutable Integer pLevel( 1 );
+
+Function on_update <Boolean> () {
+
+    if( input.press( escape ) )
+    {
+        return false;
+    }
+
+    if( input.press( space ) )
+    {
+        if( experience < 2000)
+        {
+            experience += 100;
+        } 
+        else if( experience >= 2000 & experience < 8000)
+        {
+            experience += 500;
+        }
+        
+    }
+    
+    return true;
+};
+
+Function on_2d <Nil> () {  
+    Integer screenCenter(graphics.get_resolution().x/2);
+    
+    graphics.print_centered( screenCenter, 8, "Press Spacebar to get more experience, escape to quit", white );
+    
+    graphics.print( 0, 40, "Level: " + pLevel, "7d7d7d" );
+    graphics.print( 0, 80, "Experience: " + experience, "7e7e7e" );
+};
