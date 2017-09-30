@@ -1,0 +1,64 @@
+mutable Scene scene( "Main" );
+
+scene.on_update = Function <Boolean> () {
+
+    if( input.press( escape ) )
+    {
+        return false;
+    }
+
+    return true;
+};
+
+
+scene.on_2d = Function <Nil> () {  
+    graphics.box( IntegerVector2D(0,0), graphics.get_resolution(), blue );
+
+    Integer screenCenter(graphics.get_resolution().x/2);
+    graphics.print_centered( screenCenter, 8, "FPS: " + to_string(get_fps()), white );
+    
+    draw_shapes( 120, 120 );
+};
+
+Function draw_shapes <Nil> ( Integer xInitial, Integer y ) {
+
+    mutable Integer x(xInitial); # making a mutable copy so we can change it
+    Integer size = 80; # in pixels
+    Integer offset = size + 25;
+    Real angle = get_time() * 45; # rotates 45 degrees every second the program runs
+    
+    # Each shape is drawn 5 times
+    # First, the "empty" version shows how to draw just an outline
+    # Second, the shape is drawn with a string-coded color from the internal aki list
+    # Third, the shape is drawn with a 6-digit Hexcode
+    # Forth, the shape is drawn with an RGBA specified color
+    # Fifth, the shape is drawn using the image file located in "assets/grate.*"
+    #               (where * is any supported image extension: bmp, gif, jpg, png, tif)
+    
+    # Note: any assets with an appropriate file extension will automatically be
+    # added to the local namespace in this manner.
+    
+    graphics.box_empty_centered( x, y, size, cyan );
+    graphics.box_centered( x, y + offset, size, cyan );
+    graphics.box_centered( x, y + offset*2, size, FFFF7F );
+    graphics.box_centered( x, y + offset*3, size, Color( 1.0, 0.5, 0.0, 1.0 ) );
+    graphics.box_centered( x, y + offset*4, size, assets.grate );
+    x += offset;
+
+    graphics.circle_empty( x, y, size, cyan );
+    graphics.circle( x, y + offset, size, cyan );
+    graphics.circle( x, y + offset*2, size, FFFF7F );
+    graphics.circle( x, y + offset*3, size, Color( 1.0, 0.5, 0.0, 1.0 ) );
+    graphics.circle( x, y + offset*4, size, assets.grate );
+    x += offset;
+    
+    # Polygons will always have one side pointing upward (unless rotated with an angle)
+    # the points are all exactly "size" distance from the center, i.e. a polygon will always
+    # fit perfectly inside a circle of the same size.
+    graphics.polygon_empty( x, y, size, 5, cyan, angle );
+    graphics.polygon( x, y + offset, size, 4, cyan, angle );
+    graphics.polygon( x, y + offset*2, size, 3, FFFF7F, angle );
+    graphics.polygon( x, y + offset*3, size, 4, Color( 1.0, 0.5, 0.0, 1.0 ), angle );
+    graphics.polygon( x, y + offset*4, size, 5, assets.grate, angle );
+    x += offset;
+};

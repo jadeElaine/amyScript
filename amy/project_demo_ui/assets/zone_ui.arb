@@ -1,0 +1,41 @@
+Name ZoneFrame
+Zone < 10 10 700 380 >
+
+Children
+{
+	Image
+	{
+		Texture FRAME
+		Slicing < .3 .3 .7 .7 >
+	}
+    
+	Image
+	{
+		Texture assets.nicolas_kent
+        Zone < 20 20 128 128 >
+	}
+    
+	Button
+	{
+		Name TestButton1
+		Zone < 200 32 32 32 >
+        UnpressedImage { Texture assets.chart_course_u }
+        PressedImage { Texture assets.chart_course_p }
+        HighlightImage { Texture assets.chart_course_h }
+	}
+    
+	Button
+	{
+		Name TestButton2
+		Zone < 250 32 32 32 >
+        UnpressedImage { Texture assets.chart_course_u Tint FF8888 }
+        PressedImage { Texture assets.chart_course_u Tint Grey }
+	}
+    
+	Label
+	{
+		Name TestLabel
+        Zone < 10 120 680 220 >
+		Text "Press a button^  Note that one button has multiple images for unpressed, pressed, and highlighted state, while the other uses tinting to augment state.  The pressed/highlight will inherit from the unpressed state if nothing is specified."
+	}
+}

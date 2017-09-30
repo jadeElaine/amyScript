@@ -1,7 +1,9 @@
 mutable Integer experience( 0 );
 mutable Integer pLevel( 1 );
 
-Function on_update <Boolean> () {
+mutable Scene scene( "Main" );
+
+scene.on_update = Function <Boolean> () {
 
     if( input.press( escape ) )
     {
@@ -14,7 +16,7 @@ Function on_update <Boolean> () {
         {
             experience += 100;
         } 
-        else if( experience >= 2000 & experience < 8000)
+        else if( experience >= 2000 & experience < 8000 )
         {
             experience += 500;
         }
@@ -24,7 +26,7 @@ Function on_update <Boolean> () {
     return true;
 };
 
-Function on_2d <Nil> () {  
+scene.on_2d = Function <Nil> () {  
     Integer screenCenter(graphics.get_resolution().x/2);
     
     graphics.print_centered( screenCenter, 8, "Press Spacebar to get more experience, escape to quit", white );

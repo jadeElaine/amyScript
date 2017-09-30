@@ -4,7 +4,9 @@ Function on_load <Nil> () {
     load_player();
 };
 
-Function on_update <Boolean> () {
+mutable Scene scene( "Main" );
+
+scene.on_update = Function <Boolean> () {
 
     if( input.press( escape ) )
     {
@@ -16,7 +18,7 @@ Function on_update <Boolean> () {
 };
 
 
-Function on_2d <Nil> () {  
+scene.on_2d = Function <Nil> () {  
     graphics.box( IntegerVector2D(0,0), graphics.get_resolution(), "9e9e9e");
 
     Integer screenCenter(graphics.get_resolution().x/2);

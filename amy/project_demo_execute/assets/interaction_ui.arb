@@ -1,0 +1,62 @@
+Name MainFrame
+X < { precision EXACT mode EDGE amount 25 anchor 0.0 origin 0.0 } { precision EXACT mode EDGE amount -25 anchor 1.0 origin 1.0 } >
+Y < { precision EXACT mode EDGE amount -25 anchor 1.0 origin 1.0 } { precision EXACT mode SIZE amount 135 anchor 0.0 } >
+
+Children
+{
+	Image
+	{
+		Texture FRAME
+		Slicing < .3 .3 .7 .7 >
+	}
+    
+	Label
+	{
+		Name SidesLabel
+        Zone < 10 20 120 20 >
+		Text "Sides"
+	}
+	Label
+	{
+		Name AngleLabel
+        Zone < 10 45 120 20 >
+		Text "Angle"
+	}
+	Label
+	{
+		Name SizeLabel
+        Zone < 10 70 120 20 >
+		Text "Size"
+	}
+	Label
+	{
+		Name ColorLabel
+        Zone < 10 95 120 20 >
+		Text "Color"
+	}
+    
+	TextField
+	{
+		Name SidesTextField
+        Zone < 140 20 650 24 >
+		Text "return 2+3;"
+	}
+	TextField
+	{
+		Name AngleTextField
+        Zone < 140 45 650 24 >
+		Text "return get_time() * 22.5;"
+	}
+	TextField
+	{
+		Name SizeTextField
+        Zone < 140 70 650 24 >
+		Text "return 130 + sin(get_time()*90)*80;"
+	}
+	TextField
+	{
+		Name ColorTextField
+        Zone < 140 95 650 24 >
+		Text "return Color(A43030) + Color(Blue)/2;"
+	}
+}
