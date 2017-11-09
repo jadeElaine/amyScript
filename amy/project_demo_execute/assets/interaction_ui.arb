@@ -51,7 +51,7 @@ Children
 	{
 		Name SizeTextField
         Zone < 140 70 650 24 >
-		Text "return 130 + sin(get_time()*90)*80;"
+		Text "return 130 + math.sin(get_time()*90)*80;"
 	}
 	TextField
 	{

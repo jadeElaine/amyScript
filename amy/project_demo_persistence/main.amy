@@ -1,0 +1,66 @@
+# HEy!
+mutable Integer localVariable( 0 );
+mutable Integer remoteVariable( 0 );
+mutable Boolean loading( false );
+
+mutable Scene scene( "Main" );
+
+scene.on_open = Function () {
+    loading = true;
+    localVariable = read_local( "CachedVariableKey", 0 );
+    read_remote( "CachedVariableKey", 0, Function ( Integer val ) {
+        remoteVariable = val;
+    }, 3.0 );
+};
+
+Function increment( mutable Integer target, Integer delta ) {
+    target += delta;
+};
+
+scene.on_update = Function <Boolean> () {
+
+    if( input.press( escape ) )
+    {
+        return false;
+    }
+
+    if( input.press( up ) & !input.shift() )
+    {
+        localVariable += 1;
+        write_local( "CachedVariableKey", localVariable );
+    }
+    if( input.press( down ) & !input.shift() )
+    {
+        localVariable -= 1;
+        write_local( "CachedVariableKey", localVariable );
+    }
+    
+    if( input.press( up ) & input.shift() )
+    {
+        remoteVariable += 1;
+        write_remote( "CachedVariableKey", remoteVariable, Function ( Integer val ) {
+            console_print( to_string( val ) );
+        }, 3.0 );
+    }
+    if( input.press( down ) & input.shift() )
+    {
+        remoteVariable -= 1;
+        #increment( remoteVariable, -1 );
+        write_remote( "CachedVariableKey", remoteVariable, Function ( Integer val ) {
+            console_print( to_string( val ) );
+        }, 3.0 );
+    }
+    
+    return true;
+};
+
+scene.on_2d = Function <Nil> () {  
+    Integer screenXCenter(graphics.get_resolution().x/2);
+    Integer screenYCenter(graphics.get_resolution().y/2);
+    
+    graphics.print_centered( screenXCenter, 8, "Press Up and Down to change the first number", white );
+    graphics.print_centered( screenXCenter, 8+16, "Prese Shift-Up and Shift-Down to change the second number", white );
+
+    graphics.print_centered( screenXCenter, screenYCenter, "This number is saved on this computer: " + localVariable, white );  
+    graphics.print_centered( screenXCenter, screenYCenter+16, "This number is saved on the internet: " + remoteVariable, white );   
+};

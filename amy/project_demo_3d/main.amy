@@ -1,0 +1,60 @@
+mutable Scene scene( "Main" );
+
+scene.on_open = Function <Nil> () {
+
+    # create an ambient light of 5% grey
+    add_light( Light( Color( white ) * 0.05 ) );
+
+    # add a directional light pointing down and slightly to the right,
+    # with a diffuse color of blue, and a specular color of white
+    add_light( Light( Color( blue ), Color( white ), Vector3D(0.23, -1, 0) ) );
+    
+    # position camera to be 25 units in front of the origin
+    get_3d_camera().position = math.v3forward * 6;
+};
+
+scene.on_update = Function <Boolean> () {
+
+    if( input.press( escape ) )
+    {
+        return false;
+    }
+    
+    if( input.hold( left ) )
+    {
+        get_3d_camera().position += math.v3left * get_delta_time();
+    }
+    if( input.hold( right ) )
+    {
+        get_3d_camera().position += math.v3right * get_delta_time();
+    }
+    if( input.hold( up ) )
+    {
+        get_3d_camera().position += math.v3backward * get_delta_time();
+    }
+    if( input.hold( down ) )
+    {
+        get_3d_camera().position += math.v3forward * get_delta_time();
+    }
+
+    return true;
+};
+
+scene.on_3d = Function <Nil> () {
+    # Set up a rendering config that uses the grate texture, 
+    # and shaders which respond to lighting
+    RenderConfig rc( assets.grate, graphics.lit );
+    
+    Quaternion spin = math.yaw(get_time() * 25) * math.pitch(-30);
+    
+    # draw a spinning spherical shell, with a smaller sphere inside of it
+    graphics.sphere_shell( Transform( math.v3zero, spin, 1.5 ), rc );
+    graphics.sphere( Transform( math.v3zero, spin, 1 ), rc );
+};
+
+scene.on_2d = Function <Nil> () {
+    Integer screenCenter(graphics.get_resolution().x/2);
+    
+    Camera3D cam = get_3d_camera();
+    graphics.print_centered( screenCenter, 8, "Adjust camera with arrow keys", white );
+};
