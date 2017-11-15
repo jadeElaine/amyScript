@@ -35,12 +35,18 @@ scene.on_update = Function <Boolean> () {
         # sound.play returns an integer for which sound-card channel
         # the sounds is playing on.  You can use this sound channel to
         # change the panning of the played clip.  Currently only 2.0 surround is supported
-        sound.set_panning( clipChannel, -1 );
+        if( clipChannel != -1 )
+        {
+            sound.set_panning( clipChannel, -1 );
+        }
     }
     if( input.press( right ) )
     {
         Integer clipChannel = sound.play(assets.bleep);
-        sound.set_panning( clipChannel, 1 );
+        if( clipChannel != -1 )
+        {
+            sound.set_panning( clipChannel, 1 );
+        }
     }
     
     return true;
