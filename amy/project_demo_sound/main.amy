@@ -1,4 +1,4 @@
-mutable Scene scene( "Main" );
+mutable Scene scene = create_scene( "Main" );
 
 scene.on_open = Function <Nil> () {
     # the music.play function is in this case playing the music file located at

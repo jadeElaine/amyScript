@@ -1,9 +1,8 @@
-# HEy!
 mutable Integer localVariable( 0 );
 mutable Integer remoteVariable( 0 );
 mutable Boolean loading( false );
 
-mutable Scene scene( "Main" );
+mutable Scene scene = create_scene( "Main" );
 
 scene.on_open = Function () {
     loading = true;

@@ -1,4 +1,4 @@
-mutable Scene scene( "Main" );
+mutable Scene scene = create_scene( "Main" );
 
 scene.on_open = Function <Nil> () {
     this.add_ui( assets.interaction_ui );

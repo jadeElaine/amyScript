@@ -1,10 +1,12 @@
+mutable Scene scene = create_scene( "Main" );
 
-Function on_load <Nil> () {
+scene.on_open = Function <Nil> () {
+	console_print(to_string(position));
+	console_print(to_string(graphics.get_resolution()));
+	
     input.hide_mouse();
     load_player();
 };
-
-mutable Scene scene( "Main" );
 
 scene.on_update = Function <Boolean> () {
 

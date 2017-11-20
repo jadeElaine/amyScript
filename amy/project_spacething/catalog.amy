@@ -1,0 +1,67 @@
+mutable Dictionary catalog {
+	components: mutable Dictionary {},
+	shipSchematics: mutable Dictionary {},
+	prototypes: mutable Dictionary {}
+};
+
+Function define_component( String name )
+{
+    catalog.components.insert( Dictionary { 
+        draw: Function <Nil> ( Vector3D d, Quaternion r, Vector3D s ) {
+            RenderConfig rcMetal( assets.metal1 );
+			Transform t(d, r, s);
+            graphics.cylinder(t, rcMetal);
+        }
+    }, name );
+};
+
+Function define_ship_schematic( String name )
+{
+    catalog.shipSchematics.insert( Dictionary {
+        componentInstances: Array {
+			Dictionary { type: "tank", d:Vector3D(0,0,0), r:math.yaw(90), s:Vector3D(1,1,1.5) },
+			
+			Dictionary { type: "tank", d:Vector3D(0,0,2), r:math.identity, s:Vector3D(1,1,1) },
+			Dictionary { type: "tank", d:Vector3D(0,0,-2), r:math.identity, s:Vector3D(1,1,1) }
+		},
+        thrust: 10.0,
+        twist: Vector3D(6.0, 6.0, 6.0)
+    }, name );
+};
+
+Function initialize_catalog()
+{
+    define_component( "tank" );
+
+    define_ship_schematic( "test" );
+	
+	Function shipDrawFunction = Function <Nil> ( Dictionary instance )
+	{
+		Real relativeScale = 0.1;
+		Dictionary schematic = catalog.shipSchematics[instance.config.schematic]; 
+		for( Wildcard componentInstance : schematic.componentInstances )
+		{
+			Vector3D finalPosition = (componentInstance.d * relativeScale) * instance.r + instance.d;
+			Quaternion finalRotation = componentInstance.r * instance.r;
+			
+			Wildcard component( catalog.components[componentInstance.type] );
+			component.draw( finalPosition, finalRotation, componentInstance.s * relativeScale );
+		}
+	};
+	catalog.prototypes.insert( Dictionary {
+		draw: shipDrawFunction
+	}, "ship" );
+	
+	Function worldDrawFunction = Function <Nil> ( Dictionary instance )
+	{
+		RenderConfig rc( assets.earth, graphics.lit );
+		
+		Real angle = get_time() * 360.0 / instance.config.dayLength;
+		Quaternion spin = math.pitch(90) * math.yaw(angle) * instance.r;
+		
+		graphics.sphere( Transform( instance.d, spin, 1 ), rc );
+	};
+	catalog.prototypes.insert( Dictionary {
+		draw: worldDrawFunction
+	}, "world" );
+};

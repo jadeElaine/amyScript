@@ -1,69 +1,20 @@
-mutable Scene scene( "Main" );
+mutable Scene scene = create_scene( "Main" );
 
-mutable Dictionary components;
-mutable Dictionary prototypes;
-mutable Dictionary instances;
-mutable Integer nextInstanceId=0;
-
-Function define_component( String name )
-{
-    components.insert( Dictionary { 
-        render: Function <Nil> ( Vector3D d, Quaternion r ) {
-            RenderConfig rcStars( assets.metal );
-            graphics.cylinder(Transform( d, r, 1.0 ), rcMetal);
-        }
-    }, name );
-};
-
-Function define_ship( String name )
-{
-    prototypes.insert( Dictionary {
-        comps: Dictionary { type: "tank", d:Vector3D(0,0,0), r:math.identity },
-        thrust: 10.0,
-        twist: Vector3D(6.0, 6.0, 6.0)
-    }, name );
-};
-
-Function create_instance( String proto, Vector3D position, Quaternion rotation )
-{
-    mutable Dictionary result {
-        prototype: proto,
-        d: position,
-        r: rotation };
-    instances.insert(result, nextInstanceId);
-    nextInstanceId += 1;
-    return result;
-};
-
-Function draw_instance( Dictionary instance )
-{
-    Dictionary proto = prototypes[instance.prototype]; 
-    console_print(proto.comps.keys());
-    #Wildcard componentIds = instance.prototypes.keys;
-    #for( Integer i=0; i<componentIds.length(); i+=1 )
-    #{
-    #    console_print(componentIds[i]);
-    #}
-};
-
-mutable Dictionary ship;
 scene.on_open = Function <Nil> () {
 
-    # create an ambient light of 5% grey
+    # 5% grey light ambient "maximume shadow" and the sun coming in from (-1, .1, 0)
     add_light( Light( Color( white ) * 0.05 ) );
-
-    # add a directional light pointing down and slightly to the right,
-    # with a diffuse color of blue, and a specular color of white
-    add_light( Light( Color( white ), Color( white ), Vector3D(1, .1, 0) ) );
+    add_light( Light( Color( white ), Color( white ), Vector3D(1, -.1, 0) ) );
     
+	initialize_catalog();
+	
+    create_instance( world, Dictionary { dayLength: 5.0 }, Vector3D(0, 0, 0), math.roll(-22.5) );
+	
+    create_instance( ship, Dictionary { schematic: "test" }, Vector3D(.75, -1.0, 2.0), math.yaw(0) * math.roll(45) );	
+    create_instance( ship, Dictionary { schematic: "test" }, Vector3D(.75, -0.4, 2.0), math.yaw(45) * math.roll(45) );	
+	
     # position camera to be 25 units in front of the origin
     get_3d_camera().position = math.v3forward * 6;
-
-    define_component( "tank" );
-
-    define_ship( "test" );
-
-    ship = create_instance( "test", Vector3D(1.5, 0.0, 0.0), math.identity );
 };
 
 scene.on_update = Function <Boolean> () {
@@ -99,16 +50,12 @@ scene.on_3d_skybox = Function <Nil> () {
 };
 
 scene.on_3d = Function <Nil> () {
-    # Set up a rendering config that uses the grate texture, 
-    # and shaders which respond to lighting
-    RenderConfig rc( assets.earth, graphics.lit );
-    
-    Quaternion spin = math.pitch(90) * math.yaw(get_time() * 2);
-    
-    # draw a spinning spherical shell, with a smaller sphere inside of it
-    graphics.sphere( Transform( math.v3zero, spin, 1 ), rc );
 
-    draw_instance(ship);
+	for( Wildcard i : objectManager.instances )
+	{
+		Wildcard prototype( catalog.prototypes[i.value.prototype] );
+		prototype.draw(i.value);
+	}
 };
 
 scene.on_2d = Function <Nil> () {
@@ -116,6 +63,7 @@ scene.on_2d = Function <Nil> () {
     
     Camera3D cam = get_3d_camera();
     graphics.print_centered( screenCenter, 8, "Hit Dem WASD (+QE) Keys", white );
-    String debug = to_string(prototypes[test].thrust);
-    graphics.print_centered( screenCenter, 16, debug, white );
+    graphics.print_centered( screenCenter, 24, "FPS: " + to_string(get_fps()), white );
+    #String debug = to_string(prototypes[test].thrust);
+    #graphics.print_centered( screenCenter, 40, debug, white );
 };

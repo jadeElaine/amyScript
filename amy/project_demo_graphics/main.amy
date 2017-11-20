@@ -1,4 +1,4 @@
-mutable Scene scene( "Main" );
+mutable Scene scene = create_scene( "Main" );
 
 scene.on_update = Function <Boolean> () {
 
