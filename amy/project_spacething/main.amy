@@ -4,8 +4,9 @@ Function on_load <Nil> () {
     
     create_instance( world, Dictionary { dayLength: 5.0 }, Vector3D(0, 0, 0), math.roll(-22.5) );
     
-    create_instance( ship, Dictionary { schematic: "test" }, Vector3D(.75, -1.0, 2.0), math.yaw(0) * math.roll(45) );   
-    create_instance( ship, Dictionary { schematic: "test" }, Vector3D(.75, -0.4, 2.0), math.yaw(45) * math.roll(45) );  
+    create_instance( ship, Dictionary { schematic: "test" }, Vector3D(.75, -1.0, 2.0), math.yaw(0) * math.roll(45) );
+    
+    userState.controlledObjectId = create_instance( ship, Dictionary { schematic: "test" }, Vector3D(.75, -0.4, 2.0), math.yaw(45) * math.roll(45) );  
 
     change_scene(playScene);
 };

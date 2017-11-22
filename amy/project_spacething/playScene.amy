@@ -16,8 +16,11 @@ scene.on_update = Function <Boolean> () {
     {
         return false;
     }
-    
-    user_fly_ship();
+
+    if(userState.controlledObjectId != -1)
+    {
+        user_fly_ship( objectManager.instances[userState.controlledObjectId] );
+    }    
 
     return true;
 };
