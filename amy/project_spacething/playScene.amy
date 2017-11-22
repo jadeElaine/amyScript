@@ -1,0 +1,47 @@
+mutable Scene scene = create_scene( "playScene" );
+
+scene.on_open = Function <Nil> () {
+
+    # 5% grey light ambient "maximume shadow" and the sun coming in from (-1, .1, 0)
+    add_light( Light( Color( white ) * 0.05 ) );
+    add_light( Light( Color( white ), Color( white ), Vector3D(1, -.1, 0) ) );
+	
+    # position camera to be 25 units in front of the origin
+    get_3d_camera().position = math.v3forward * 6;
+};
+
+scene.on_update = Function <Boolean> () {
+
+    if( input.press( escape ) )
+    {
+        return false;
+    }
+    
+    user_fly_ship();
+
+    return true;
+};
+
+scene.on_3d_skybox = Function <Nil> () {
+    RenderConfig rcStars( assets.starfield, graphics.unlit );
+    graphics.sphere_shell( Transform( math.v3zero, math.pitch(90), 10.0 ), rcStars );
+};
+
+scene.on_3d = Function <Nil> () {
+
+	for( Wildcard i : objectManager.instances )
+	{
+		Wildcard prototype( catalog.prototypes[i.value.prototype] );
+		prototype.draw(i.value);
+	}
+};
+
+scene.on_2d = Function <Nil> () {
+    Integer screenCenter(graphics.get_resolution().x/2);
+    
+    Camera3D cam = get_3d_camera();
+    graphics.print_centered( screenCenter, 8, "Hit Dem WASD (+QE) Keys", white );
+    graphics.print_centered( screenCenter, 24, "FPS: " + to_string(get_fps()), white );
+    #String debug = to_string(prototypes[test].thrust);
+    #graphics.print_centered( screenCenter, 40, debug, white );
+};

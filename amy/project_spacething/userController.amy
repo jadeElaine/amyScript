@@ -1,0 +1,19 @@
+Function user_fly_ship() {
+	
+    if( input.hold( a ) )
+    {
+        get_3d_camera().position += math.v3left * get_delta_time();
+    }
+    if( input.hold( d ) )
+    {
+        get_3d_camera().position += math.v3right * get_delta_time();
+    }
+    if( input.hold( w ) )
+    {
+        get_3d_camera().position += math.v3backward * get_delta_time();
+    }
+    if( input.hold( s ) )
+    {
+        get_3d_camera().position += math.v3forward * get_delta_time();
+    }
+};
