@@ -46,7 +46,7 @@ scene.on_update = Function <Boolean> () {
 
 scene.on_3d_skybox = Function <Nil> () {
     RenderConfig rcStars( assets.starfield, graphics.unlit );
-    graphics.sphere_shell( Transform( math.v3zero, math.pitch(90), 10.0 ), rcStars );
+    graphics.sphere_shell( Transform3D( math.v3zero, math.pitch(90), 10.0 ), rcStars );
 };
 
 scene.on_3d = Function <Nil> () {

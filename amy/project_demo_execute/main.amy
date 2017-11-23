@@ -28,7 +28,7 @@ scene.on_2d = Function <Nil> () {
         Real size = to_real( execute( ui.SizeTextField.text ) );
         Color color = execute( ui.ColorTextField.text );
     
-        graphics.polygon( graphics.get_resolution()/2, size, sides, color, angle );
+        graphics.polygon( Transform2D( graphics.get_resolution()/2, angle, size ), sides, color );
     }
     catch( Exception e )
     {

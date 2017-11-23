@@ -9,7 +9,7 @@ Function define_component( String name )
     catalog.components.insert( Dictionary { 
         draw: Function <Nil> ( Vector3D d, Quaternion r, Vector3D s ) {
             RenderConfig rcMetal( assets.metal1 );
-			Transform t(d, r, s);
+			Transform3D t(d, r, s);
             graphics.cylinder(t, rcMetal);
         }
     }, name );
@@ -59,7 +59,7 @@ Function initialize_catalog()
 		Real angle = get_time() * 360.0 / instance.config.dayLength;
 		Quaternion spin = math.pitch(90) * math.yaw(angle) * instance.r;
 		
-		graphics.sphere( Transform( instance.d, spin, 1 ), rc );
+		graphics.sphere( Transform3D( instance.d, spin, 1 ), rc );
 	};
 	catalog.prototypes.insert( Dictionary {
 		draw: worldDrawFunction

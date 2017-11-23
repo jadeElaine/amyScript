@@ -21,7 +21,7 @@ scene.on_update = Function <Boolean> () {
 
 
 scene.on_2d = Function <Nil> () {  
-    graphics.box( IntegerVector2D(0,0), graphics.get_resolution(), "9e9e9e");
+    graphics.box( Transform2D( IntegerVector2D(0,0), 0, graphics.get_resolution() ), "9e9e9e");
 
     Integer screenCenter(graphics.get_resolution().x/2);
     graphics.print_centered( screenCenter, 8, "Press escape to quit", "000000" );

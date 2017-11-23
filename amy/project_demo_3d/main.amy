@@ -48,8 +48,8 @@ scene.on_3d = Function <Nil> () {
     Quaternion spin = math.yaw(get_time() * 25) * math.pitch(-30);
     
     # draw a spinning spherical shell, with a smaller sphere inside of it
-    graphics.sphere_shell( Transform( math.v3zero, spin, 1.5 ), rc );
-    graphics.sphere( Transform( math.v3zero, spin, 1 ), rc );
+    graphics.sphere_shell( Transform3D( math.v3zero, spin, 1.5 ), rc );
+    graphics.sphere( Transform3D( math.v3zero, spin, 1 ), rc );
 };
 
 scene.on_2d = Function <Nil> () {

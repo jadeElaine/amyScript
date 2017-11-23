@@ -76,6 +76,6 @@ Function load_player <Nil> () {
 };
 
 Function draw_player <Nil> () {
-	graphics.box_centered(position, playerSize * 2, "2e2e2e");
-    graphics.box_centered(position + hammerPosition, 10, yellow);
+	graphics.box_centered( Transform2D( position, 0, playerSize * 2), "2e2e2e");
+    graphics.box_centered( Transform2D( position + hammerPosition, 0, 10), yellow);
 };

@@ -54,7 +54,7 @@ scene.on_update = Function <Boolean> () {
 
 
 scene.on_2d = Function <Nil> () {  
-    graphics.box( IntegerVector2D(0,0), graphics.get_resolution(), green );
+    graphics.box( Transform2D( IntegerVector2D(0,0), 0, graphics.get_resolution() ), green );
 
     Integer screenCenter(graphics.get_resolution().x/2);
     graphics.print_centered( screenCenter, 8, "Press arrow keys to play sound", white );
