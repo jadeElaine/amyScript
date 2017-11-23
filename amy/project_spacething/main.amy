@@ -1,69 +1,12 @@
-mutable Scene scene = create_scene( "Main" );
-
-scene.on_open = Function <Nil> () {
-
-    # 5% grey light ambient "maximume shadow" and the sun coming in from (-1, .1, 0)
-    add_light( Light( Color( white ) * 0.05 ) );
-    add_light( Light( Color( white ), Color( white ), Vector3D(1, -.1, 0) ) );
+Function on_load <Nil> () {
     
-	initialize_catalog();
-	
+    initialize_catalog();
+    
     create_instance( world, Dictionary { dayLength: 5.0 }, Vector3D(0, 0, 0), math.roll(-22.5) );
-	
-    create_instance( ship, Dictionary { schematic: "test" }, Vector3D(.75, -1.0, 2.0), math.yaw(0) * math.roll(45) );	
-    create_instance( ship, Dictionary { schematic: "test" }, Vector3D(.75, -0.4, 2.0), math.yaw(45) * math.roll(45) );	
-	
-    # position camera to be 25 units in front of the origin
-    get_3d_camera().position = math.v3forward * 6;
-};
-
-scene.on_update = Function <Boolean> () {
-
-    if( input.press( escape ) )
-    {
-        return false;
-    }
     
-    if( input.hold( a ) )
-    {
-        get_3d_camera().position += math.v3left * get_delta_time();
-    }
-    if( input.hold( d ) )
-    {
-        get_3d_camera().position += math.v3right * get_delta_time();
-    }
-    if( input.hold( w ) )
-    {
-        get_3d_camera().position += math.v3backward * get_delta_time();
-    }
-    if( input.hold( s ) )
-    {
-        get_3d_camera().position += math.v3forward * get_delta_time();
-    }
-
-    return true;
-};
-
-scene.on_3d_skybox = Function <Nil> () {
-    RenderConfig rcStars( assets.starfield, graphics.unlit );
-    graphics.sphere_shell( Transform3D( math.v3zero, math.pitch(90), 10.0 ), rcStars );
-};
-
-scene.on_3d = Function <Nil> () {
-
-	for( Wildcard i : objectManager.instances )
-	{
-		Wildcard prototype( catalog.prototypes[i.value.prototype] );
-		prototype.draw(i.value);
-	}
-};
-
-scene.on_2d = Function <Nil> () {
-    Integer screenCenter(graphics.get_resolution().x/2);
+    create_instance( ship, Dictionary { schematic: "test" }, Vector3D(.75, -1.0, 2.0), math.yaw(0) * math.roll(45) );
     
-    Camera3D cam = get_3d_camera();
-    graphics.print_centered( screenCenter, 8, "Hit Dem WASD (+QE) Keys", white );
-    graphics.print_centered( screenCenter, 24, "FPS: " + to_string(get_fps()), white );
-    #String debug = to_string(prototypes[test].thrust);
-    #graphics.print_centered( screenCenter, 40, debug, white );
+    userState.controlledObjectId = create_instance( ship, Dictionary { schematic: "test" }, Vector3D(.75, -0.4, 2.0), math.yaw(45) * math.roll(45) );  
+
+    change_scene(playScene);
 };

@@ -6,11 +6,12 @@ mutable Dictionary objectManager {
 Function create_instance( String prototype, Dictionary config, Vector3D d, Quaternion r )
 {
     mutable Dictionary result {
+        id: Integer(objectManager.nextInstanceId),
         prototype: prototype,
 		config: config,
         d: d,
         r: r };
     objectManager.instances.insert(result, objectManager.nextInstanceId);
     objectManager.nextInstanceId += 1;
-    return result;
+    return result.id;
 };

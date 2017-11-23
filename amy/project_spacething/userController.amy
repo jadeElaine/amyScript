@@ -1,0 +1,19 @@
+Function user_fly_ship( mutable Dictionary ship ) {
+	
+    if( input.hold( a ) )
+    {
+        ship.d += math.v3left * get_delta_time();
+    }
+    if( input.hold( d ) )
+    {
+        ship.d += math.v3right * get_delta_time();
+    }
+    if( input.hold( w ) )
+    {
+        ship.d += math.v3backward * get_delta_time();
+    }
+    if( input.hold( s ) )
+    {
+        ship.d += math.v3forward * get_delta_time();
+    }
+};
