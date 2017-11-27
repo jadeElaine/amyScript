@@ -37,8 +37,7 @@ Function lvl_check <Nil> () {
 	}
 };
 
-# might make more sense to call this "add_score"
-Function calculate_score <Nil> () {
+Function add_score <Nil> () {
 	game_vars.current_score += to_integer( (game_vars.multiplier ^ game_vars.p_lvl) / game_vars.p_lvl );
 };
 
@@ -53,29 +52,21 @@ scene.on_update = Function <Boolean> () {
 
     if( input.press( space ) )
     {
-		# calling before and after feels a little odd
-		# might be cleaner to call only once, then adjust the function to get the feel right
-		calculate_score();
+		add_score();
 		lvl_check();
-		calculate_score();
     }
 	
 	if( input.press( l ) )
 	{
 		# if nothing is found, default to whatever we have (i.e. ignore loading)
-		Dictionary loaded_vars = read_local( "PlayerSaveKey", game_vars );
-		
-		# found a buuuuug, looks like mutability isn't cached, so I need to save that.
-		game_vars.current_score = loaded_vars.current_score;
-		game_vars.p_lvl = loaded_vars.p_lvl;
+		game_vars = read_local( "PlayerSaveKey", game_vars );
 	}
 	if( input.press( s ) )
 	{
-		# most amy variables and containers can auto-serialize to reads writes
-		# Basically, you can write an nested collections of arrays and dictionaries
+		# most amy variables and containers can auto-serialize to reads/writes.
+		# Basically, you can write a nested collections of arrays and dictionaries
 		# as long as you don't have like, a ui element or reference to core c++ function somewhere in there
 		
-		# Another BUUUUUG, this doesn't work, and won't work until i get a deep copy in place
 		write_local( "PlayerSaveKey", game_vars );
 	}
     

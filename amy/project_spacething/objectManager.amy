@@ -3,14 +3,14 @@ mutable Dictionary objectManager {
 	nextInstanceId: mutable Integer(0)
 };
 
-Function create_instance( String prototype, Dictionary config, Vector3D d, Quaternion r )
+Function create_instance( String prototype_, Dictionary config_, Vector3D d_, Quaternion r_ )
 {
     mutable Dictionary result {
         id: Integer(objectManager.nextInstanceId),
-        prototype: prototype,
-		config: config,
-        d: d,
-        r: r };
+        prototype: prototype_,
+		config: config_,
+        d: mutable Vector3D( d_ ),
+        r: mutable Quaternion( r_ ) };
     objectManager.instances.insert(result, objectManager.nextInstanceId);
     objectManager.nextInstanceId += 1;
     return result.id;

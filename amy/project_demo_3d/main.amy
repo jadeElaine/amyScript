@@ -7,7 +7,7 @@ scene.on_open = Function <Nil> () {
 
     # add a directional light pointing down and slightly to the right,
     # with a diffuse color of blue, and a specular color of white
-    add_light( Light( Color( blue ), Color( white ), Vector3D(0.23, -1, 0) ) );
+    add_light( Light( blue, white, Vector3D(0.23, -1, 0) ) );
     
     # position camera to be 25 units in front of the origin
     get_3d_camera().position = math.v3forward * 6;
