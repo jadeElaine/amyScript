@@ -15,25 +15,32 @@ Function define_component( String name )
     }, name );
 };
 
-Function define_ship_schematic( String name )
+Function define_ship_schematic( String name, Dictionary data )
 {
-    catalog.shipSchematics.insert( Dictionary {
-        componentInstances: Array {
-			Dictionary { type: "tank", d:Vector3D(0,0,0), r:math.yaw(90), s:Vector3D(1,1,1.5) },
-			
-			Dictionary { type: "tank", d:Vector3D(0,0,2), r:math.identity, s:Vector3D(1,1,1) },
-			Dictionary { type: "tank", d:Vector3D(0,0,-2), r:math.identity, s:Vector3D(1,1,1) }
-		},
-        thrust: 10.0,
-        twist: Vector3D(6.0, 6.0, 6.0)
-    }, name );
+	Dictionary newSchematic {
+        componentInstances: mutable Array {},
+        thrust: data.thrust,
+        twist: Vector3D(data.twist[0], data.twist[1], data.twist[2])
+    };
+	for( Wildcard i : data.componentInstances )
+	{
+		newSchematic.componentInstances.add( Dictionary {
+			type: i.type,
+			d:Vector3D( i.offset[0], i.offset[1], i.offset[2] ),
+			r:math.euler( i.rotation[0], i.rotation[1], i.rotation[2] ),
+			s:Vector3D( i.size[0], i.size[1], i.size[2] ),
+		} );
+	}
+    catalog.shipSchematics.insert( newSchematic, name );
 };
 
 Function initialize_catalog()
 {
     define_component( "tank" );
-
-    define_ship_schematic( "test" );
+	for( Dictionary schematic : assets.schematics.dictionary() )
+	{
+		define_ship_schematic( schematic.key, schematic.value );
+	}
 	
 	Function shipDrawFunction = Function <Nil> ( Dictionary instance )
 	{
@@ -41,7 +48,7 @@ Function initialize_catalog()
 		Dictionary schematic = catalog.shipSchematics[instance.config.schematic]; 
 		for( Wildcard componentInstance : schematic.componentInstances )
 		{
-			Vector3D finalPosition = (componentInstance.d * relativeScale) * instance.r + instance.d;
+			Vector3D finalPosition = (componentInstance.d * instance.r) * relativeScale + instance.d;
 			Quaternion finalRotation = componentInstance.r * instance.r;
 			
 			Wildcard component( catalog.components[componentInstance.type] );

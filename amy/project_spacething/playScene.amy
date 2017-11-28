@@ -20,7 +20,12 @@ scene.on_update = Function <Boolean> () {
     if(userState.controlledObjectId != -1)
     {
         user_fly_ship( objectManager.instances[userState.controlledObjectId] );
-    }    
+    }
+	
+	for( Wildcard i : objectManager.instances )
+	{ 
+		update_instance( i.value );
+	}
 
     return true;
 };

@@ -1,19 +1,44 @@
 Function user_fly_ship( mutable Dictionary ship ) {
+	Dictionary shipSchematic = catalog.shipSchematics[ship.config.schematic];
+	ship.f = false;
+	ship.t = false;
 	
-    if( input.hold( a ) )
-    {
-        ship.d += math.v3left * get_delta_time();
-    }
-    if( input.hold( d ) )
-    {
-        ship.d += math.v3right * get_delta_time();
-    }
     if( input.hold( w ) )
     {
-        ship.d += math.v3backward * get_delta_time();
+        ship.o -= math.v3right * get_delta_time() * shipSchematic.twist.x;
+		ship.t = true;
     }
     if( input.hold( s ) )
     {
-        ship.d += math.v3forward * get_delta_time();
+        ship.o += math.v3right * get_delta_time() * shipSchematic.twist.x;
+		ship.t = true;
     }
+	
+    if( input.hold( a ) )
+    {
+        ship.o += math.v3up * get_delta_time() * shipSchematic.twist.y;
+		ship.t = true;
+    }
+    if( input.hold( d ) )
+    {
+        ship.o -= math.v3up * get_delta_time() * shipSchematic.twist.y;
+		ship.t = true;
+    }
+	
+    if( input.hold( q ) )
+    {
+        ship.o += math.v3forward * get_delta_time() * shipSchematic.twist.z;
+		ship.t = true;
+    }
+    if( input.hold( e ) )
+    {
+        ship.o -= math.v3forward * get_delta_time() * shipSchematic.twist.z;
+		ship.t = true;
+    }
+	
+	if( input.hold( space ) )
+	{
+        ship.v += (math.v3forward * ship.r) * get_delta_time() * shipSchematic.thrust;
+		ship.f = true;
+	}
 };
