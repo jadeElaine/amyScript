@@ -6,7 +6,8 @@ Low
 		flags < SIUseAmbientLightValue >
 		
 		diffuse < 0 >
-		specular < 0 g >
+		specular < 0 b >
+		normals < 0 g >
 		emission < 1 >
 	}
 }

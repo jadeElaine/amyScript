@@ -13,14 +13,23 @@ scene.on_update = Function <Boolean> () {
 };
 
 scene.on_3d = Function <Nil> () {
+	# two textures are supplies
+	# - a diffuse texture is loaded with the "Smooth" and "Mipmap" flags
+	# - a self-illumination texture is loaded with just the "Smooth" flag
+	
+	# "Smooth" causes the texture to interpolate between texels so as not to appear pixelated
+	# "Mipmap" generates smaller and squashed versions of each texture in memory, so when the texture is viewed at 
+	#    sharp angles it appears to blend rather then having hard arbitrary boundaries
 
 	# the shader is configured to use a 2-texture (diffuse, self illumination) multipass
 	# - the diffuse texture is used as is to reflect diffuse light
-	# - the diffuse texture's green channel is used as a monochrome specular map to reflect shine
+	# - the diffuse texture's blue channel is used as a monochrome specular map to reflect shine
+	# - the diffuse texture's green channel is used as a bump map, so that the dark lines on the wings appear as groves in the lighting
 	# - the self-illumination channel is applied as an unlit final pass to give the effect of coming from the ship
 	# "pure_bright" is neutral material that has ambient/diffuse/specular/si all cranked up to 100% to give the shader complete control
 	# - the supplied diffuse and SI textures are designed with a nuetral material in mind
-	# - try changing the material to "gold" or "pearlescent_purple" for other examples
+	# - try changing the material to "bronze" or "pearlescent_purple" for other examples, but note that these materials will probably look
+	#        dirty or muted when not used with source textures designed to work well with them.
 	
 	RenderConfig compositeRc( Array { assets.birdofprey_diffuse, assets.birdofprey_si }, assets.birdofprey_shader, pure_bright );
     
