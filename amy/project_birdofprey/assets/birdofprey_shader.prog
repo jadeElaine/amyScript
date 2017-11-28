@@ -1,0 +1,14 @@
+Low
+{
+	auto
+	{
+		type compositeMultitex
+		flags < SIUseAmbientLightValue >
+		
+		diffuse < 0 >
+		specular < 0 g >
+		emission < 1 >
+	}
+}
+
+textures <texDiffuse texSI>
