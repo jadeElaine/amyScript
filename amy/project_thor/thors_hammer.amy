@@ -1,8 +1,8 @@
 mutable Scene scene = create_scene( "Main" );
 
 scene.on_open = Function <Nil> () {
-	console_print(to_string(position));
-	console_print(to_string(graphics.get_resolution()));
+	console.print(to_string(position));
+	console.print(to_string(graphics.get_resolution()));
 	
     input.hide_mouse();
     load_player();

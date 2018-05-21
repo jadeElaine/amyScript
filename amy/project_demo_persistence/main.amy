@@ -38,7 +38,7 @@ scene.on_update = Function <Boolean> () {
     {
         remoteVariable += 1;
         write_remote( "CachedVariableKey", remoteVariable, Function ( Integer val ) {
-            console_print( to_string( val ) );
+            console.print( to_string( val ) );
         }, 3.0 );
     }
     if( input.press( down ) & input.shift() )
@@ -46,7 +46,7 @@ scene.on_update = Function <Boolean> () {
         remoteVariable -= 1;
         #increment( remoteVariable, -1 );
         write_remote( "CachedVariableKey", remoteVariable, Function ( Integer val ) {
-            console_print( to_string( val ) );
+            console.print( to_string( val ) );
         }, 3.0 );
     }
     

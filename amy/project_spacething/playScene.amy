@@ -50,6 +50,8 @@ scene.on_2d = Function <Nil> () {
     Camera3D cam = get_3d_camera();
     graphics.print_centered( screenCenter, 8, "Hit Dem WASD (+QE) Keys", white );
     graphics.print_centered( screenCenter, 24, "FPS: " + to_string(get_fps()), white );
-    #String debug = to_string(prototypes[test].thrust);
+    
+	#String debug = to_string(prototypes[test].thrust);
     #graphics.print_centered( screenCenter, 40, debug, white );
+    #graphics.print_centered( screenCenter, 40, to_string(is_nil(sim)), white );
 };

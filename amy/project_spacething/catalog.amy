@@ -7,9 +7,9 @@ mutable Dictionary catalog {
 Function define_component( String name )
 {
     catalog.components.insert( Dictionary { 
-        draw: Function <Nil> ( Vector3D d, Quaternion r, Vector3D s ) {
+        draw: Function <Nil> ( Vector3D d, Quaternion r, Vector3D size ) {
             RenderConfig rcMetal( assets.metal1 );
-			Transform3D t(d, r, s);
+			Transform3D t(d, r, size);
             graphics.cylinder(t, rcMetal);
         }
     }, name );
@@ -28,7 +28,7 @@ Function define_ship_schematic( String name, Dictionary data )
 			type: i.type,
 			d:Vector3D( i.offset[0], i.offset[1], i.offset[2] ),
 			r:math.euler( i.rotation[0], i.rotation[1], i.rotation[2] ),
-			s:Vector3D( i.size[0], i.size[1], i.size[2] ),
+			size:Vector3D( i.size[0], i.size[1], i.size[2] ),
 		} );
 	}
     catalog.shipSchematics.insert( newSchematic, name );
@@ -37,7 +37,7 @@ Function define_ship_schematic( String name, Dictionary data )
 Function initialize_catalog()
 {
     define_component( "tank" );
-	for( Dictionary schematic : assets.schematics.dictionary() )
+	for( Dictionary schematic : assets.schematics )
 	{
 		define_ship_schematic( schematic.key, schematic.value );
 	}
@@ -52,7 +52,7 @@ Function initialize_catalog()
 			Quaternion finalRotation = componentInstance.r * instance.r;
 			
 			Wildcard component( catalog.components[componentInstance.type] );
-			component.draw( finalPosition, finalRotation, componentInstance.s * relativeScale );
+			component.draw( finalPosition, finalRotation, componentInstance.size * relativeScale );
 		}
 	};
 	catalog.prototypes.insert( Dictionary {

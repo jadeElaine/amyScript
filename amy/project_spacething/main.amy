@@ -1,4 +1,8 @@
-Function on_load <Nil> () {
+Simulation sim = Simulation { PrototypeInstantiator, PhysicsUpdate };
+
+Function<Nil> on_load () {
+
+	sim.create_entity( Array { Component<Physics3DConfig> { timeStep: Period<Seconds>(0.25) } } );
     
     initialize_catalog();
     

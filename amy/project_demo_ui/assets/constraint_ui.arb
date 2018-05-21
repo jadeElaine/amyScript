@@ -1,4 +1,3 @@
-Name ConstraintFrame
 X < { precision EXACT mode EDGE amount 100 anchor 0.0 origin 0.0 } { precision EXACT mode EDGE amount -100 anchor 1.0 origin 1.0 } >
 Y < { precision EXACT mode EDGE amount -300 anchor 0.0 origin 1.0 } { precision EXACT mode EDGE amount -100 anchor 1.0 origin 1.0 } >
 

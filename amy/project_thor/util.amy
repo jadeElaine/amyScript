@@ -1,4 +1,4 @@
-Function bind_on_screen <Vector2D>(Vector2D originalPosition, Integer size) {
+Function<Vector2D> bind_on_screen (Vector2D originalPosition, Integer size) {
 	mutable Vector2D result(originalPosition);
 	IntegerVector2D resolution(graphics.get_resolution());
 	
@@ -22,7 +22,7 @@ Function bind_on_screen <Vector2D>(Vector2D originalPosition, Integer size) {
 	return result;
 };
 
-Function move_to_point <Vector2D> (Vector2D originalPosition, Vector2D goal, Real step) {
+Function<Vector2D> move_to_point (Vector2D originalPosition, Vector2D goal, Real step) {
     mutable Vector2D result(originalPosition);
     Vector2D directionToGoal((goal - result).normalized());
     Vector2D stepVector(directionToGoal*step);

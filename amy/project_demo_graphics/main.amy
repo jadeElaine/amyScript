@@ -20,7 +20,7 @@ scene.on_2d = Function <Nil> () {
     draw_shapes( 120, 120 );
 };
 
-Function draw_shapes <Nil> ( Integer xInitial, Integer y ) {
+Function<Nil> draw_shapes ( Integer xInitial, Integer y ) {
 
     mutable Integer x(xInitial); # making a mutable copy so we can change it
     Integer size = 80; # in pixels

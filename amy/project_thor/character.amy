@@ -9,7 +9,7 @@ Vector2D hammerRestingPosition (-15, -15);
 mutable Vector2D hammerPosition (hammerRestingPosition);
 mutable Integer characterDirection (0);
 
-Function update_player <Nil> () {
+Function<Nil> update_player () {
     Real deltaTime(1.0/60.0);
 	# wasd movement controls
     if (input.hold(w))
@@ -71,11 +71,11 @@ Function update_player <Nil> () {
    	}
 };
 
-Function load_player <Nil> () {
+Function<Nil> load_player () {
     position = to_vector2d(graphics.get_resolution() / 2);
 };
 
-Function draw_player <Nil> () {
+Function<Nil> draw_player () {
 	graphics.box_centered( Transform2D( position, 0, playerSize * 2), "2e2e2e");
     graphics.box_centered( Transform2D( position + hammerPosition, 0, 10), yellow);
 };
