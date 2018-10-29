@@ -1,2 +1,0 @@
-These assets are meant to be used as the default fallbacks for the +ui module.  
-They are the property of Joanna Stringer.
