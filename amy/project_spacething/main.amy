@@ -1,8 +1,14 @@
+language.require_version("0.1.0");
+
 Simulation sim = Simulation { PrototypeInstantiator, PhysicsUpdate };
 
 Function<Nil> on_load () {
 
-	sim.create_entity( Array { Component<Physics3DConfig> { timeStep: Period<Seconds>(0.25) } } );
+	sim.create_entity( Component<Physics3DConfig> { timeStep: 0.25 s, gravity: ( 0, 0, 0 ) * m/s/s }, );
+	
+	Auto spaceship = sim.create_entity( Component<Prototype> {}, Component<Named> { name: spaceship }, Component<PhysicalityGenerator> { type: Physicality3DInertial } );
+	
+	sim.instantiate(spaceship);
     
     initialize_catalog();
     

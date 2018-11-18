@@ -22,7 +22,7 @@ Function define_ship_schematic( String name, Dictionary data )
         thrust: data.thrust,
         twist: Vector3D(data.twist[0], data.twist[1], data.twist[2])
     };
-	for( Wildcard i : data.componentInstances )
+	for( Auto i : data.componentInstances )
 	{
 		newSchematic.componentInstances.add( Dictionary {
 			type: i.type,
@@ -46,12 +46,12 @@ Function initialize_catalog()
 	{
 		Real relativeScale = 0.1;
 		Dictionary schematic = catalog.shipSchematics[instance.config.schematic]; 
-		for( Wildcard componentInstance : schematic.componentInstances )
+		for( Auto componentInstance : schematic.componentInstances )
 		{
 			Vector3D finalPosition = (componentInstance.d * instance.r) * relativeScale + instance.d;
 			Quaternion finalRotation = componentInstance.r * instance.r;
 			
-			Wildcard component( catalog.components[componentInstance.type] );
+			Auto component( catalog.components[componentInstance.type] );
 			component.draw( finalPosition, finalRotation, componentInstance.size * relativeScale );
 		}
 	};

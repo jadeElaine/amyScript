@@ -22,7 +22,7 @@ scene.on_update = Function <Boolean> () {
         user_fly_ship( objectManager.instances[userState.controlledObjectId] );
     }
 	
-	for( Wildcard i : objectManager.instances )
+	for( Auto i : objectManager.instances )
 	{ 
 		update_instance( i.value );
 	}
@@ -37,9 +37,9 @@ scene.on_3d_skybox = Function <Nil> () {
 
 scene.on_3d = Function <Nil> () {
 
-	for( Wildcard i : objectManager.instances )
+	for( Auto i : objectManager.instances )
 	{
-		Wildcard prototype( catalog.prototypes[i.value.prototype] );
+		Auto prototype( catalog.prototypes[i.value.prototype] );
 		prototype.draw(i.value);
 	}
 };
