@@ -6,7 +6,7 @@ mutable Dictionary catalog {
 
 Function define_component( String name ) {
     catalog.components.insert( Dictionary { 
-        draw: Function <Nil> ( Vector3D d, Quaternion r, Vector3D size ) {
+        draw: Function[Nil] ( Vector3D d, Quaternion r, Vector3D size ) {
             RenderConfig rcMetal( assets.metal1 )
 			Transform3D t(d, r, size)
             graphics.cylinder(t, rcMetal)
