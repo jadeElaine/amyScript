@@ -1,28 +1,28 @@
-mutable Scene scene = create_scene( "Main" );
+mutable Scene scene = create_scene( "Main" )
 
-scene.on_open = Function <Nil> () {
-    this.add_ui_frame( UIFrame zoneUI( assets.zone_ui ) );
-    this.add_ui_frame( assets.constraint_ui );
+scene.on_open = Function[Nil] () {
+    this.add_ui_frame( UIFrame zoneUI( assets.zone_ui ) )
+    this.add_ui_frame( assets.constraint_ui )
         
-    zoneUI.TestButton1.add_button_press_callback( Function <Nil> () {
-        UIFrame hostFrame = this.get_parent();
+    zoneUI.TestButton1.add_button_press_callback( Function[Nil] () {
+        UIFrame hostFrame = this.get_parent()
         hostFrame.TestLabel.set_text( "This ui is defined using Zones.  You can reference image assets by . delimited local paths, the same as in script.  There are a few hardcoded textures such as FRAME which are meant to supply enough UI placeholder to get started.  All images support 9-slicing, as specified with the frame backdrop.  Also, sorry about the shitty word-wrapping.  I'll fix that at some point." );
-    } );
+    } )
     
-    zoneUI.TestButton2.add_button_press_callback( Function <Nil> () {
-        UIFrame hostFrame = this.get_parent();
-        hostFrame.TestLabel.set_text( "Inside of AmyScript, you can add ui to the current scene using . delimited asset file paths. The scene allows you to grab ui frames by name - though note these are the internal names specified in the files, not the filenames themselves.  Once loaded, the original filename is no longer known by the ui.  Then, as shown in the script, you can reference all child members as properties of the frames, and children of them the same way.  All ui elements expose a few functions, for example buttons can recieve callback functions, and labels can have their text changed." );
-    } );
-};
+    zoneUI.TestButton2.add_button_press_callback( Function[Nil] () {
+        UIFrame hostFrame = this.get_parent()
+        hostFrame.TestLabel.set_text( "Inside of AmyScript, you can add ui to the current scene using . delimited asset file paths. The scene allows you to grab ui frames by name - though note these are the internal names specified in the files, not the filenames themselves.  Once loaded, the original filename is no longer known by the ui.  Then, as shown in the script, you can reference all child members as properties of the frames, and children of them the same way.  All ui elements expose a few functions, for example buttons can recieve callback functions, and labels can have their text changed." )
+    } )
+}
 
 
 
-scene.on_update = Function <Boolean> () {
+scene.on_update = Function[Boolean] () {
 
     if( input.press( escape ) )
     {
-        return false;
+        return false
     }
     
-    return true;
-};
+    return true
+}

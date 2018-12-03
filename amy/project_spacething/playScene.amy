@@ -1,57 +1,57 @@
-mutable Scene scene = create_scene( "playScene" );
+mutable Scene scene = create_scene( "playScene" )
 
-scene.on_open = Function <Nil> () {
+scene.on_open = Function[Nil] () {
 
     # 5% grey light ambient "maximume shadow" and the sun coming in from (-1, .1, 0)
-    add_light( Light( Color( white ) * 0.05 ) );
-    add_light( Light( Color( white ), Color( white ), Vector3D(1, -.1, 0) ) );
+    add_light( Light( Color( white ) * 0.05 ) )
+    add_light( Light( Color( white ), Color( white ), Vector3D(1, -.1, 0) ) )
 	
     # position camera to be 25 units in front of the origin
-    get_3d_camera().position = math.v3forward * 6;
-};
+    get_3d_camera().position = math.v3forward * 6
+}
 
-scene.on_update = Function <Boolean> () {
+scene.on_update = Function[Boolean] () {
 
     if( input.press( escape ) )
     {
-        return false;
+        return false
     }
 
     if(userState.controlledObjectId != -1)
     {
-        user_fly_ship( objectManager.instances[userState.controlledObjectId] );
+        user_fly_ship( objectManager.instances[userState.controlledObjectId] )
     }
 	
-	for( Auto i : objectManager.instances )
+	for( Auto i in objectManager.instances )
 	{ 
-		update_instance( i.value );
+		update_instance( i.value )
 	}
 
-    return true;
-};
+    return true
+}
 
-scene.on_3d_skybox = Function <Nil> () {
-    RenderConfig rcStars( assets.starfield, graphics.unlit );
-    graphics.sphere_shell( Transform3D( math.v3zero, math.pitch(90), 10.0 ), rcStars );
-};
+scene.on_3d_skybox = Function[Nil] () {
+    RenderConfig rcStars( assets.starfield, graphics.unlit )
+    graphics.sphere_shell( Transform3D( math.v3zero, math.pitch(90), 10.0 ), rcStars )
+}
 
-scene.on_3d = Function <Nil> () {
+scene.on_3d = Function[Nil] () {
 
-	for( Auto i : objectManager.instances )
+	for( Auto i in objectManager.instances )
 	{
-		Auto prototype( catalog.prototypes[i.value.prototype] );
-		prototype.draw(i.value);
+		Auto prototype( catalog.prototypes[i.value.prototype] )
+		prototype.draw(i.value)
 	}
-};
+}
 
-scene.on_2d = Function <Nil> () {
-    Integer screenCenter(graphics.get_resolution().x/2);
+scene.on_2d = Function[Nil] () {
+    Integer screenCenter(graphics.get_resolution().x/2)
     
-    Camera3D cam = get_3d_camera();
-    graphics.print_centered( screenCenter, 8, "Hit Dem WASD (+QE) Keys", white );
-    graphics.print_centered( screenCenter, 24, "FPS: " + to_string(get_fps()), white );
+    Camera3D cam = get_3d_camera()
+    graphics.print_centered( screenCenter, 8, "Hit Dem WASD (+QE) Keys", white )
+    graphics.print_centered( screenCenter, 24, "FPS: " + to_string(get_fps()), white )
     
-	#String debug = to_string(prototypes[test].thrust);
-    #graphics.print_centered( screenCenter, 40, debug, white );
-    #graphics.print_centered( screenCenter, 40, to_string(is_nil(sim)), white );
-};
+	#String debug = to_string(prototypes[test].thrust)
+    #graphics.print_centered( screenCenter, 40, debug, white )
+    #graphics.print_centered( screenCenter, 40, to_string(is_nil(sim)), white )
+}

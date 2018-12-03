@@ -1,18 +1,18 @@
-mutable Scene scene = create_scene( "Main" );
+mutable Scene scene = create_scene( "Main" )
 
-scene.on_open = Function <Nil> () {
+scene.on_open = Function[Nil] () {
 
 	# pure white sun-light, and a camera pulled out 16 units
-    add_light( Light( white, white, Vector3D(-1,-1,-1) ) );    
-    get_3d_camera().position = math.v3forward * 16;
-};
+    add_light( Light( white, white, Vector3D(-1,-1,-1) ) )
+    get_3d_camera().position = math.v3forward * 16
+}
 
-scene.on_update = Function <Boolean> () {
+scene.on_update = Function [Boolean] () {
 
-	return !input.press( escape );
-};
+	return !input.press( escape )
+}
 
-scene.on_3d = Function <Nil> () {
+scene.on_3d = Function[Nil] () {
 	# two textures are supplies
 	# - a diffuse texture is loaded with the "Smooth" and "Mipmap" flags
 	# - a self-illumination texture is loaded with just the "Smooth" flag
@@ -31,16 +31,16 @@ scene.on_3d = Function <Nil> () {
 	# - try changing the material to "bronze" or "pearlescent_purple" for other examples, but note that these materials will probably look
 	#        dirty or muted when not used with source textures designed to work well with them.
 	
-	RenderConfig compositeRc( Array { assets.birdofprey_diffuse, assets.birdofprey_si }, assets.birdofprey_shader, pure_bright );
+	RenderConfig compositeRc( Array { assets.birdofprey_diffuse, assets.birdofprey_si }, assets.birdofprey_shader, pure_bright )
     
-    Quaternion spin = math.yaw(get_time() * 25) * math.pitch(-30);
+    Quaternion spin = math.yaw(get_time() * 25) * math.pitch(-30)
     
 	# we can optionally pass a config to the shaders
 	# the supplied shader allows for tuning of the brightness of the SI channel (i.e. for dimming the engines)
 	Dictionary shaderConfig {
 		graphics.uniformSIKey : Array { 1.0 }
-	};
+	}
 	
-	graphics.mesh( Transform3D( math.v3zero, spin ), compositeRc, assets.birdofprey_mesh, shaderConfig );
-};
+	graphics.mesh( Transform3D( math.v3zero, spin ), compositeRc, assets.birdofprey_mesh, shaderConfig )
+}
 

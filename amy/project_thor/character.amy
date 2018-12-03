@@ -1,81 +1,81 @@
-mutable Vector2D position (100, 100);
-Integer playerSize (20);
-Real playerSpeed (400.0);
-Integer hammerSize (10);
-Real hammerSpeed (1024.0);
-Real hoverTime (2.0);
-mutable Real hoverTicker (0.0);
-Vector2D hammerRestingPosition (-15, -15);
-mutable Vector2D hammerPosition (hammerRestingPosition);
-mutable Integer characterDirection (0);
+mutable Vector2D position (100, 100)
+Integer playerSize (20)
+Real playerSpeed (400.0)
+Integer hammerSize (10)
+Real hammerSpeed (1024.0)
+Real hoverTime (2.0)
+mutable Real hoverTicker (0.0)
+Vector2D hammerRestingPosition (-15, -15)
+mutable Vector2D hammerPosition (hammerRestingPosition)
+mutable Integer characterDirection (0)
 
-Function<Nil> update_player () {
-    Real deltaTime(1.0/60.0);
+Function[Nil] update_player () {
+    Real deltaTime(1.0/60.0)
 	# wasd movement controls
     if (input.hold(w))
     {
-        position.y -= playerSpeed * deltaTime;
-        characterDirection = 90;
+        position.y -= playerSpeed * deltaTime
+        characterDirection = 90
     }
     if (input.hold(s))
     {
-        position.y += playerSpeed * deltaTime;
-        characterDirection = 180;
+        position.y += playerSpeed * deltaTime
+        characterDirection = 180
     }
     if (input.hold(a))
     {
-        position.x -= playerSpeed * deltaTime;
-        characterDirection = 270;
+        position.x -= playerSpeed * deltaTime
+        characterDirection = 270
     }
     if (input.hold(d))
     {
-        position.x += playerSpeed * deltaTime;
-        characterDirection = 360;
+        position.x += playerSpeed * deltaTime
+        characterDirection = 360
     }
-    position = bind_on_screen(position, playerSize);
+    position = bind_on_screen(position, playerSize)
 
     # arrow hammer controls
-    mutable Boolean isHammerControlled(false);
+    mutable Boolean isHammerControlled(false)
 
     if (input.hold(up))
     {
-        hammerPosition.y -= hammerSpeed * deltaTime;
-        isHammerControlled = true;
+        hammerPosition.y -= hammerSpeed * deltaTime
+        isHammerControlled = true
     }
     if (input.hold(down))
     {
-        hammerPosition.y += hammerSpeed * deltaTime;
-        isHammerControlled = true;
+        hammerPosition.y += hammerSpeed * deltaTime
+        isHammerControlled = true
     }
     if (input.hold(left))
     {
-        hammerPosition.x -= hammerSpeed * deltaTime;
-        isHammerControlled = true;
+        hammerPosition.x -= hammerSpeed * deltaTime
+        isHammerControlled = true
     }
     if (input.hold(right))
     {
-        hammerPosition.x += hammerSpeed * deltaTime;
-        isHammerControlled = true;
+        hammerPosition.x += hammerSpeed * deltaTime
+        isHammerControlled = true
     }
     if (isHammerControlled) 
     {
-    	hoverTicker = 0.0;
+    	hoverTicker = 0.0
     }
     else
    	{
-   		hoverTicker += deltaTime;
+   		hoverTicker += deltaTime
    		if (hoverTicker > hoverTime)
    		{
-   			hammerPosition = move_to_point(hammerPosition, hammerRestingPosition, hammerSpeed * deltaTime);
+   			hammerPosition = move_to_point(hammerPosition, hammerRestingPosition, hammerSpeed * deltaTime)
    		}
    	}
-};
+}
 
-Function<Nil> load_player () {
-    position = to_vector2d(graphics.get_resolution() / 2);
-};
+Function[Nil] load_player () {
+    position = to_vector2d(graphics.get_resolution() / 2)
+}
 
-Function<Nil> draw_player () {
-	graphics.box_centered( Transform2D( position, 0, playerSize * 2), "2e2e2e");
-    graphics.box_centered( Transform2D( position + hammerPosition, 0, 10), yellow);
-};
+Function[Nil] draw_player () {
+	graphics.box_centered( Transform2D( position, 0, playerSize * 2), "2e2e2e")
+    graphics.box_centered( Transform2D( position + hammerPosition, 0, 10), yellow)
+}

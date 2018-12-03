@@ -2,7 +2,7 @@ mutable Dictionary game_vars {
 	current_score: mutable Integer(0),
 	p_lvl: mutable Integer( 1 ),
 	multiplier: 5
-};
+}
 
 Array lvl_vars {
 	100,
@@ -15,10 +15,10 @@ Array lvl_vars {
 	3300,
 	4500,
 	6000
-};
+}
 
-Function<Nil> lvl_check () {
-	for( mutable Integer i=0; i<lvl_vars.size(); i+=1 )
+Function[Nil] lvl_check () {
+	for( mutable Integer i=0, i<lvl_vars.size(), i+=1 )
 	{
 		if( game_vars.current_score > lvl_vars[i] )
 		{
@@ -27,39 +27,39 @@ Function<Nil> lvl_check () {
 				# +2 is a bit strange as a modifier,
 				# having level be zero based instead of 1 based may clean things up a bit
 				# (i.e. level starts at 0, but when you print it out, you add 1 to it)
-				game_vars.p_lvl = i+2;
+				game_vars.p_lvl = i+2
 			}
 			else if( game_vars.current_score <= lvl_vars[i+1] )
 			{
-				game_vars.p_lvl = i+2;
+				game_vars.p_lvl = i+2
 			}
 		}
 	}
-};
+}
 
-Function<Nil> add_score () {
-	game_vars.current_score += to_integer( (game_vars.multiplier ^ game_vars.p_lvl) / game_vars.p_lvl );
-};
+Function[Nil] add_score () {
+	game_vars.current_score += to_integer( (game_vars.multiplier ^ game_vars.p_lvl) / game_vars.p_lvl )
+}
 
-mutable Scene scene = create_scene( "Main" );
+mutable Scene scene = create_scene( "Main" )
 
-scene.on_update = Function <Boolean> () {
+scene.on_update = Function[Boolean] () {
 
     if( input.press( escape ) )
     {
-        return false;
+        return false
     }
 
     if( input.press( space ) )
     {
-		add_score();
-		lvl_check();
+		add_score()
+		lvl_check()
     }
 	
 	if( input.press( l ) )
 	{
 		# if nothing is found, default to whatever we have (i.e. ignore loading)
-		game_vars = read_local( "PlayerSaveKey", game_vars );
+		game_vars = read_local( "PlayerSaveKey", game_vars )
 	}
 	if( input.press( s ) )
 	{
@@ -67,17 +67,17 @@ scene.on_update = Function <Boolean> () {
 		# Basically, you can write a nested collections of arrays and dictionaries
 		# as long as you don't have like, a ui element or reference to core c++ function somewhere in there
 		
-		write_local( "PlayerSaveKey", game_vars );
+		write_local( "PlayerSaveKey", game_vars )
 	}
     
-    return true;
-};
+    return true
+}
 
-scene.on_2d = Function <Nil> () {  
-    Integer screenCenter(graphics.get_resolution().x/2);
+scene.on_2d = Function[Nil] () {  
+    Integer screenCenter(graphics.get_resolution().x/2)
     
-    graphics.print_centered( screenCenter, 8, "Press Spacebar to get more experience, s to save, l to load, escape to quit", white );
+    graphics.print_centered( screenCenter, 8, "Press Spacebar to get more experience, s to save, l to load, escape to quit", white )
     
-    graphics.print( 0, 40, "Level: " + game_vars.p_lvl, "7d7d7d" );
-    graphics.print( 0, 80, "Experience: " + game_vars.current_score, "7e7e7e" );
-};
+    graphics.print( 0, 40, "Level: " + game_vars.p_lvl, "7d7d7d" )
+    graphics.print( 0, 80, "Experience: " + game_vars.current_score, "7e7e7e" )
+}

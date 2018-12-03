@@ -1,37 +1,37 @@
-mutable Scene scene = create_scene( "Main" );
+mutable Scene scene = create_scene( "Main" )
 
-scene.on_open = Function <Nil> () {
-    this.add_ui_frame( assets.interaction_ui );
-};
+scene.on_open = Function[Nil] () {
+    this.add_ui_frame( assets.interaction_ui )
+}
 
 
 
-scene.on_update = Function <Boolean> () {
+scene.on_update = Function[Boolean] () {
 
     if( input.press( escape ) )
     {
-        return false;
+        return false
     }
     
-    return true;
-};
+    return true
+}
 
 
-scene.on_2d = Function <Nil> () {
-    UIFrame ui = this.get_ui( MainFrame );
+scene.on_2d = Function[Nil] () {
+    UIFrame ui = this.get_ui( MainFrame )
     
     # We are catching exceptions and printing them ourselves so that the program can keep running through bad user data
     try
     {
-        Integer sides = to_integer( execute( ui.SidesTextField.text ) );
-        Real angle = to_real( execute( ui.AngleTextField.text ) );
-        Real size = to_real( execute( ui.SizeTextField.text ) );
-        Color color = execute( ui.ColorTextField.text );
+        Integer sides = to_integer( eval( ui.SidesTextField.text ) )
+        Real angle = to_real( eval( ui.AngleTextField.text ) )
+        Real size = to_real( eval( ui.SizeTextField.text ) )
+        Color color = eval( ui.ColorTextField.text )
     
-        graphics.polygon( Transform2D( graphics.get_resolution()/2, angle, size ), sides, color );
+        graphics.polygon( Transform2D( graphics.get_resolution()/2, angle, size ), sides, color )
     }
     catch( Exception e )
     {
-        graphics.print( 0, 0, character_wrap( "Internal " + e.code + " From UI Fields: " + e.reason, 80), "7d7d7d" );
+        graphics.print( 0, 0, character_wrap( "Internal " + e.code + " From UI Fields: " + e.reason, 80), "7d7d7d" )
     }
-};
+}

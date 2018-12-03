@@ -1,22 +1,22 @@
-language.require_version("0.1.0");
+language.require_version("0.1.0")
 
-Simulation sim = Simulation { PrototypeInstantiator, PhysicsUpdate };
+#Simulation sim = Simulation { PrototypeInstantiator, PhysicsUpdate }
 
-Function<Nil> on_load () {
+Function[Nil] on_load () {
 
-	sim.create_entity( Component<Physics3DConfig> { timeStep: 0.25 s, gravity: ( 0, 0, 0 ) * m/s/s }, );
+	#sim.create_entity( Component[Physics3DConfig] { timeStep: 0.25 s, gravity: ( 0, 0, 0 ) * m/s/s }, )
 	
-	Auto spaceship = sim.create_entity( Component<Prototype> {}, Component<Named> { name: spaceship }, Component<PhysicalityGenerator> { type: Physicality3DInertial } );
+	#Auto spaceship = sim.create_entity( Component[Prototype] {}, Component[Named] { name: spaceship }, Component[PhysicalityGenerator] { type: Physicality3DInertial } )
 	
-	sim.instantiate(spaceship);
+	#sim.instantiate(spaceship)
     
-    initialize_catalog();
+    initialize_catalog()
     
-    create_instance( world, Dictionary { dayLength: 5.0 }, Vector3D(0, 0, 0), math.roll(-22.5) );
+    create_instance( world, Dictionary { dayLength: 5.0 }, Vector3D(0, 0, 0), math.roll(-22.5) )
     
-    create_instance( ship, Dictionary { schematic: "test" }, Vector3D(.75, -1.0, 2.0), math.yaw(0) * math.roll(45) );
+    create_instance( ship, Dictionary { schematic: "test" }, Vector3D(.75, -1.0, 2.0), math.yaw(0) * math.roll(45) )
     
-    userState.controlledObjectId = create_instance( ship, Dictionary { schematic: "test" }, Vector3D(.75, -0.4, 2.0), math.yaw(45) * math.roll(45) );  
+    userState.controlledObjectId = create_instance( ship, Dictionary { schematic: "test" }, Vector3D(.75, -0.4, 2.0), math.yaw(45) * math.roll(45) )
 
-    change_scene(playScene);
-};
+    change_scene(playScene)
+}

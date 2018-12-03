@@ -1,31 +1,31 @@
-mutable Scene scene = create_scene( "Main" );
+mutable Scene scene = create_scene( "Main" )
 
-scene.on_update = Function <Boolean> () {
+scene.on_update = Function[Boolean] () {
 
     if( input.press( escape ) )
     {
-        return false;
+        return false
     }
 
-    return true;
-};
+    return true
+}
 
 
-scene.on_2d = Function <Nil> () {  
-    graphics.box( Transform2D( IntegerVector2D(0,0), 0, graphics.get_resolution() ), blue );
+scene.on_2d = Function[Nil] () {  
+    graphics.box( Transform2D( IntegerVector2D(0,0), 0, graphics.get_resolution() ), blue )
 
-    Integer screenCenter(graphics.get_resolution().x/2);
-    graphics.print_centered( screenCenter, 8, "FPS: " + to_string(get_fps()), white );
+    Integer screenCenter(graphics.get_resolution().x/2)
+    graphics.print_centered( screenCenter, 8, "FPS: " + to_string(get_fps()), white )
     
-    draw_shapes( 120, 120 );
-};
+    draw_shapes( 120, 120 )
+}
 
-Function<Nil> draw_shapes ( Integer xInitial, Integer y ) {
+Function[Nil] draw_shapes ( Integer xInitial, Integer y ) {
 
-    mutable Integer x(xInitial); # making a mutable copy so we can change it
-    Integer size = 80; # in pixels
-    Integer offset = size + 25;
-    Real angle = get_time() * 45; # rotates 45 degrees every second the program runs
+    mutable Integer x(xInitial) # making a mutable copy so we can change it
+    Integer size = 80 # in pixels
+    Integer offset = size + 25
+    Real angle = get_time() * 45 # rotates 45 degrees every second the program runs
     
     # Each shape is drawn 5 times
     # First, the "empty" version shows how to draw just an outline
@@ -38,27 +38,27 @@ Function<Nil> draw_shapes ( Integer xInitial, Integer y ) {
     # Note: any assets with an appropriate file extension will automatically be
     # added to the local namespace in this manner.
     
-    graphics.box_empty_centered( Transform2D( x, y, angle, size), cyan );
-    graphics.box_centered( Transform2D( x, y + offset, angle, size), cyan );
-    graphics.box_centered( Transform2D( x, y + offset*2, angle, size), FFFF7F );
-    graphics.box_centered( Transform2D( x, y + offset*3, angle, size), Color( 1.0, 0.5, 0.0, 1.0 ) );
-    graphics.box_centered( Transform2D( x, y + offset*4, angle, size), assets.grate );
-    x += offset;
+    graphics.box_empty_centered( Transform2D( x, y, angle, size), cyan )
+    graphics.box_centered( Transform2D( x, y + offset, angle, size), cyan )
+    graphics.box_centered( Transform2D( x, y + offset*2, angle, size), FFFF7F )
+    graphics.box_centered( Transform2D( x, y + offset*3, angle, size), Color( 1.0, 0.5, 0.0, 1.0 ) )
+    graphics.box_centered( Transform2D( x, y + offset*4, angle, size), assets.grate )
+    x += offset
 
-    graphics.circle_empty( Transform2D( x, y, angle, size), cyan );
-    graphics.circle( Transform2D( x, y + offset, angle, size), cyan );
-    graphics.circle( Transform2D( x, y + offset*2, angle, size), FFFF7F );
-    graphics.circle( Transform2D( x, y + offset*3, angle, size), Color( 1.0, 0.5, 0.0, 1.0 ) );
-    graphics.circle( Transform2D( x, y + offset*4, angle, size), assets.grate );
-    x += offset;
+    graphics.circle_empty( Transform2D( x, y, angle, size), cyan )
+    graphics.circle( Transform2D( x, y + offset, angle, size), cyan )
+    graphics.circle( Transform2D( x, y + offset*2, angle, size), FFFF7F )
+    graphics.circle( Transform2D( x, y + offset*3, angle, size), Color( 1.0, 0.5, 0.0, 1.0 ) )
+    graphics.circle( Transform2D( x, y + offset*4, angle, size), assets.grate )
+    x += offset
     
     # Polygons will always have one side pointing upward (unless rotated with an angle)
     # the points are all exactly "size" distance from the center, i.e. a polygon will always
     # fit perfectly inside a circle of the same size.
-    graphics.polygon_empty( Transform2D( x, y, angle, size), 5, cyan );
-    graphics.polygon( Transform2D( x, y + offset, angle, size), 4, cyan );
-    graphics.polygon( Transform2D( x, y + offset*2, angle, size), 3, FFFF7F );
-    graphics.polygon( Transform2D( x, y + offset*3, angle, size), 4, Color( 1.0, 0.5, 0.0, 1.0 ) );
-    graphics.polygon( Transform2D( x, y + offset*4, angle, size), 5, assets.grate );
-    x += offset;
-};
+    graphics.polygon_empty( Transform2D( x, y, angle, size), 5, cyan )
+    graphics.polygon( Transform2D( x, y + offset, angle, size), 4, cyan )
+    graphics.polygon( Transform2D( x, y + offset*2, angle, size), 3, FFFF7F )
+    graphics.polygon( Transform2D( x, y + offset*3, angle, size), 4, Color( 1.0, 0.5, 0.0, 1.0 ) )
+    graphics.polygon( Transform2D( x, y + offset*4, angle, size), 5, assets.grate )
+    x += offset
+}

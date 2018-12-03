@@ -1,38 +1,38 @@
-mutable Scene scene = create_scene( "Main" );
+mutable Scene scene = create_scene( "Main" )
 
-scene.on_open = Function <Nil> () {
-	console.print(to_string(position));
-	console.print(to_string(graphics.get_resolution()));
+scene.on_open = Function[Nil] () {
+	console.print(to_string(position))
+	console.print(to_string(graphics.get_resolution()))
 	
-    input.hide_mouse();
-    load_player();
-};
+    input.hide_mouse()
+    load_player()
+}
 
-scene.on_update = Function <Boolean> () {
+scene.on_update = Function[Boolean] () {
 
     if( input.press( escape ) )
     {
-        return false;
+        return false
     }
-    update_player();
+    update_player()
 
-    return true;
-};
+    return true
+}
 
 
-scene.on_2d = Function <Nil> () {  
-    graphics.box( Transform2D( IntegerVector2D(0,0), 0, graphics.get_resolution() ), "9e9e9e");
+scene.on_2d = Function[Nil] () {  
+    graphics.box( Transform2D( IntegerVector2D(0,0), 0, graphics.get_resolution() ), "9e9e9e")
 
-    Integer screenCenter(graphics.get_resolution().x/2);
-    graphics.print_centered( screenCenter, 8, "Press escape to quit", "000000" );
+    Integer screenCenter(graphics.get_resolution().x/2)
+    graphics.print_centered( screenCenter, 8, "Press escape to quit", "000000" )
     
-    IntegerVector2D mouseCursor( input.cursor());
-    graphics.line(mouseCursor, mouseCursor + IntegerVector2D(-10, 5), 1, yellow );
-    graphics.line(mouseCursor, mouseCursor + IntegerVector2D(10, 5), 1, yellow );
-    graphics.line(mouseCursor, mouseCursor + IntegerVector2D(0, -10), 1, yellow );
+    IntegerVector2D mouseCursor( input.cursor())
+    graphics.line(mouseCursor, mouseCursor + IntegerVector2D(-10, 5), 1, yellow )
+    graphics.line(mouseCursor, mouseCursor + IntegerVector2D(10, 5), 1, yellow )
+    graphics.line(mouseCursor, mouseCursor + IntegerVector2D(0, -10), 1, yellow )
     
-    draw_player();
+    draw_player()
     
-    graphics.print_centered( screenCenter, 30, "Thor's coordinates: " + to_string(position.x)+ " "+ to_string(position.y), "000000");
-    graphics.print_centered( screenCenter, 60, "Hammer coordinates: " + to_string(hammerPosition.x)+ " "+ to_string(hammerPosition.y), "000000");
-};
+    graphics.print_centered( screenCenter, 30, "Thor's coordinates: " + to_string(position.x)+ " "+ to_string(position.y), "000000")
+    graphics.print_centered( screenCenter, 60, "Hammer coordinates: " + to_string(hammerPosition.x)+ " "+ to_string(hammerPosition.y), "000000")
+}

@@ -39,24 +39,24 @@ Children
 	{
 		Name SidesTextField
         Zone < 140 20 650 24 >
-		Text "return 2+3;"
+		Text "2+3"
 	}
 	TextField
 	{
 		Name AngleTextField
         Zone < 140 45 650 24 >
-		Text "return get_time() * 22.5;"
+		Text "get_time() * 22.5"
 	}
 	TextField
 	{
 		Name SizeTextField
         Zone < 140 70 650 24 >
-		Text "return 130 + math.sin(get_time()*90)*80;"
+		Text "130 + math.sin(get_time()*90)*80"
 	}
 	TextField
 	{
 		Name ColorTextField
         Zone < 140 95 650 24 >
-		Text "return Color(A43030) + Color(Blue)/2;"
+		Text "Color(A43030) + Color(Blue)/2"
 	}
 }
