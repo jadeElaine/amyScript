@@ -24,6 +24,7 @@ Function update_instance( mutable Dictionary instance ) {
 	instance.d += instance.v * get_delta_time()
 }
 
+#Function for creating a new 3d object
 Function create_instance( String prototype_, Dictionary config_, Vector3D d_, Quaternion r_ ) {
     mutable Dictionary result {
         id: Integer(objectManager.nextInstanceId),
