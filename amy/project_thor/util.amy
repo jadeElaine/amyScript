@@ -1,6 +1,6 @@
-Function[Vector2D] bind_on_screen (Vector2D originalPosition, Integer size) {
-	mutable Vector2D result(originalPosition)
-	IntegerVector2D resolution(graphics.get_resolution())
+bind_on_screen := Function[Vector2D] (originalPosition : Vector2D, size : Integer) {
+	mutable result := originalPosition
+	resolution := graphics.get_resolution()
 	
 	if (result.x - size < 0)
 	{
@@ -22,10 +22,10 @@ Function[Vector2D] bind_on_screen (Vector2D originalPosition, Integer size) {
 	return result
 }
 
-Function[Vector2D] move_to_point (Vector2D originalPosition, Vector2D goal, Real step) {
-    mutable Vector2D result(originalPosition)
-    Vector2D directionToGoal((goal - result).normalized())
-    Vector2D stepVector(directionToGoal*step)
+move_to_point := Function[Vector2D] (originalPosition : Vector2D, goal : Vector2D, step : Real) {
+    mutable result := originalPosition
+    directionToGoal := (goal - result).normalized()
+    stepVector := directionToGoal*step
     if (stepVector.magnitude() >(goal - result).magnitude())
     {
         result = goal

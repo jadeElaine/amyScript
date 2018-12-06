@@ -1,4 +1,4 @@
-mutable Scene scene = create_scene( "Main" )
+mutable scene := create_scene( "Main" )
 
 scene.on_open = Function[Nil] () {
 
@@ -7,7 +7,7 @@ scene.on_open = Function[Nil] () {
     get_3d_camera().position = math.v3forward * 16
 }
 
-scene.on_update = Function [Boolean] () {
+scene.on_update = Function[Boolean] () {
 
 	return !input.press( escape )
 }
@@ -31,13 +31,13 @@ scene.on_3d = Function[Nil] () {
 	# - try changing the material to "bronze" or "pearlescent_purple" for other examples, but note that these materials will probably look
 	#        dirty or muted when not used with source textures designed to work well with them.
 	
-	RenderConfig compositeRc( Array { assets.birdofprey_diffuse, assets.birdofprey_si }, assets.birdofprey_shader, pure_bright )
+	compositeRc := RenderConfig( Array { assets.birdofprey_diffuse, assets.birdofprey_si }, assets.birdofprey_shader, pure_bright )
     
-    Quaternion spin = math.yaw(get_time() * 25) * math.pitch(-30)
+    spin := math.yaw(get_time() * 25) * math.pitch(-30)
     
 	# we can optionally pass a config to the shaders
 	# the supplied shader allows for tuning of the brightness of the SI channel (i.e. for dimming the engines)
-	Dictionary shaderConfig {
+	shaderConfig := {
 		graphics.uniformSIKey : Array { 1.0 }
 	}
 	

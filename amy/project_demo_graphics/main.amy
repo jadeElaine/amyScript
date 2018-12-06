@@ -1,4 +1,4 @@
-mutable Scene scene = create_scene( "Main" )
+mutable scene := create_scene( "Main" )
 
 scene.on_update = Function[Boolean] () {
 
@@ -14,18 +14,19 @@ scene.on_update = Function[Boolean] () {
 scene.on_2d = Function[Nil] () {  
     graphics.box( Transform2D( IntegerVector2D(0,0), 0, graphics.get_resolution() ), blue )
 
-    Integer screenCenter(graphics.get_resolution().x/2)
+    screenCenter := graphics.get_resolution().x/2
     graphics.print_centered( screenCenter, 8, "FPS: " + to_string(get_fps()), white )
     
     draw_shapes( 120, 120 )
 }
 
-Function[Nil] draw_shapes ( Integer xInitial, Integer y ) {
+# Comment For Draw Shapes!
+draw_shapes := Function[Nil] ( xInitial : Integer, y : Integer ) {
 
-    mutable Integer x(xInitial) # making a mutable copy so we can change it
-    Integer size = 80 # in pixels
-    Integer offset = size + 25
-    Real angle = get_time() * 45 # rotates 45 degrees every second the program runs
+    mutable x := xInitial # making a mutable copy so we can change it
+    size := 80 # in pixels
+    offset := size + 25
+    angle := get_time() * 45 # rotates 45 degrees every second the program runs
     
     # Each shape is drawn 5 times
     # First, the "empty" version shows how to draw just an outline

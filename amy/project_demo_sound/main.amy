@@ -1,4 +1,4 @@
-mutable Scene scene = create_scene( "Main" )
+mutable scene := create_scene( "Main" )
 
 scene.on_open = Function[Nil] () {
     # the music.play function is in this case playing the music file located at
@@ -31,7 +31,7 @@ scene.on_update = Function[Boolean] () {
     }
     if( input.press( left ) )
     {
-        Integer clipChannel = sound.play(assets.bleep)
+        clipChannel := sound.play(assets.bleep)
         # sound.play returns an integer for which sound-card channel
         # the sounds is playing on.  You can use this sound channel to
         # change the panning of the played clip.  Currently only 2.0 surround is supported
@@ -42,7 +42,7 @@ scene.on_update = Function[Boolean] () {
     }
     if( input.press( right ) )
     {
-        Integer clipChannel = sound.play(assets.bleep)
+        clipChannel := sound.play(assets.bleep)
         if( clipChannel != -1 )
         {
             sound.set_panning( clipChannel, 1 )
@@ -56,6 +56,6 @@ scene.on_update = Function[Boolean] () {
 scene.on_2d = Function[Nil] () {  
     graphics.box( Transform2D( IntegerVector2D(0,0), 0, graphics.get_resolution() ), green )
 
-    Integer screenCenter(graphics.get_resolution().x/2)
+    screenCenter := graphics.get_resolution().x/2
     graphics.print_centered( screenCenter, 8, "Press arrow keys to play sound", white )
 }

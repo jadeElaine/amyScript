@@ -1,5 +1,5 @@
-Function user_fly_ship( mutable Dictionary ship ) {
-	Dictionary shipSchematic = catalog.shipSchematics[ship.config.schematic]
+user_fly_ship := Function( ship : mutable Dictionary ) {
+	shipSchematic := catalog.shipSchematics[ship.config.schematic]
 	ship.f = false
 	ship.t = false
 	

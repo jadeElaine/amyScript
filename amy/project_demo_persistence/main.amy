@@ -1,18 +1,18 @@
-mutable Integer localVariable( 0 )
-mutable Integer remoteVariable( 0 )
-mutable Boolean loading( false )
+mutable localVariable := 0
+mutable remoteVariable := 0
+mutable loading := false
 
-mutable Scene scene = create_scene( "Main" )
+mutable scene := create_scene( "Main" )
 
 scene.on_open = Function () {
     loading = true
     localVariable = read_local( "CachedVariableKey", 0 )
-    read_remote( "CachedVariableKey", 0, Function ( Integer val ) {
+    read_remote( "CachedVariableKey", 0, Function ( val : Integer ) {
         remoteVariable = val
     }, 3.0 )
 }
 
-Function increment( mutable Integer target, Integer delta ) {
+increment := Function( target : mutable Integer, delta : Integer ) {
     target += delta
 }
 
@@ -37,7 +37,7 @@ scene.on_update = Function[Boolean] () {
     if( input.press( up ) & input.shift() )
     {
         remoteVariable += 1
-        write_remote( "CachedVariableKey", remoteVariable, Function ( Integer val ) {
+        write_remote( "CachedVariableKey", remoteVariable, Function ( val : Integer ) {
             console.print( to_string( val ) )
         }, 3.0 )
     }
@@ -45,7 +45,7 @@ scene.on_update = Function[Boolean] () {
     {
         remoteVariable -= 1
         #increment( remoteVariable, -1 )
-        write_remote( "CachedVariableKey", remoteVariable, Function ( Integer val ) {
+        write_remote( "CachedVariableKey", remoteVariable, Function ( val : Integer ) {
             console.print( to_string( val ) )
         }, 3.0 )
     }
@@ -54,8 +54,8 @@ scene.on_update = Function[Boolean] () {
 }
 
 scene.on_2d = Function[Nil] () {  
-    Integer screenXCenter(graphics.get_resolution().x/2)
-    Integer screenYCenter(graphics.get_resolution().y/2)
+    screenXCenter := graphics.get_resolution().x/2
+    screenYCenter := graphics.get_resolution().y/2
     
     graphics.print_centered( screenXCenter, 8, "Press Up and Down to change the first number", white )
     graphics.print_centered( screenXCenter, 8+16, "Prese Shift-Up and Shift-Down to change the second number", white )

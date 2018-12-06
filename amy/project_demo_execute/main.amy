@@ -1,7 +1,7 @@
-mutable Scene scene = create_scene( "Main" )
+mutable scene := create_scene( "Main" )
 
 scene.on_open = Function[Nil] () {
-    this.add_ui_frame( assets.interaction_ui )
+    add_ui_frame( assets.interaction_ui )
 }
 
 
@@ -18,15 +18,15 @@ scene.on_update = Function[Boolean] () {
 
 
 scene.on_2d = Function[Nil] () {
-    UIFrame ui = this.get_ui( MainFrame )
+    ui := get_ui( MainFrame )
     
     # We are catching exceptions and printing them ourselves so that the program can keep running through bad user data
     try
     {
-        Integer sides = to_integer( eval( ui.SidesTextField.text ) )
-        Real angle = to_real( eval( ui.AngleTextField.text ) )
-        Real size = to_real( eval( ui.SizeTextField.text ) )
-        Color color = eval( ui.ColorTextField.text )
+        sides := to_integer( eval( ui.SidesTextField.text ) )
+        angle := to_real( eval( ui.AngleTextField.text ) )
+        size := to_real( eval( ui.SizeTextField.text ) )
+        color := eval( ui.ColorTextField.text )
     
         graphics.polygon( Transform2D( graphics.get_resolution()/2, angle, size ), sides, color )
     }

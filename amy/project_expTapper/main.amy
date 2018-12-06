@@ -1,10 +1,10 @@
-mutable Dictionary game_vars {
+mutable game_vars := {
 	current_score: mutable Integer(0),
 	p_lvl: mutable Integer( 1 ),
 	multiplier: 5
 }
 
-Array lvl_vars {
+lvl_vars := {
 	100,
 	255,
 	500,
@@ -17,8 +17,8 @@ Array lvl_vars {
 	6000
 }
 
-Function[Nil] lvl_check () {
-	for( mutable Integer i=0, i<lvl_vars.size(), i+=1 )
+lvl_check := Function[Nil] () {
+	for( mutable i := 0, i<lvl_vars.size(), i+=1 )
 	{
 		if( game_vars.current_score > lvl_vars[i] )
 		{
@@ -37,11 +37,11 @@ Function[Nil] lvl_check () {
 	}
 }
 
-Function[Nil] add_score () {
+add_score := Function[Nil] () {
 	game_vars.current_score += to_integer( (game_vars.multiplier ^ game_vars.p_lvl) / game_vars.p_lvl )
 }
 
-mutable Scene scene = create_scene( "Main" )
+mutable scene := create_scene( "Main" )
 
 scene.on_update = Function[Boolean] () {
 
@@ -74,7 +74,7 @@ scene.on_update = Function[Boolean] () {
 }
 
 scene.on_2d = Function[Nil] () {  
-    Integer screenCenter(graphics.get_resolution().x/2)
+    screenCenter := graphics.get_resolution().x/2
     
     graphics.print_centered( screenCenter, 8, "Press Spacebar to get more experience, s to save, l to load, escape to quit", white )
     

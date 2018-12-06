@@ -1,67 +1,65 @@
-mutable Dictionary catalog {
+mutable catalog := {
 	components: mutable Dictionary {},
 	shipSchematics: mutable Dictionary {},
 	prototypes: mutable Dictionary {}
 }
 
-Function define_component( String name ) {
+define_component := Function( name : String ) {
     catalog.components.insert( Dictionary { 
-        draw: Function[Nil] ( Vector3D d, Quaternion r, Vector3D size ) {
-            RenderConfig rcMetal( assets.metal1 )
-			Transform3D t(d, r, size)
+        draw: Function[Nil] ( d : Vector3D, r : Quaternion, bounds : Vector3D ) {
+            rcMetal := RenderConfig( assets.metal1 )
+			t := Transform3D(d, r, bounds)
             graphics.cylinder(t, rcMetal)
         }
     }, name )
 }
 
-Function define_ship_schematic( String name, Dictionary data ) {
-	Dictionary newSchematic {
+define_ship_schematic := Function( name : String, data : Dictionary) {
+	newSchematic := {
         componentInstances: mutable Array {},
         thrust: data.thrust,
         twist: Vector3D(data.twist[0], data.twist[1], data.twist[2])
     }
-	for( Auto i in data.componentInstances )
+	for( i in data.componentInstances )
 	{
 		newSchematic.componentInstances.add( Dictionary {
 			type: i.type,
 			d:Vector3D( i.offset[0], i.offset[1], i.offset[2] ),
 			r:math.euler( i.rotation[0], i.rotation[1], i.rotation[2] ),
-			size:Vector3D( i.size[0], i.size[1], i.size[2] ),
+			bounds:Vector3D( i.bounds[0], i.bounds[1], i.bounds[2] ),
 		} )
 	}
     catalog.shipSchematics.insert( newSchematic, name )
 }
 
-Function initialize_catalog() {
+initialize_catalog := Function() {
     define_component( "tank" )
-	for( Dictionary schematic in assets.schematics )
+	for( schematic in assets.schematics )
 	{
 		define_ship_schematic( schematic.key, schematic.value )
 	}
 	
-	Function shipDrawFunction = Function[Nil] ( Dictionary instance )
-	{
-		Real relativeScale = 0.1
-		Dictionary schematic = catalog.shipSchematics[instance.config.schematic]
-		for( Auto componentInstance in schematic.componentInstances )
+	shipDrawFunction := Function[Nil] ( instance : Dictionary ) {
+		relativeScale := 0.1
+		schematic := catalog.shipSchematics[instance.config.schematic]
+		for( componentInstance in schematic.componentInstances )
 		{
-			Vector3D finalPosition = (componentInstance.d * instance.r) * relativeScale + instance.d
-			Quaternion finalRotation = componentInstance.r * instance.r
+			finalPosition := (componentInstance.d * instance.r) * relativeScale + instance.d
+			finalRotation := componentInstance.r * instance.r
 			
-			Auto component( catalog.components[componentInstance.type] )
-			component.draw( finalPosition, finalRotation, componentInstance.size * relativeScale )
+			component := catalog.components[componentInstance.type]
+			component.draw( finalPosition, finalRotation, componentInstance.bounds * relativeScale )
 		}
 	}
 	catalog.prototypes.insert( Dictionary {
 		draw: shipDrawFunction
 	}, "ship" )
 	
-	Function worldDrawFunction = Function[Nil] ( Dictionary instance )
-	{
-		RenderConfig rc( assets.earth, graphics.lit )
+	worldDrawFunction := Function[Nil] ( instance : Dictionary ) {
+		rc := RenderConfig( assets.earth, graphics.lit )
 		
-		Real angle = get_time() * 360.0 / instance.config.dayLength
-		Quaternion spin = math.pitch(90) * math.yaw(angle) * instance.r
+		angle := get_time() * 360.0 / instance.config.dayLength
+		spin := math.pitch(90) * math.yaw(angle) * instance.r
 		
 		graphics.sphere( Transform3D( instance.d, spin, 1 ), rc )
 	}

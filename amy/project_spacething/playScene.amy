@@ -1,4 +1,4 @@
-mutable Scene scene = create_scene( "playScene" )
+mutable scene := create_scene( "playScene" )
 
 scene.on_open = Function[Nil] () {
 
@@ -22,7 +22,7 @@ scene.on_update = Function[Boolean] () {
         user_fly_ship( objectManager.instances[userState.controlledObjectId] )
     }
 	
-	for( Auto i in objectManager.instances )
+	for( i in objectManager.instances )
 	{ 
 		update_instance( i.value )
 	}
@@ -31,23 +31,23 @@ scene.on_update = Function[Boolean] () {
 }
 
 scene.on_3d_skybox = Function[Nil] () {
-    RenderConfig rcStars( assets.starfield, graphics.unlit )
+    rcStars := RenderConfig( assets.starfield, graphics.unlit )
     graphics.sphere_shell( Transform3D( math.v3zero, math.pitch(90), 10.0 ), rcStars )
 }
 
 scene.on_3d = Function[Nil] () {
 
-	for( Auto i in objectManager.instances )
+	for( i in objectManager.instances )
 	{
-		Auto prototype( catalog.prototypes[i.value.prototype] )
+		prototype := catalog.prototypes[i.value.prototype]
 		prototype.draw(i.value)
 	}
 }
 
 scene.on_2d = Function[Nil] () {
-    Integer screenCenter(graphics.get_resolution().x/2)
+    screenCenter := graphics.get_resolution().x/2
     
-    Camera3D cam = get_3d_camera()
+    cam := get_3d_camera()
     graphics.print_centered( screenCenter, 8, "Hit Dem WASD (+QE) Keys", white )
     graphics.print_centered( screenCenter, 24, "FPS: " + to_string(get_fps()), white )
     

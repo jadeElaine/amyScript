@@ -1,4 +1,4 @@
-mutable Scene scene = create_scene( "Main" )
+mutable scene := create_scene( "Main" )
 
 scene.on_open = Function[Nil] () {
 
@@ -43,9 +43,9 @@ scene.on_update = Function[Boolean] () {
 scene.on_3d = Function[Nil] () {
     # Set up a rendering config that uses the grate texture, 
     # and shaders which respond to lighting
-    RenderConfig rc( assets.grate, graphics.lit )
+    rc := RenderConfig( assets.grate, graphics.lit )
     
-    Quaternion spin = math.yaw(get_time() * 25) * math.pitch(-30)
+    spin := math.yaw(get_time() * 25) * math.pitch(-30)
     
     # draw a spinning spherical shell, with a smaller sphere inside of it
     graphics.sphere_shell( Transform3D( math.v3zero, spin, 1.5 ), rc )
@@ -53,8 +53,8 @@ scene.on_3d = Function[Nil] () {
 }
 
 scene.on_2d = Function[Nil] () {
-    Integer screenCenter(graphics.get_resolution().x/2)
+    screenCenter := graphics.get_resolution().x/2
     
-    Camera3D cam = get_3d_camera()
+    cam := get_3d_camera()
     graphics.print_centered( screenCenter, 8, "Adjust camera with arrow keys", white )
 }
