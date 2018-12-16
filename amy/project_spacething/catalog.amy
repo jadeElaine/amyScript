@@ -1,7 +1,6 @@
 mutable catalog := {
 	components: mutable Dictionary {},
-	shipSchematics: mutable Dictionary {},
-	prototypes: mutable Dictionary {}
+	shipSchematics: mutable Dictionary {}
 }
 
 define_component := Function( name : String ) {
@@ -34,36 +33,9 @@ define_ship_schematic := Function( name : String, data : Dictionary) {
 
 initialize_catalog := Function() {
     define_component( "tank" )
+	
 	for( schematic in assets.schematics )
 	{
 		define_ship_schematic( schematic.key, schematic.value )
 	}
-	
-	shipDrawFunction := Function[Nil] ( instance : Dictionary ) {
-		relativeScale := 0.1
-		schematic := catalog.shipSchematics[instance.config.schematic]
-		for( componentInstance in schematic.componentInstances )
-		{
-			finalPosition := (componentInstance.d * instance.r) * relativeScale + instance.d
-			finalRotation := componentInstance.r * instance.r
-			
-			component := catalog.components[componentInstance.type]
-			component.draw( finalPosition, finalRotation, componentInstance.bounds * relativeScale )
-		}
-	}
-	catalog.prototypes.insert( Dictionary {
-		draw: shipDrawFunction
-	}, "ship" )
-	
-	worldDrawFunction := Function[Nil] ( instance : Dictionary ) {
-		rc := RenderConfig( assets.earth, graphics.lit )
-		
-		angle := get_time() * 360.0 / instance.config.dayLength
-		spin := math.pitch(90) * math.yaw(angle) * instance.r
-		
-		graphics.sphere( Transform3D( instance.d, spin, 1 ), rc )
-	}
-	catalog.prototypes.insert( Dictionary {
-		draw: worldDrawFunction
-	}, "world" )
 }

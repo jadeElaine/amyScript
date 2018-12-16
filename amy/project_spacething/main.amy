@@ -1,22 +1,81 @@
 language.require_version("0.1.0")
 
-sim := Simulation { PrototypeInstantiator, PhysicsUpdate }
+sim := Simulation { PrototypeInstantiator, Physics3DUpdate, Renderer3D }
 
 on_load := Function[Nil] () {
 
-	sim.create_entity( Component[Physics3DConfig] { timeStep: 0.25 s, gravity: ( 0, 0, 0 ) * m/s/s }, )
-	
-	spaceship := sim.create_entity( Component[Prototype] {}, Component[Named] { name: spaceship }, Component[PhysicalityGenerator] { type: Physicality3DInertial } )
-	
-	sim.instantiate(spaceship)
-    
     initialize_catalog()
+	
+	# Physics Config
+	sim.create_entity( Component[Physics3DConfig] { timeStep: 0.01 s, gravity: ( 0, 0, 0 ) * m/s/s } )
+	
+	# Starfield
+	sim.create_entity( 
+		Component[Physicality3DDiscrete] {}
+		Component[Render3DFunction] { layer: Skybox, func: Function( ent : Entity, trans : Transform3D ) {
+			rcStars := RenderConfig( assets.starfield, graphics.unlit )
+			graphics.sphere_shell( Transform3D( math.v3zero, math.pitch(90), 10.0 ), rcStars )
+		} }
+	)
+	
+	# Planet
+	worldRenderFunction := Function( ent : Entity, trans : Transform3D ) {
+		rc := RenderConfig( ent.Custom.data.texture, graphics.lit )
+		
+		angle := get_time() * 360.0 / ent.Custom.data.dayLength
+		spin := math.pitch(90) * math.yaw(angle) * trans.r
+		
+		graphics.sphere( Transform3D( trans.d, spin, 1 ), rc )
+	}
+	
+	sim.create_entity(
+		Component[Prototype] {}
+		Component[Named] { name: world }
+		Component[Physicality3DGenerator] { type: Physicality3DKinematic }
+		Component[Render3DFunction] { layer: Solid, func: worldRenderFunction }
+	)
+	
+	earthInst := sim.instantiate(world)
+	earthInst.add_component( Component[Custom] { data : { dayLength: 5.0, texture: assets.earth } } )
+	earthInst.Physicality3DKinematic.position = Vector3D(0, 0, 0) m
+	earthInst.Physicality3DKinematic.rotation = math.roll(-22.5)
+	
+	# Ship
+	shipRenderFunction := Function( ent : Entity, trans : Transform3D ) {
+		relativeScale := 0.1
+		schematic := catalog.shipSchematics[ent.Custom.data.schematic]
+		for( componentInstance in schematic.componentInstances )
+		{
+			finalPosition := (componentInstance.d * trans.r) * relativeScale + trans.d
+			finalRotation := componentInstance.r * trans.r
+			
+			component := catalog.components[componentInstance.type]
+			component.draw( finalPosition, finalRotation, componentInstance.bounds * relativeScale )
+		}
+	}
+	
+	sim.create_entity(
+		Component[Prototype] {}
+		Component[Named] { name: ship }
+		Component[Physicality3DGenerator] { type: Physicality3DInertial }
+		Component[Render3DFunction] { layer: Solid, func: shipRenderFunction }
+	)
+	
+	{
+		shipInst1 := sim.instantiate(ship)
+		shipInst1.add_component( Component[Custom] { data : { schematic: "test" } } )
+		shipInst1.Physicality3DInertial.position = Vector3D(.75, -1.0, 2.0) m
+		shipInst1.Physicality3DInertial.rotation = math.yaw(0) * math.roll(45)
+	}
     
-    create_instance( world, Dictionary { dayLength: 5.0 }, Vector3D(0, 0, 0), math.roll(-22.5) )
+	{
+		shipInst2 := sim.instantiate(ship)
+		shipInst2.add_component( Component[Custom] { data : { schematic: "test" } } )
+		shipInst2.Physicality3DInertial.position = Vector3D(.75, -0.4, 2.0) m
+		shipInst2.Physicality3DInertial.rotation = math.yaw(45) * math.roll(45)
+		
+		userState.controlledObjectId = shipInst2.guid
+	}
     
-    create_instance( ship, Dictionary { schematic: "test" }, Vector3D(.75, -1.0, 2.0), math.yaw(0) * math.roll(45) )
-    
-    userState.controlledObjectId = create_instance( ship, Dictionary { schematic: "test" }, Vector3D(.75, -0.4, 2.0), math.yaw(45) * math.roll(45) )
-
     change_scene(playScene)
 }

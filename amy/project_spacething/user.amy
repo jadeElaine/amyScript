@@ -1,0 +1,62 @@
+mutable userState := {
+	controlledObjectId: mutable Guid()
+}
+
+user_fly_ship := Function( ship : Entity ) {
+
+	shipSchematic := catalog.shipSchematics[ship.Custom.data.schematic]
+	phys := ship.Physicality3DInertial
+	
+	torquing := mutable false
+	
+    if( input.hold( w ) )
+    {
+        phys.omega -= math.v3right * get_delta_time() * shipSchematic.twist.x rad/s
+		torquing = true
+    }
+    if( input.hold( s ) )
+    {
+        phys.omega += math.v3right * get_delta_time() * shipSchematic.twist.x rad/s
+		torquing = true
+    }
+	
+    if( input.hold( a ) )
+    {
+        phys.omega += math.v3up * get_delta_time() * shipSchematic.twist.y rad/s
+		torquing = true
+    }
+    if( input.hold( d ) )
+    {
+        phys.omega -= math.v3up * get_delta_time() * shipSchematic.twist.y rad/s
+		torquing = true
+    }
+	
+    if( input.hold( q ) )
+    {
+        phys.omega += math.v3forward * get_delta_time() * shipSchematic.twist.z rad/s
+		torquing = true
+    }
+    if( input.hold( e ) )
+    {
+        phys.omega -= math.v3forward * get_delta_time() * shipSchematic.twist.z rad/s
+		torquing = true
+    }
+	
+	if( input.hold( space ) )
+	{
+        phys.velocity += (math.v3forward * phys.rotation) * get_delta_time() * shipSchematic.thrust m/s
+	}
+	
+	if( !torquing )
+	{
+		step := get_delta_time() * 35.0
+		if( phys.omega.get_value().magnitude() > step )
+		{
+			phys.omega -= phys.omega.get_value().normalized() * step rad/s
+		}
+		else
+		{
+			phys.omega = math.v3zero rad/s
+		}
+	}
+}

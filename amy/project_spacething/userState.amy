@@ -1,3 +1,0 @@
-mutable userState := {
-	controlledObjectId: mutable Integer(-1)
-}
