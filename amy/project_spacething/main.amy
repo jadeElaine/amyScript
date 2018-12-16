@@ -1,6 +1,6 @@
 language.require_version("0.1.0")
 
-sim := Simulation { PrototypeInstantiator, Physics3DUpdate, Renderer3D }
+sim := Simulation { PrototypeInstantiator, Physics3DUpdate, SceneRenderer }
 
 on_load := Function[Nil] () {
 
@@ -12,27 +12,27 @@ on_load := Function[Nil] () {
 	# Starfield
 	sim.create_entity( 
 		Physicality3DDiscrete : {},
-		Render3DFunction : { skybox: Function( ent : Entity, trans : Transform3D ) {
+		RenderFunction : { skybox: Function( ent : Entity ) {
 			rcStars := RenderConfig( assets.starfield, graphics.unlit )
 			graphics.sphere_shell( Transform3D( math.v3zero, math.pitch(90), 10.0 ), rcStars )
 		} }
 	)
 	
 	# Planet
-	worldRenderFunction := Function( ent : Entity, trans : Transform3D ) {
+	worldRenderFunction := Function( ent : Entity ) {
 		rc := RenderConfig( ent.Custom.texture, graphics.lit )
 		
 		angle := get_time() * 360.0 / ent.Custom.dayLength
-		spin := math.pitch(90) * math.yaw(angle) * trans.r
+		spin := math.pitch(90) * math.yaw(angle) * ent.Physicality3DKinematic.rotation
 		
-		graphics.sphere( Transform3D( trans.d, spin, 1 ), rc )
+		graphics.sphere( Transform3D( ent.Physicality3DKinematic.position.get_value(), spin, 1 ), rc )
 	}
 	
 	sim.create_entity(
 		Prototype : {},
 		Named : { name: world },
 		Physicality3DGenerator : { type: Physicality3DKinematic },
-		Render3DFunction : { solid: worldRenderFunction }
+		RenderFunction : { solid: worldRenderFunction }
 	)
 	
 	earthInst := sim.instantiate(world)
@@ -46,8 +46,8 @@ on_load := Function[Nil] () {
 		schematic := catalog.shipSchematics[ent.Custom.schematic]
 		for( componentInstance in schematic.componentInstances )
 		{
-			finalPosition := (componentInstance.d * trans.r) * relativeScale + trans.d
-			finalRotation := componentInstance.r * trans.r
+			finalPosition := (componentInstance.d * ent.Physicality3DInertial.rotation) * relativeScale + ent.Physicality3DInertial.position.get_value()
+			finalRotation := componentInstance.r * ent.Physicality3DInertial.rotation
 			
 			component := catalog.components[componentInstance.type]
 			component.draw( finalPosition, finalRotation, componentInstance.bounds * relativeScale )
@@ -58,7 +58,7 @@ on_load := Function[Nil] () {
 		Prototype : {},
 		Named : { name: ship },
 		Physicality3DGenerator : { type: Physicality3DInertial },
-		Render3DFunction : { solid: shipRenderFunction }
+		RenderFunction : { solid : shipRenderFunction }
 	)
 	
 	{
