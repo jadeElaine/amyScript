@@ -1,8 +1,8 @@
 mutable scene := create_scene( "Main" )
 
 scene.on_open = Function[Nil] () {
-	console.print(to_string(position))
-	console.print(to_string(graphics.get_resolution()))
+	console.print(position.to_string())
+	console.print(graphics.get_resolution().to_string())
 	
     input.hide_mouse()
     load_player()
@@ -33,6 +33,6 @@ scene.on_2d = Function[Nil] () {
     
     draw_player()
     
-    graphics.print_centered( screenCenter, 30, "Thor's coordinates: " + to_string(position.x)+ " "+ to_string(position.y), "000000")
-    graphics.print_centered( screenCenter, 60, "Hammer coordinates: " + to_string(hammerPosition.x)+ " "+ to_string(hammerPosition.y), "000000")
+    graphics.print_centered( screenCenter, 30, "Thor's coordinates: " + position.x.to_string()+ " "+ position.y.to_string(), "000000")
+    graphics.print_centered( screenCenter, 60, "Hammer coordinates: " + hammerPosition.x.to_string()+ " "+ hammerPosition.y.to_string(), "000000")
 }

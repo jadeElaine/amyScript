@@ -23,12 +23,12 @@ scene.on_2d = Function[Nil] () {
     # We are catching exceptions and printing them ourselves so that the program can keep running through bad user data
     try
     {
-        sides := to_integer( eval( ui.SidesTextField.text ) )
-        angle := to_real( eval( ui.AngleTextField.text ) )
-        size := to_real( eval( ui.SizeTextField.text ) )
+        sides := eval( ui.SidesTextField.text ).to_integer()
+        angle := eval( ui.AngleTextField.text ).to_real()
+        size := eval( ui.SizeTextField.text ).to_real()
         color := eval( ui.ColorTextField.text )
     
-        graphics.polygon( Transform2D( graphics.get_resolution()/2, angle, size ), sides, color )
+        graphics.polygon( Transform2D( graphics.get_resolution()/2, angle * math.pi / 180, size ), sides, color )
     }
     catch( Exception e )
     {

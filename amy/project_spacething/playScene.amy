@@ -9,7 +9,7 @@ scene.on_open = Function[Nil] () {
     # position camera to be 25 units in front of the origin
     get_3d_camera().position = math.v3forward * 6
 	
-	sim.generate_scene_view(this)
+	sim.link_scene(this)
 }
 
 scene.on_update = Function[Boolean] () {
@@ -40,5 +40,5 @@ scene.on_2d = Function[Nil] () {
     
     cam := get_3d_camera()
     graphics.print_centered( screenCenter, 8, "Hit Dem WASD (+QE) Keys", white )
-    graphics.print_centered( screenCenter, 24, "FPS: " + to_string(get_fps()), white )
+    graphics.print_centered( screenCenter, 24, "FPS: " + get_fps().to_string(), white )
 }

@@ -73,7 +73,7 @@ update_player := Function[Nil] () {
 }
 
 load_player := Function[Nil] () {
-    position = to_vector2d(graphics.get_resolution() / 2)
+    position = (graphics.get_resolution() / 2).to_vector2d()
 }
 
 draw_player := Function[Nil] () {

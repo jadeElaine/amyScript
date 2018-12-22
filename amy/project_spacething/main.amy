@@ -1,53 +1,57 @@
 language.require_version("0.1.0")
 
-sim := Simulation { PrototypeInstantiator, Physics3DUpdate, SceneRenderer }
+sim := Simulation { PrototypeInstantiator, Physics3DUpdate, SceneLink,
+	PlanetConfig {texture : Texture, dayLength : Real},
+	ShipConfig {schematic : String} }
 
 on_load := Function[Nil] () {
 
     initialize_catalog()
 	
 	# Physics Config
-	sim.create_entity( Physics3DConfig : { timeStep: 0.01 s, gravity: ( 0, 0, 0 ) * m/s/s } )
+	sim.create_entity( 
+		Physics3DConfig : { timeStep: 0.01 s, gravity: ( 0, 0, 0 ) * m/s/s }
+	)
 	
 	# Starfield
 	sim.create_entity( 
 		Physicality3DDiscrete : {},
-		RenderFunction : { skybox: Function( ent : Entity ) {
+		ViewFunction : { skybox: Function( sc : Scene ) {
 			rcStars := RenderConfig( assets.starfield, graphics.unlit )
 			graphics.sphere_shell( Transform3D( math.v3zero, math.pitch(90), 10.0 ), rcStars )
 		} }
 	)
 	
 	# Planet
-	worldRenderFunction := Function( ent : Entity ) {
-		rc := RenderConfig( ent.Custom.texture, graphics.lit )
+	worldRenderFunction := Function( sc : Scene ) {
+		rc := RenderConfig( this.PlanetConfig.texture, graphics.lit )
 		
-		angle := get_time() * 360.0 / ent.Custom.dayLength
-		spin := math.pitch(90) * math.yaw(angle) * ent.Physicality3DKinematic.rotation
+		angle := get_time() * 360.0 / this.PlanetConfig.dayLength
+		spin := math.pitch(90) * math.yaw(angle) * this.Physicality3DKinematic.rotation
 		
-		graphics.sphere( Transform3D( ent.Physicality3DKinematic.position.get_value(), spin, 1 ), rc )
+		graphics.sphere( Transform3D( this.Physicality3DKinematic.position.to_vector3d(), spin, 1 ), rc )
 	}
 	
 	sim.create_entity(
 		Prototype : {},
 		Named : { name: world },
 		Physicality3DGenerator : { type: Physicality3DKinematic },
-		RenderFunction : { solid: worldRenderFunction }
+		ViewFunction : { solid: worldRenderFunction }
 	)
 	
 	earthInst := sim.instantiate(world)
-	earthInst.add_components( Custom : { dayLength: 5.0, texture: assets.earth } )
+	earthInst.add_components( PlanetConfig : { dayLength: 5.0, texture: assets.earth } )
 	earthInst.Physicality3DKinematic.position = (0, 0, 0) m
 	earthInst.Physicality3DKinematic.rotation = math.roll(-22.5)
 	
 	# Ship
-	shipRenderFunction := Function( ent : Entity, trans : Transform3D ) {
+	shipRenderFunction := Function( sc : Scene ) {
 		relativeScale := 0.1
-		schematic := catalog.shipSchematics[ent.Custom.schematic]
+		schematic := catalog.shipSchematics[this.ShipConfig.schematic]
 		for( componentInstance in schematic.componentInstances )
 		{
-			finalPosition := (componentInstance.d * ent.Physicality3DInertial.rotation) * relativeScale + ent.Physicality3DInertial.position.get_value()
-			finalRotation := componentInstance.r * ent.Physicality3DInertial.rotation
+			finalPosition := (componentInstance.d * this.Physicality3DInertial.rotation) * relativeScale + this.Physicality3DInertial.position.to_vector3d()
+			finalRotation := componentInstance.r * this.Physicality3DInertial.rotation
 			
 			component := catalog.components[componentInstance.type]
 			component.draw( finalPosition, finalRotation, componentInstance.bounds * relativeScale )
@@ -58,19 +62,19 @@ on_load := Function[Nil] () {
 		Prototype : {},
 		Named : { name: ship },
 		Physicality3DGenerator : { type: Physicality3DInertial },
-		RenderFunction : { solid : shipRenderFunction }
+		ViewFunction : { solid : shipRenderFunction }
 	)
 	
 	{
 		shipInst := sim.instantiate(ship)
-		shipInst.add_components( Custom : { schematic: "test" } )
+		shipInst.add_components( ShipConfig : { schematic: "test" } )
 		shipInst.Physicality3DInertial.position = (.75, -1.0, 2.0) m
 		shipInst.Physicality3DInertial.rotation = math.yaw(0) * math.roll(45)
 	}
     
 	{
 		shipInst := sim.instantiate(ship)
-		shipInst.add_components( Custom : { schematic: "test" } )
+		shipInst.add_components( ShipConfig : { schematic: "test" } )
 		shipInst.Physicality3DInertial.position = (.75, -0.4, 2.0) m
 		shipInst.Physicality3DInertial.rotation = math.yaw(45) * math.roll(45)
 		

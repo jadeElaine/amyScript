@@ -4,7 +4,7 @@ mutable userState := {
 
 user_fly_ship := Function( ship : Entity ) {
 
-	shipSchematic := catalog.shipSchematics[ship.Custom.schematic]
+	shipSchematic := catalog.shipSchematics[ship.ShipConfig.schematic]
 	phys := ship.Physicality3DInertial
 	
 	torquing := mutable false
@@ -50,9 +50,9 @@ user_fly_ship := Function( ship : Entity ) {
 	if( !torquing )
 	{
 		step := get_delta_time() * 35.0
-		if( phys.omega.get_value().magnitude() > step )
+		if( phys.omega.to_vector3d().magnitude() > step )
 		{
-			phys.omega -= phys.omega.get_value().normalized() * step rad/s
+			phys.omega -= phys.omega.to_vector3d().normalized() * step rad/s
 		}
 		else
 		{

@@ -3,7 +3,7 @@ mutable scene := create_scene( "Main" )
 scene.on_open = Function[Nil] () {
 
 	# pure white sun-light, and a camera pulled out 16 units
-    add_light( Light( white, white, Vector3D(-1,-1,-1) ) )
+    add_light( Light( Color(white), Color(white), Vector3D(-1,-1,-1) ) )
     get_3d_camera().position = math.v3forward * 16
 }
 
@@ -41,6 +41,6 @@ scene.on_3d = Function[Nil] () {
 		graphics.uniformSIKey : Array { 1.0 }
 	}
 	
-	graphics.mesh( Transform3D( math.v3zero, spin ), compositeRc, assets.birdofprey_mesh, shaderConfig )
+	graphics.mesh( Transform3D( math.v3zero, spin, 1 ), compositeRc, assets.birdofprey_mesh, shaderConfig )
 }
 

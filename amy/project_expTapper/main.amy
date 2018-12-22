@@ -38,7 +38,7 @@ lvl_check := Function[Nil] () {
 }
 
 add_score := Function[Nil] () {
-	game_vars.current_score += to_integer( (game_vars.multiplier ^ game_vars.p_lvl) / game_vars.p_lvl )
+	game_vars.current_score += ( (game_vars.multiplier ^ game_vars.p_lvl) / game_vars.p_lvl ).to_integer()
 }
 
 mutable scene := create_scene( "Main" )
