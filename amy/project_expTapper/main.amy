@@ -1,4 +1,4 @@
-mutable game_vars := {
+game_vars := mutable Dictionary {
 	current_score: mutable Integer(0),
 	p_lvl: mutable Integer( 1 ),
 	multiplier: 5
@@ -18,7 +18,7 @@ lvl_vars := {
 }
 
 lvl_check := Function[Nil] () {
-	for( mutable i := 0, i<lvl_vars.size(), i+=1 )
+	for( i := mutable 0, i<lvl_vars.size(), i+=1 )
 	{
 		if( game_vars.current_score > lvl_vars[i] )
 		{
@@ -41,7 +41,7 @@ add_score := Function[Nil] () {
 	game_vars.current_score += ( (game_vars.multiplier ^ game_vars.p_lvl) / game_vars.p_lvl ).to_integer()
 }
 
-mutable scene := create_scene( "Main" )
+scene := create_scene( "Main" )
 
 scene.on_update = Function[Boolean] () {
 

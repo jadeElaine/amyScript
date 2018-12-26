@@ -1,13 +1,13 @@
-mutable position := Vector2D(100, 100)
+position := mutable Vector2D(100, 100)
 playerSize := 20
 playerSpeed := 400.0
 hammerSize := 10
 hammerSpeed := 1024.0
 hoverTime := 2.0
-mutable hoverTicker := 0.0
+hoverTicker := mutable 0.0
 hammerRestingPosition := Vector2D(-15, -15)
-mutable hammerPosition := hammerRestingPosition
-mutable characterDirection := 0
+hammerPosition := mutable hammerRestingPosition
+characterDirection := mutable 0
 
 update_player := Function[Nil] () {
     deltaTime := 1.0/60.0
@@ -35,7 +35,7 @@ update_player := Function[Nil] () {
     position = bind_on_screen(position, playerSize)
 
     # arrow hammer controls
-    mutable isHammerControlled := false
+    isHammerControlled := mutable false
 
     if (input.hold(up))
     {

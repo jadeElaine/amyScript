@@ -1,4 +1,4 @@
-mutable scene := create_scene( "Main" )
+scene := create_scene( "Main" )
 
 scene.on_update = Function[Boolean] () {
 
@@ -23,7 +23,7 @@ scene.on_2d = Function[Nil] () {
 # Comment For Draw Shapes!
 draw_shapes := Function[Nil] ( xInitial : Integer, y : Integer ) {
 	
-    mutable x := xInitial # making a mutable copy so we can change it
+    x := mutable xInitial # making a mutable copy so we can change it
     size := 80 # in pixels
     offset := size + 25
     angle := get_time() * math.pi/4 # rotates 45 degrees every second the program runs
