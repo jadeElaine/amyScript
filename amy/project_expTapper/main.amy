@@ -76,8 +76,8 @@ scene.on_update = Function[Boolean] () {
 scene.on_2d = Function[Nil] () {  
     screenCenter := graphics.get_resolution().x/2
     
-    graphics.print_centered( screenCenter, 8, "Press Spacebar to get more experience, s to save, l to load, escape to quit", white )
+    graphics.print_centered( screenCenter, 8, "Press Spacebar to get more experience, s to save, l to load, escape to quit", colors.white )
     
-    graphics.print( 0, 40, "Level: " + game_vars.p_lvl, "7d7d7d" )
-    graphics.print( 0, 80, "Experience: " + game_vars.current_score, "7e7e7e" )
+    graphics.print( 0, 40, "Level: " + game_vars.p_lvl, Color( H7d7d7d ) )
+    graphics.print( 0, 80, "Experience: " + game_vars.current_score, Color( H7e7e7e ) )
 }

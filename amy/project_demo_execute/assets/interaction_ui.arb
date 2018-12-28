@@ -57,6 +57,6 @@ Children
 	{
 		Name ColorTextField
         Zone < 140 95 650 24 >
-		Text "Color(A43030) + Color(Blue)/2"
+		Text "Color(HA43030) + colors.blue/2"
 	}
 }

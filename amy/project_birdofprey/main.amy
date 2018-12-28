@@ -3,7 +3,7 @@ scene := create_scene( "Main" )
 scene.on_open = Function[Nil] () {
 
 	# pure white sun-light, and a camera pulled out 16 units
-    add_light( Light( Color(white), Color(white), Vector3D(-1,-1,-1) ) )
+    add_light( Light( colors.white, colors.white, Vector3D(-1,-1,-1) ) )
     get_3d_camera().position = math.v3forward * 16
 }
 

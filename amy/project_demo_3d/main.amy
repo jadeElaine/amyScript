@@ -3,11 +3,11 @@ scene := create_scene( "Main" )
 scene.on_open = Function[Nil] () {
 
     # create an ambient light of 5% grey
-    add_light( Light( Color( white ) * 0.05 ) )
+    add_light( Light( colors.white * 0.05 ) )
 
     # add a directional light pointing down and slightly to the right,
     # with a diffuse color of blue, and a specular color of white
-    add_light( Light( Color( blue ), Color( white ), Vector3D(0.23, -1, 0) ) )
+    add_light( Light( colors.blue, colors.white, Vector3D(0.23, -1, 0) ) )
     
     # position camera to be 25 units in front of the origin
     get_3d_camera().position = math.v3forward * 6
@@ -56,5 +56,5 @@ scene.on_2d = Function[Nil] () {
     screenCenter := graphics.get_resolution().x/2
     
     cam := get_3d_camera()
-    graphics.print_centered( screenCenter, 8, "Adjust camera with arrow keys", white )
+    graphics.print_centered( screenCenter, 8, "Adjust camera with arrow keys", colors.white )
 }
