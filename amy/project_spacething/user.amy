@@ -4,8 +4,8 @@ userState := mutable Dictionary {
 
 user_fly_ship := Function( ship : Entity ) {
 
-	shipSchematic := catalog.shipSchematics[ship.ShipConfig.schematic]
-	phys := ship.Physicality3DInertial
+	shipSchematic := catalog.shipSchematics[ship.CpShipConfig.schematic]
+	phys := ship.CpPhysicality3DInertial
 	
 	torquing := mutable false
 	
