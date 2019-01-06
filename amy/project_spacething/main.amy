@@ -8,7 +8,7 @@ CpShipConfig := Type {
 	schematic : public String()
 }
 
-sim := Simulation { PrPrototypeInstantiator, PrPhysics3DUpdate, PrSceneLink }
+sim := EntityProcessor { PrPrototypeInstantiator, PrPhysics3DUpdate, PrSceneLink }
 
 on_load := Function[Nil] () {
 
