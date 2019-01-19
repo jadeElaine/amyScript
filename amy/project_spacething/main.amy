@@ -8,7 +8,7 @@ CpShipConfig := Type {
 	schematic : public String()
 }
 
-sim := EntityProcessor { PrPrototypeInstantiator, PrPhysics3DUpdate, PrSceneLink }
+sim := Ecs { SyPrototypeInstantiator, SyPhysics3DUpdate, SySceneLink }
 
 on_load := Function[Nil] () {
 
@@ -32,7 +32,7 @@ on_load := Function[Nil] () {
 	worldRenderFunction := Function( sc : Scene ) {
 		rc := RenderConfig( this.CpPlanetConfig.texture, graphics.lit )
 		
-		angle := get_time() * 360.0 / this.CpPlanetConfig.dayLength
+		angle := time.get_time() * 360.0 / this.CpPlanetConfig.dayLength
 		spin := math.pitch(90) * math.yaw(angle) * this.CpPhysicality3DKinematic.rotation
 		
 		graphics.sphere( Transform3D( this.CpPhysicality3DKinematic.position.to_vector3d(), spin, 1 ), rc )

@@ -45,13 +45,13 @@ Children
 	{
 		Name AngleTextField
         Zone < 140 45 650 24 >
-		Text "get_time() * 22.5"
+		Text "time.get_time() * 22.5"
 	}
 	TextField
 	{
 		Name SizeTextField
         Zone < 140 70 650 24 >
-		Text "130 + math.sin(get_time()*90)*80"
+		Text "130 + math.sin(time.get_time()*90)*80"
 	}
 	TextField
 	{

@@ -11,45 +11,45 @@ user_fly_ship := Function( ship : Entity ) {
 	
     if( input.hold( w ) )
     {
-        phys.omega -= math.v3right * get_delta_time() * shipSchematic.twist.x rad/s
+        phys.omega -= math.v3right * time.get_delta_time() * shipSchematic.twist.x rad/s
 		torquing = true
     }
     if( input.hold( s ) )
     {
-        phys.omega += math.v3right * get_delta_time() * shipSchematic.twist.x rad/s
+        phys.omega += math.v3right * time.get_delta_time() * shipSchematic.twist.x rad/s
 		torquing = true
     }
 	
     if( input.hold( a ) )
     {
-        phys.omega += math.v3up * get_delta_time() * shipSchematic.twist.y rad/s
+        phys.omega += math.v3up * time.get_delta_time() * shipSchematic.twist.y rad/s
 		torquing = true
     }
     if( input.hold( d ) )
     {
-        phys.omega -= math.v3up * get_delta_time() * shipSchematic.twist.y rad/s
+        phys.omega -= math.v3up * time.get_delta_time() * shipSchematic.twist.y rad/s
 		torquing = true
     }
 	
     if( input.hold( q ) )
     {
-        phys.omega += math.v3forward * get_delta_time() * shipSchematic.twist.z rad/s
+        phys.omega += math.v3forward * time.get_delta_time() * shipSchematic.twist.z rad/s
 		torquing = true
     }
     if( input.hold( e ) )
     {
-        phys.omega -= math.v3forward * get_delta_time() * shipSchematic.twist.z rad/s
+        phys.omega -= math.v3forward * time.get_delta_time() * shipSchematic.twist.z rad/s
 		torquing = true
     }
 	
 	if( input.hold( space ) )
 	{
-        phys.velocity += (math.v3forward * phys.rotation) * get_delta_time() * shipSchematic.thrust m/s
+        phys.velocity += (math.v3forward * phys.rotation) * time.get_delta_time() * shipSchematic.thrust m/s
 	}
 	
 	if( !torquing )
 	{
-		step := get_delta_time() * 35.0
+		step := time.get_delta_time() * 35.0
 		if( phys.omega.to_vector3d().magnitude() > step )
 		{
 			phys.omega -= phys.omega.to_vector3d().normalized() * step rad/s

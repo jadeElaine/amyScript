@@ -22,19 +22,19 @@ scene.on_update = Function[Boolean] () {
     
     if( input.hold( left ) )
     {
-        get_3d_camera().position += math.v3left * get_delta_time()
+        get_3d_camera().position += math.v3left * time.get_delta_time()
     }
     if( input.hold( right ) )
     {
-        get_3d_camera().position += math.v3right * get_delta_time()
+        get_3d_camera().position += math.v3right * time.get_delta_time()
     }
     if( input.hold( up ) )
     {
-        get_3d_camera().position += math.v3backward * get_delta_time()
+        get_3d_camera().position += math.v3backward * time.get_delta_time()
     }
     if( input.hold( down ) )
     {
-        get_3d_camera().position += math.v3forward * get_delta_time()
+        get_3d_camera().position += math.v3forward * time.get_delta_time()
     }
 
     return true
@@ -45,7 +45,7 @@ scene.on_3d = Function[Nil] () {
     # and shaders which respond to lighting
     rc := RenderConfig( assets.grate, graphics.lit )
     
-    spin := math.yaw(get_time() * 25) * math.pitch(-30)
+    spin := math.yaw(time.get_time() * 25) * math.pitch(-30)
     
     # draw a spinning spherical shell, with a smaller sphere inside of it
     graphics.sphere_shell( Transform3D( math.v3zero, spin, 1.5 ), rc )
