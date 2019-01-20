@@ -6,23 +6,29 @@ characters := Dictionary()
 bouncerRenderFunction := Function( sc : Scene ) {
 
     sizeGuide := graphics.get_resolution().x/10;
-    s_shadow := IntegerVector2D( sizeGuide, sizeGuide/2 )
+    s_shadow := IntegerVector2D( sizeGuide/3, sizeGuide/5 )
     s_char := IntegerVector2D( sizeGuide, sizeGuide )
 
     d_shadow := this.CpPhysicality.get_2d_position_shadow()
     d_char := this.CpPhysicality.get_2d_position() - IntegerVector2D( 0, sizeGuide/2 )
     
+    r_char := this.CpPhysicality.angle
     
     graphics.circle( Transform2D( d_shadow, 0, s_shadow ), Color( H3F3F3F2F ) )
     
     if( this.CpPhysicality.frame in this.CpCharacter.images )
     {
-        graphics.box_centered( Transform2D( d_char, 0, s_char ), this.CpCharacter.images[this.CpPhysicality.frame] )
+        graphics.box_centered( Transform2D( d_char, r_char, s_char ), this.CpCharacter.images[this.CpPhysicality.frame] )
     }
     else
     {
-        graphics.box_centered( Transform2D( d_char, 0, s_char ), this.CpCharacter.color )
+        graphics.box_centered( Transform2D( d_char, r_char, s_char ), this.CpCharacter.color * Color( HFFFFFF3F ) )
     }
+    
+    graphics.box_centered( Transform2D( d_shadow + IntegerVector2D(0, sizeGuide/8), 0, IntegerVector2D(sizeGuide/2, sizeGuide/8) ), Color( HFF0000FF ) )
+    healthPercent := this.CpVulnerable.health.to_real() / this.CpCharacter.stats.health.to_real()
+    fillPixels := ((sizeGuide/2-2).to_real() * healthPercent).to_integer()
+    graphics.box( Transform2D( d_shadow + IntegerVector2D(-sizeGuide/4, sizeGuide/16+1), 0, IntegerVector2D(fillPixels, sizeGuide/8-2) ), Color( H00FF30FF ) )
     
     flow.CpBattleFlow.draw_entity_ui(this)
 }

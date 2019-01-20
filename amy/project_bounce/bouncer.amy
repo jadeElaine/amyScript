@@ -25,7 +25,8 @@ Stats := Type {
 
 CpPhysicality := Type {
     position : mutable Vector3D()
-    frame : stand
+    angle : mutable Real()
+    frame : mutable String(stand)
     
     get_2d_position : public Function() {
         right := graphics.get_resolution().x

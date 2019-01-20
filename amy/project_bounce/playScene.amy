@@ -40,18 +40,25 @@ scene.on_2d = Function[Nil] () {
     x := mutable Integer(20)
     for( eGuid in flow.CpBattleFlow.turnOrder )
     {
-        e := sim.get_entity(eGuid)
-        y := if( eGuid == flow.CpBattleFlow.turnOrder[flow.CpBattleFlow.turn] ) { 40 } else { 20 }
-        
-        if( e.CpPhysicality.frame in e.CpCharacter.images )
+        if( sim.has_entity(eGuid) )
         {
-            graphics.box_centered( Transform2D( IntegerVector2D( x, y ), 0, 48 ), e.CpCharacter.images[e.CpPhysicality.frame] )
+            e := sim.get_entity(eGuid)
+            y := mutable 20
+            if( flow.CpBattleFlow.turn >= 0 and flow.CpBattleFlow.turn < flow.CpBattleFlow.turnOrder.size() )
+            {
+                if( eGuid == flow.CpBattleFlow.turnOrder[flow.CpBattleFlow.turn] ) { y = 40 }
+            } 
+            
+            if( e.CpPhysicality.frame in e.CpCharacter.images )
+            {
+                graphics.box_centered( Transform2D( IntegerVector2D( x, y ), 0, 48 ), e.CpCharacter.images[e.CpPhysicality.frame] )
+            }
+            else
+            {
+                graphics.box_centered( Transform2D( IntegerVector2D( x, y ), 0, 48 ), e.CpCharacter.color )
+            }
+            x += 28
         }
-        else
-        {
-            graphics.box_centered( Transform2D( IntegerVector2D( x, y ), 0, 48 ), e.CpCharacter.color )
-        }
-        x += 28
     }
 
     # draw FPS
