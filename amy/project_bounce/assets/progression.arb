@@ -1,0 +1,21 @@
+party
+<
+    { type red    position < 0.75 0.2 > }
+    { type yellow position < 0.8 0.4 > }
+    { type black  position < 0.85 0.6 > }
+    { type white  position < 0.9 0.8 > }
+>
+
+battlefields
+{
+    fight1 <
+        { type victim position < 0.15 0.5 > }
+        { type victim position < 0.3 0.5 > }
+        { type victim position < 0.45 0.5 > }
+    >
+    
+    fight2 <
+        { type victim position < 0.4 0.25 > }
+        { type victim position < 0.4 0.75 > }
+    >
+}

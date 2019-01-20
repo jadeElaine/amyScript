@@ -1,0 +1,103 @@
+Stats := Type {
+    health : public Integer()
+    weight : public Integer()
+    strength : public Integer()
+    damage : public Integer()
+    defense : public Integer()
+    aoe : public Integer()
+    heal : public Integer()
+    knockback : public Integer()
+    initiative : public Integer()
+    
+    _Ctor : public Function () {}
+    _Ctor : public Function ( d : Dictionary ) {
+        this.health = d.health
+        this.weight = d.weight
+        this.strength = d.strength
+        this.damage = d.damage
+        this.defense = d.defense
+        this.aoe = d.aoe
+        this.heal = d.heal
+        this.knockback = d.knockback
+        this.initiative = d.initiative
+    }
+}
+
+CpPhysicality := Type {
+    position : mutable Vector3D()
+    frame : stand
+    
+    get_2d_position : public Function() {
+        right := graphics.get_resolution().x
+        bottom := graphics.get_resolution().y
+        horizon := (0.65 * bottom).to_integer()
+        margin := bottom - horizon
+        
+        return Vector2D(this.position.x * right, this.position.y * margin + horizon - this.position.z * margin).to_integer_vector2d()
+    }
+    get_2d_position_shadow : public Function() {
+        right := graphics.get_resolution().x
+        bottom := graphics.get_resolution().y
+        horizon := (0.65 * bottom).to_integer()
+        margin := bottom - horizon
+        
+        return Vector2D(this.position.x * right, (this.position.y * margin + horizon)).to_integer_vector2d()
+    }
+}
+
+CpVulnerable := Type {
+    health : mutable Integer()
+}
+
+CpAllegiance := Type {
+    team : mutable String()
+}
+
+CpCharacter := Type {
+    name : String()
+    color : Color()
+    images : Dictionary()
+    stats : Stats()
+    
+    _Ctor : public Function ( key : String, config : Dictionary ) {
+        
+        this.name = config.name
+        this.color = colors[config.color]
+        if( assets.contains_key( key + _stand ) )
+        {
+            this.images = {
+                stand : assets[key + _stand],
+                lift : assets[key + _lift],
+                aaaa : assets[key + _aaaa]
+            }
+        }
+        this.stats = Stats( config )
+    }
+    
+    instantiate : public Function[Entity] ( sim : Ecs, xyArray : Array, team : String ) {
+        entity := sim."instantiate"(bouncer)
+        entity.add_component( this )
+        spawnLocation := Vector3D( xyArray[0],  xyArray[1], 0 )
+        entity.add_component( CpAllegiance { "team" : team } )
+        entity.add_component( CpPhysicality { position : spawnLocation } )
+        entity.add_component( CpVulnerable { health : this.stats.health } )
+        entity.add_component( CpInitiative {} )
+        return entity
+    }
+    
+    get_jump_range : public Function() {
+        return this.stats.strength.to_real() / this.stats.weight.to_real()
+    }
+    get_throw_range : public Function(obj : Entity) {
+        return (this.stats.strength.to_real() + obj.CpCharacter.stats.strength.to_real()) / obj.CpCharacter.stats.weight.to_real()
+    }
+}
+
+CpInitiative := Type {
+    initiative : mutable Real()
+    hasMoved : mutable Boolean()
+    
+    roll : public mutating Function( char : CpCharacter ) {
+        this.initiative = math.random_integer( 0, 100 ) + char.stats.initiative
+    }
+}

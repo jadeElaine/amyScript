@@ -1,0 +1,283 @@
+flowFsm := FSM {
+    nextRound : {
+        on_update : Function[String] ( timeStep : Real ) {
+            flow.CpBattleFlow.turnOrder.clear()
+            all := sim.get_entities_with_component("CpInitiative")
+            for( e in all )
+            {
+                e.CpInitiative.roll(e.CpCharacter)
+                flow.CpBattleFlow.turnOrder.add( e.guid )
+            }
+            
+            flow.CpBattleFlow.turnOrder.sort( Function( a_ : Guid, b_ : Guid ) {
+                return sim.get_entity(a_).CpInitiative.initiative > sim.get_entity(b_).CpInitiative.initiative
+            } )
+            
+            console.print(all.size())
+            return "nextTurn"
+        }
+        draw_entity_ui : Function(entity : Entity) {
+        }
+    }
+    nextTurn : {
+        on_update : Function[String] ( timeStep : Real ) {
+            if( flow.CpBattleFlow.turn > flow.CpBattleFlow.turnOrder.size() )
+            {
+                return "nextRound" 
+            }
+            entityGuid := flow.CpBattleFlow.turnOrder[flow.CpBattleFlow.turn];
+            entity := sim.get_entity(entityGuid)
+            
+            if( entity.CpAllegiance.team == party )
+            {
+                flow.CpBattleFlow.throwAngle = 180.0
+                flow.CpBattleFlow.throwPower = 1.0
+                flow.CpBattleFlow.selectedGuid = entityGuid
+                return userTargetSelect
+            }
+            if( entity.CpAllegiance.team == enemy )
+            {
+                return enemyTargetSelect
+            }
+            throw("Invalid active entity allegiance " + entity.CpAllegiance.team) 
+        }
+        draw_entity_ui : Function(entity : Entity) {
+        }
+    }
+    userTargetSelect : {
+        on_update : Function[String] ( timeStep : Real ) {
+                    
+            if( input.hold( left ) )
+            {
+                flow.CpBattleFlow.throwAngle -= time.get_delta_time() * 120
+            }
+            if( input.hold( right ) )
+            {
+                flow.CpBattleFlow.throwAngle += time.get_delta_time() * 120
+            }
+            if( input.hold( up ) )
+            {
+                flow.CpBattleFlow.throwPower = minimum( flow.CpBattleFlow.throwPower.to_real() + time.get_delta_time(), 1.0 )
+            }
+            if( input.hold( down ) )
+            {
+                flow.CpBattleFlow.throwPower = maximum( flow.CpBattleFlow.throwPower.to_real() - time.get_delta_time(), 0.25 )
+            }
+            
+            #check for assists
+            flow.CpBattleFlow.assistGuid = Guid()
+            flow.CpBattleFlow.targetGuid = Guid()
+            all := sim.get_entities_with_component("CpPhysicality")
+            actor := sim.get_entity( flow.CpBattleFlow.selectedGuid )
+            closestDist := mutable Real(math.infinity)
+            throwDirection := Vector3D( math.cos(flow.CpBattleFlow.throwAngle), math.sin(flow.CpBattleFlow.throwAngle), 0 )
+            for( tgt in all )
+            {
+                meToThem := tgt.CpPhysicality.position - actor.CpPhysicality.position
+                dist := meToThem.magnitude()
+                if( tgt.CpAllegiance.team == party and tgt.guid != flow.CpBattleFlow.selectedGuid )
+                {
+                    if( meToThem.normalized() * throwDirection > 0.95 and 
+                        dist < actor.CpCharacter.get_jump_range()*2.0 )
+                    {
+                        if( dist < closestDist )
+                        {
+                            flow.CpBattleFlow.targetGuid = Guid()
+                            flow.CpBattleFlow.assistGuid = tgt.guid
+                            closestDist = dist
+                        }
+                    }
+                }
+                if( tgt.CpAllegiance.team == enemy )
+                {
+                    if( meToThem.normalized() * throwDirection > 0.95 and 
+                        dist < actor.CpCharacter.get_jump_range() )
+                    {
+                        if( dist < closestDist )
+                        {
+                            flow.CpBattleFlow.assistGuid = Guid()
+                            flow.CpBattleFlow.targetGuid = tgt.guid
+                            closestDist = dist
+                        }
+                    }
+                }
+            }
+            
+            if( input.press( enter ) or input.press( space ) )
+            {
+                if( flow.CpBattleFlow.assistGuid.is_valid() )
+                {
+                    return "userThrowFriend"
+                }
+                else if( flow.CpBattleFlow.targetGuid.is_valid() )
+                {
+                    return "performJump"
+                }
+                else
+                {
+                    return "performJump"
+                }
+            }
+            
+            return ""
+        }
+        draw_entity_ui : Function(entity : Entity) {
+                
+            isMyTurn := entity.guid == flow.CpBattleFlow.turnOrder[flow.CpBattleFlow.turn]
+        
+            if( isMyTurn )
+            {
+                arrowYOffset := (math.sin(time.get_time() * 180)*8).to_integer() - 64
+                
+                d_charReal := entity.CpPhysicality.get_2d_position()
+                graphics.polygon( Transform2D( d_charReal + IntegerVector2D(0, arrowYOffset - 48), math.pi, IntegerVector2D(64,32) ), 3, colors.lime )
+                
+                if( flow.CpBattleFlow.assistGuid.is_valid() )
+                {
+                    assistEntity := sim.get_entity( flow.CpBattleFlow.assistGuid )
+                    d_assistReal := assistEntity.CpPhysicality.get_2d_position()
+                    graphics.polygon( Transform2D( d_assistReal + IntegerVector2D(0, arrowYOffset - 48), math.pi, IntegerVector2D(64,32) ), 3, colors.blue )
+                    
+                    for( i in 7 )
+                    {
+                        percent := (i+1).to_real() / 8.0;
+                        leadPoint := math.lerp(d_charReal.to_vector2d(), d_assistReal.to_vector2d(), percent).to_integer_vector2d()
+                        graphics.circle( Transform2D(leadPoint, 0, 8), Color(0.0,0.0,1.0,0.125) )
+                    }
+                }
+                else if( flow.CpBattleFlow.targetGuid.is_valid() )
+                {
+                    targetEntity := sim.get_entity( flow.CpBattleFlow.targetGuid )
+                    d_targetReal := targetEntity.CpPhysicality.get_2d_position()
+                    graphics.polygon( Transform2D( d_targetReal + IntegerVector2D(0, arrowYOffset - 48), math.pi, IntegerVector2D(64,32) ), 3, colors.red )
+                    
+                    for( i in 7 )
+                    {
+                        percent := (i+1).to_real() / 8.0;
+                        height := (math.sin(percent * 180) * graphics.get_resolution().y/6).to_integer()
+                        leadPoint := math.lerp(d_charReal.to_vector2d(), d_targetReal.to_vector2d(), percent).to_integer_vector2d() - IntegerVector2D(0, height)
+                        graphics.circle( Transform2D(leadPoint, 0, 8), Color(1.0,0.0,0.0,0.125) )
+                    }
+                }
+                else
+                {
+                    throwDirection := Vector3D( math.cos(flow.CpBattleFlow.throwAngle), math.sin(flow.CpBattleFlow.throwAngle), 0 )
+                    targetPoint := entity.CpPhysicality.position + throwDirection * flow.CpBattleFlow.throwPower * entity.CpCharacter.get_jump_range()
+                    
+                    right := graphics.get_resolution().x
+                    bottom := graphics.get_resolution().y
+                    horizon := (0.65 * bottom).to_integer()
+                    margin := bottom - horizon
+                    impactPoint := Vector2D( targetPoint.x * right, targetPoint.y * margin + horizon )
+                    graphics.circle( Transform2D(impactPoint.to_integer_vector2d(), 0, IntegerVector2D(32,16)), Color(1.0,0.5,0.0,0.25) )
+                    for( i in 7 )
+                    {
+                        percent := (i+1).to_real() / 8.0;
+                        height := (math.sin(percent * 180) * graphics.get_resolution().y/6).to_integer()
+                        leadPoint := math.lerp(d_charReal.to_vector2d(), impactPoint, percent).to_integer_vector2d() - IntegerVector2D(0, height)
+                        graphics.circle( Transform2D(leadPoint, 0, 8), Color(1.0,0.5,0.0,0.125) )
+                    }
+                }
+            }
+        }
+    }
+    userThrowFriend : {
+        on_update : Function[String] ( timeStep : Real ) {
+            console.print("in here")
+            if( input.press( backspace ) )
+            {
+                actor := sim.get_entity( flow.CpBattleFlow.selectedGuid )
+                friend := sim.get_entity( flow.CpBattleFlow.assistGuid )
+                meToThem := friend.CpPhysicality.position - actor.CpPhysicality.position
+                flow.CpBattleFlow.throwAngle = math.arctan(Vector2D(meToThem.x, meToThem.y))
+                flow.CpBattleFlow.throwPower = 1.0
+                return "userTargetSelect"
+            }
+            
+            return ""
+        }
+        draw_entity_ui : Function(entity : Entity) {
+                
+        }
+    }
+    enemyTargetSelect : {
+        on_update : Function[String] ( timeStep : Real ) {
+            return ""
+        }
+        draw_entity_ui : Function(entity : Entity) {
+        }
+    }
+    performJump : {
+        on_update : Function[String] ( timeStep : Real ) {
+            return ""
+        }
+        draw_entity_ui : Function(entity : Entity) {
+        }
+    }
+    performJumpImpact : {
+        on_update : Function[String] ( timeStep : Real ) {
+            return ""
+        }
+        draw_entity_ui : Function(entity : Entity) {
+        }
+    }
+    performWalk : {
+        on_update : Function[String] ( timeStep : Real ) {
+            return ""
+        }
+        draw_entity_ui : Function(entity : Entity) {
+        }
+    }
+    performPickup : {
+        on_update : Function[String] ( timeStep : Real ) {
+            return ""
+        }
+        draw_entity_ui : Function(entity : Entity) {
+        }
+    }
+    performThrow : {
+        on_update : Function[String] ( timeStep : Real ) {
+            return ""
+        }
+        draw_entity_ui : Function(entity : Entity) {
+        }
+    }
+    performThrowImpact : {
+        on_update : Function[String] ( timeStep : Real ) {
+            return ""
+        }
+        draw_entity_ui : Function(entity : Entity) {
+        }
+    }
+    performImpartDamage : {
+        on_update : Function[String] ( timeStep : Real ) {
+            return ""
+        }
+        draw_entity_ui : Function(entity : Entity) {
+        }
+    }
+}
+
+CpBattleFlow := Type {
+    turnOrder : mutable Array[Guid]()
+    turn : mutable Integer()
+    ticker : mutable Real()
+    
+    selectedGuid : public mutable Guid()
+    assistGuid : public mutable Guid()
+    targetGuid : public mutable Guid()
+    
+    throwAngle : public mutable Real()
+    throwPower : public mutable Real()
+    
+    fsm : flowFsm
+    init : public Function() {
+        this.fsm.change(nextRound)
+    }
+    update : public Function() {
+        this.fsm.force_update( time.get_delta_time() )
+    }
+    draw_entity_ui : public Function( entity : Entity ) {
+        this.fsm.get_current_state()."draw_entity_ui"(entity)
+    }
+}

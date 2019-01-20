@@ -1,0 +1,68 @@
+sim := Ecs { SyPrototypeInstantiator, SySceneLink }
+flow := mutable Entity()
+
+characters := Dictionary()
+
+bouncerRenderFunction := Function( sc : Scene ) {
+
+    sizeGuide := graphics.get_resolution().x/10;
+    s_shadow := IntegerVector2D( sizeGuide, sizeGuide/2 )
+    s_char := IntegerVector2D( sizeGuide, sizeGuide )
+
+    d_shadow := this.CpPhysicality.get_2d_position_shadow()
+    d_char := this.CpPhysicality.get_2d_position() - IntegerVector2D( 0, sizeGuide/2 )
+    
+    
+    graphics.circle( Transform2D( d_shadow, 0, s_shadow ), Color( H3F3F3F2F ) )
+    
+    if( this.CpPhysicality.frame in this.CpCharacter.images )
+    {
+        graphics.box_centered( Transform2D( d_char, 0, s_char ), this.CpCharacter.images[this.CpPhysicality.frame] )
+    }
+    else
+    {
+        graphics.box_centered( Transform2D( d_char, 0, s_char ), this.CpCharacter.color )
+    }
+    
+    flow.CpBattleFlow.draw_entity_ui(this)
+}
+
+stage_battle := Function( key : String ) {
+    sim.condemn_entity_by_name(battleFlow)
+    sim.condemn_all_instances()
+    # Populate Battlefield
+    for( fighter in assets.progression.party )
+    {
+        characters[fighter.type].instantiate( sim, fighter.position, party )
+    }
+    
+    for( fighter in assets.progression.battlefields.key )
+    {
+        characters[fighter.type].instantiate( sim, fighter.position, enemy )
+    }
+        
+    flow = sim.create_entity( Array {
+        CpNamed { name : battleFlow }
+        CpBattleFlow {}
+    } )
+    flow.CpBattleFlow.init()
+
+    change_scene("Play")
+}
+
+on_load := Function() {
+
+    sim.create_entity( Array {
+        CpPrototype {}
+        CpNamed { name: bouncer }
+        CpViewFunction { ortho: bouncerRenderFunction }
+    } )
+    
+    # Load Characters
+    for( character in assets."characters" )
+    {
+        characters.insert(CpCharacter(character.key, character.value), character.key)
+    }
+    
+    stage_battle( fight1 )
+}

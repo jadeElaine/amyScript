@@ -1,0 +1,59 @@
+scene := create_scene("Play")
+scene.on_open = Function[Nil] () {
+    sim.link_scene(this)
+}
+
+scene.on_update = Function[Boolean] () {
+
+    sim.update()
+    
+    flow.CpBattleFlow.update()
+
+    if( input.press( escape ) )
+    {
+        return false
+    }
+    
+    if( input.press( "1" ) )
+    {
+        stage_battle( fight1 )
+    }
+    if( input.press( "2" ) )
+    {
+        stage_battle( fight2 )
+    }
+    
+    return true
+}
+
+scene.on_2d = Function[Nil] () {
+    screenCenter := graphics.get_resolution().x/2
+    right := graphics.get_resolution().x
+    bottom := graphics.get_resolution().y
+    horizon := (0.65 * bottom).to_integer()
+    
+    # draw background
+    graphics.box( Transform2D( IntegerVector2D(0,0), 0, IntegerVector2D(right,horizon) ), Color( H3F50CF ) )
+    graphics.box( Transform2D( IntegerVector2D(0,horizon), 0, IntegerVector2D(right,bottom) ), Color( HA07035 ) )
+    
+    # draw turn order
+    x := mutable Integer(20)
+    for( eGuid in flow.CpBattleFlow.turnOrder )
+    {
+        e := sim.get_entity(eGuid)
+        y := if( eGuid == flow.CpBattleFlow.turnOrder[flow.CpBattleFlow.turn] ) { 40 } else { 20 }
+        
+        if( e.CpPhysicality.frame in e.CpCharacter.images )
+        {
+            graphics.box_centered( Transform2D( IntegerVector2D( x, y ), 0, 48 ), e.CpCharacter.images[e.CpPhysicality.frame] )
+        }
+        else
+        {
+            graphics.box_centered( Transform2D( IntegerVector2D( x, y ), 0, 48 ), e.CpCharacter.color )
+        }
+        x += 28
+    }
+
+    # draw FPS
+    graphics.print_centered( screenCenter, 24, "FPS: " + time.get_fps().to_string(), colors.white )
+}

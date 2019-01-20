@@ -1,0 +1,46 @@
+red
+{
+    name Red
+    color red
+    health 100
+    initiative 200
+    weight 800 defense 100 heal 0
+    strength 100 damage 1000 aoe 25 knockback 25
+}
+yellow
+{
+    name Yellow
+    color yellow
+    health 100
+    initiative 120
+    weight 400 defense 85 heal 0
+    strength 70 damage 800 aoe 0 knockback 5
+}
+black
+{
+    name Black
+    color black
+    health 100
+    initiative 80
+    weight 1200 defense 110 heal 0
+    strength 200 damage 1600 aoe 10 knockback 10
+}
+white
+{
+    name White
+    color white
+    health 100
+    initiative 120
+    weight 800 defense 125 heal 40
+    strength 100 damage 500 aoe 10 knockback 10
+}
+
+victim
+{
+    name Victim
+    color purple
+    health 100
+    initiative 50
+    weight 400 defense 25 heal 0
+    strength 100 damage 500 aoe 0 knockback 10
+}
