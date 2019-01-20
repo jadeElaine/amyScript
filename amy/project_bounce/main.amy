@@ -69,6 +69,6 @@ on_load := Function() {
     {
         characters.insert(CpCharacter(character.key, character.value), character.key)
     }
-    
-    stage_battle( fight1 )
+
+    change_scene("Select")
 }

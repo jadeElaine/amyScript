@@ -1,9 +1,10 @@
-scene := create_scene("Play")
-scene.on_open = Function[Nil] () {
+scenePlay := create_scene("Play")
+scenePlay.on_open = Function[Nil] () {
+    music.play( assets.bouncebattletheme_1 )
     sim.link_scene(this)
 }
 
-scene.on_update = Function[Boolean] () {
+scenePlay.on_update = Function[Boolean] () {
 
     sim.update()
     
@@ -14,19 +15,10 @@ scene.on_update = Function[Boolean] () {
         return false
     }
     
-    if( input.press( "1" ) )
-    {
-        stage_battle( fight1 )
-    }
-    if( input.press( "2" ) )
-    {
-        stage_battle( fight2 )
-    }
-    
     return true
 }
 
-scene.on_2d = Function[Nil] () {
+scenePlay.on_2d = Function[Nil] () {
     screenCenter := graphics.get_resolution().x/2
     right := graphics.get_resolution().x
     bottom := graphics.get_resolution().y

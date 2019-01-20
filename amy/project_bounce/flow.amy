@@ -13,7 +13,6 @@ flowFsm := FSM {
                 return sim.get_entity(a_).CpInitiative.initiative > sim.get_entity(b_).CpInitiative.initiative
             } )
             
-            #TODO: Validate victory
             
             flow.CpBattleFlow.turn = -1
             return "nextTurn"
@@ -23,12 +22,52 @@ flowFsm := FSM {
     }
     nextTurn : {
         on_update : Function[String] ( timeStep : Real ) {
+        
+            flow.CpBattleFlow.selectedGuid = Guid()
+            flow.CpBattleFlow.assistGuid = Guid()
+            flow.CpBattleFlow.targetGuid = Guid()
+            
+            #TODO: Validate victory
+            all := sim.get_entities_with_component("CpPhysicality")
+            haveWon := mutable Boolean(true)
+            haveLost := mutable Boolean(true)
+            for( tgt in all )
+            {
+                if( tgt.CpAllegiance.team == enemy ) { haveWon = false }
+                if( tgt.CpAllegiance.team == party ) { haveLost = false }
+            }
+            
+            if( haveWon )
+            {
+                for( tgt in all )
+                {
+                    tgt.CpPhysicality.frame = lift
+                }
+                flow.CpBattleFlow.ticker = 0
+                return "victory"
+            }
+            if( haveLost )
+            {
+                for( tgt in all )
+                {
+                    tgt.CpPhysicality.frame = lift
+                }
+                flow.CpBattleFlow.ticker = 0
+                return "defeat"
+            }
+            
             flow.CpBattleFlow.turn += 1
             if( flow.CpBattleFlow.turn >= flow.CpBattleFlow.turnOrder.size() )
             {
                 return "nextRound" 
             }
-            entityGuid := flow.CpBattleFlow.turnOrder[flow.CpBattleFlow.turn];
+            entityGuid := flow.CpBattleFlow.turnOrder[flow.CpBattleFlow.turn]
+            
+            if( !sim.has_entity(entityGuid) )
+            {
+                return ""
+            }
+            
             entity := sim.get_entity(entityGuid)
             
             if( entity.CpAllegiance.team == party )
@@ -36,11 +75,11 @@ flowFsm := FSM {
                 flow.CpBattleFlow.throwAngle = 180.0
                 flow.CpBattleFlow.throwPower = 1.0
                 flow.CpBattleFlow.selectedGuid = entityGuid
-                return userTargetSelect
+                return "userTargetSelect"
             }
             if( entity.CpAllegiance.team == enemy )
             {
-                return enemyTargetSelect
+                return "enemyTargetSelect"
             }
             throw("Invalid active entity allegiance " + entity.CpAllegiance.team) 
         }
@@ -603,6 +642,43 @@ flowFsm := FSM {
                 pos := entity.CpPhysicality.get_2d_position() - IntegerVector2D(0, graphics.get_resolution().x/10)
                 graphics.print_centered( Transform2D(pos - IntegerVector2D(0, (math.sin(flow.CpBattleFlow.ticker*180.0) * 25.0).to_integer()), 0, 1), damage.to_string(), colors.red )
             }
+        }
+    }
+    defeat : {
+        on_update : Function[String] ( timeStep : Real ) {
+            flow.CpBattleFlow.ticker += timeStep
+            if( flow.CpBattleFlow.ticker > 2.0 )
+            {
+                sim.condemn_all_instances()
+                change_scene("Select")
+                return "done"
+            }
+            return ""
+        }
+        draw_entity_ui : Function(entity : Entity) {
+            graphics.print_centered( Transform2D(graphics.get_resolution()/2, 0, 6), "DEFEAT", colors.white )
+        }
+    }
+    victory : {
+        on_update : Function[String] ( timeStep : Real ) {
+            flow.CpBattleFlow.ticker += timeStep
+            if( flow.CpBattleFlow.ticker > 2.0 )
+            {
+                sim.condemn_all_instances()
+                change_scene("Select")
+                return "done"
+            }
+            return ""
+        }
+        draw_entity_ui : Function(entity : Entity) {
+            graphics.print_centered( Transform2D(graphics.get_resolution()/2, 0, 6), "VICTORY", colors.white )
+        }
+    }
+    done : {
+        on_update : Function[String] ( timeStep : Real ) {
+            return ""
+        }
+        draw_entity_ui : Function(entity : Entity) {
         }
     }
 }
