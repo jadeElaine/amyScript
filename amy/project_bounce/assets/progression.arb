@@ -1,9 +1,9 @@
 party
 <
     { type red    position < 0.75 0.2 > }
-    { type yellow position < 0.8 0.4 > }
-    { type black  position < 0.85 0.6 > }
-    { type white  position < 0.9 0.8 > }
+    { type white  position < 0.85 0.4 > }
+    { type black  position < 0.8 0.6 > }
+    { type yellow position < 0.9 0.8 > }
 >
 
 battlefields
@@ -15,7 +15,11 @@ battlefields
     >
     
     fight2 <
-        { type slime position < 0.4 0.25 > }
+        { type slime position < 0.22 0.25 > }
+        { type slime position < 0.2 0.75 > }
+        { type slime position < 0.42 0.25 > }
         { type slime position < 0.4 0.75 > }
+        { type slime position < 0.62 0.25 > }
+        { type slime position < 0.6 0.75 > }
     >
 }

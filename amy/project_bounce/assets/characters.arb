@@ -13,7 +13,7 @@ yellow
     color yellow imageHeightAdjust .025
     health 100
     initiative 120
-    weight 400 defense 85 heal 0
+    weight 240 defense 85 heal 0
     strength 100 damage 800 aoe 5 knockback 5
 }
 black
@@ -31,8 +31,8 @@ white
     color white imageHeightAdjust .025
     health 100
     initiative 120
-    weight 800 defense 125 heal 40
-    strength 100 damage 500 aoe 10 knockback 10
+    weight 500 defense 125 heal 40
+    strength 100 damage 250 aoe 14 knockback 5
 }
 
 slime
@@ -42,5 +42,5 @@ slime
     health 100
     initiative 50
     weight 400 defense 25 heal 0
-    strength 100 damage 500 aoe 10 knockback 10
+    strength 100 damage 1000 aoe 10 knockback 10
 }
