@@ -35,9 +35,9 @@ white
     strength 100 damage 500 aoe 10 knockback 10
 }
 
-victim
+slime
 {
-    name Victim
+    name Slime
     color purple
     health 100
     initiative 50

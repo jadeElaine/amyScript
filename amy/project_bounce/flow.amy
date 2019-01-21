@@ -79,6 +79,7 @@ flowFsm := FSM {
             }
             if( entity.CpAllegiance.team == enemy )
             {
+                flow.CpBattleFlow.selectedGuid = entityGuid
                 return "enemyTargetSelect"
             }
             throw("Invalid active entity allegiance " + entity.CpAllegiance.team) 
@@ -289,7 +290,7 @@ flowFsm := FSM {
             {
                 if( flow.CpBattleFlow.targetGuid.is_valid() )
                 {
-                    flow.CpBattleFlow.throwOrigin = actor.CpPhysicality.position
+                    flow.CpBattleFlow.throwOrigin = assist.CpPhysicality.position
                     flow.CpBattleFlow.throwTarget = sim.get_entity(flow.CpBattleFlow.targetGuid).CpPhysicality.position
                 }
                 else
@@ -371,7 +372,115 @@ flowFsm := FSM {
     }
     enemyTargetSelect : {
         on_update : Function[String] ( timeStep : Real ) {
-            # Skip AI for now
+            actor := sim.get_entity( flow.CpBattleFlow.selectedGuid )
+
+            # Rank all possible targets via jump & all available throws
+            scoreJumpTarget := Function(src : Entity, e : Entity) {
+                dist := (src.CpPhysicality.position - e.CpPhysicality.position).magnitude()
+                if( dist > src.CpCharacter.get_jump_range() ) { return 0 }
+
+                damage := src.CpCharacter.stats.damage / e.CpCharacter.stats.defense
+                if( damage > e.CpVulnerable.health ) { return 300 }
+                return (100 * damage) / e.CpCharacter.stats.health + 100
+            }
+            scoreJumpApproach := Function(src : Entity, e : Entity) {
+                dist := (src.CpPhysicality.position - e.CpPhysicality.position).magnitude()
+                result := mutable 0
+                if( dist <= src.CpCharacter.get_jump_range() ) { return 0 }
+
+                spacing := dist - src.CpCharacter.get_jump_range()
+                return 100 - (100 * spacing).to_integer()
+            }
+            scoreThrowTarget := Function(src : Entity, assist : Entity, e : Entity) {
+                dist := (assist.CpPhysicality.position - e.CpPhysicality.position).magnitude()
+                result := mutable 0
+                if( dist > src.CpCharacter.get_throw_range(assist) ) { return 0 }
+                
+                damage := assist.CpCharacter.stats.damage / e.CpCharacter.stats.defense
+                if( damage > e.CpVulnerable.health ) { return 450 }
+                return (150 * damage) / e.CpCharacter.stats.health + 150
+            }
+            scoreThrowApproach := Function(src : Entity, assist : Entity, e : Entity) {
+                dist := (assist.CpPhysicality.position - e.CpPhysicality.position).magnitude()
+                result := mutable 0
+                if( dist <= src.CpCharacter.get_throw_range(assist) ) { return 0 }
+                
+                spacing := dist - src.CpCharacter.get_throw_range(assist)
+                return 150 - (100 * spacing).to_integer()
+            }
+            
+            all := sim.get_entities_with_component("CpPhysicality")
+
+            bestScore := mutable 0
+            
+            enemies := for( i in all if i.CpAllegiance.team == party ) { i }
+            
+            for( i in enemies )
+            {
+                tScore := scoreJumpTarget( actor, i )
+                if( tScore > bestScore )
+                {
+                    bestScore = tScore
+                    flow.CpBattleFlow.assistGuid = Guid()
+                    flow.CpBattleFlow.targetGuid = i.guid
+                    flow.CpBattleFlow.throwOrigin = actor.CpPhysicality.position
+                    flow.CpBattleFlow.throwTarget = sim.get_entity(flow.CpBattleFlow.targetGuid).CpPhysicality.position
+                }
+                aScore := scoreJumpApproach( actor, i )
+                if( aScore > bestScore )
+                {
+                    bestScore = aScore
+                    flow.CpBattleFlow.assistGuid = Guid()
+                    flow.CpBattleFlow.targetGuid = Guid()
+                    flow.CpBattleFlow.throwOrigin = actor.CpPhysicality.position
+                    offset := (i.CpPhysicality.position-actor.CpPhysicality.position).normalized() * actor.CpCharacter.get_jump_range()
+                    flow.CpBattleFlow.throwTarget = flow.CpBattleFlow.throwOrigin + offset
+                }
+            }
+            
+            allies := for( i in all if i.CpAllegiance.team == enemy and i.guid != actor.guid ) { i }
+            
+            for( assist in allies )
+            {
+                if( (assist.CpPhysicality.position-actor.CpPhysicality.position).magnitude() < actor.CpCharacter.get_jump_range() )
+                {
+                    for( i in enemies )
+                    {
+                        tScore := scoreThrowTarget( actor, assist, i )
+                        if( tScore > bestScore )
+                        {
+                            bestScore = tScore
+                            flow.CpBattleFlow.assistGuid = assist.guid
+                            flow.CpBattleFlow.targetGuid = i.guid
+                            flow.CpBattleFlow.throwOrigin = actor.CpPhysicality.position
+                            flow.CpBattleFlow.throwTarget = sim.get_entity(flow.CpBattleFlow.targetGuid).CpPhysicality.position
+                        }
+                        aScore := scoreThrowApproach( actor, assist, i )
+                        if( aScore > bestScore )
+                        {
+                            bestScore = aScore
+                            flow.CpBattleFlow.assistGuid = assist.guid
+                            flow.CpBattleFlow.targetGuid = Guid()
+                            flow.CpBattleFlow.throwOrigin = assist.CpPhysicality.position
+                            offset := (i.CpPhysicality.position-assist.CpPhysicality.position).normalized() * actor.CpCharacter.get_throw_range(assist)
+                            flow.CpBattleFlow.throwTarget = flow.CpBattleFlow.throwOrigin + offset
+                        }
+                    }
+                }
+            }
+            
+            if( bestScore > 0 )
+            {
+                flow.CpBattleFlow.ticker = 0.0
+                if( flow.CpBattleFlow.assistGuid.is_valid() )
+                {
+                    return "performWalkTo"
+                }
+                else
+                {
+                    return "performJump"
+                }
+            }
             return "nextTurn"
         }
         draw_entity_ui : Function(entity : Entity) {
@@ -401,7 +510,7 @@ flowFsm := FSM {
                 {
                     meToThem := tgt.CpPhysicality.position - actor.CpPhysicality.position
                     dist := meToThem.magnitude()
-                    if( tgt.CpAllegiance.team == enemy )
+                    if( tgt.CpAllegiance.team != actor.CpAllegiance.team )
                     {
                         if( tgt.guid == flow.CpBattleFlow.targetGuid or
                             dist < aoeRange )
@@ -409,7 +518,7 @@ flowFsm := FSM {
                             flow.CpBattleFlow.damageRecipients.add(tgt.guid)
                         }
                     }
-                    if( tgt.guid != actor.guid and tgt.CpAllegiance.team == party and actor.CpCharacter.stats.heal > 0 )
+                    if( tgt.guid != actor.guid and tgt.CpAllegiance.team == actor.CpAllegiance.team and actor.CpCharacter.stats.heal > 0 )
                     {
                         if( dist < aoeRange )
                         {
@@ -487,6 +596,7 @@ flowFsm := FSM {
     }
     performThrow : {
         on_update : Function[String] ( timeStep : Real ) {
+            actor := sim.get_entity( flow.CpBattleFlow.selectedGuid )
             flow.CpBattleFlow.ticker += timeStep
             percent := flow.CpBattleFlow.ticker / 1.2
             nominalPosition := math.lerp( flow.CpBattleFlow.throwOrigin, flow.CpBattleFlow.throwTarget, percent )
@@ -511,7 +621,7 @@ flowFsm := FSM {
                 {
                     meToThem := tgt.CpPhysicality.position - assist.CpPhysicality.position
                     dist := meToThem.magnitude()
-                    if( tgt.CpAllegiance.team == enemy )
+                    if( tgt.CpAllegiance.team != actor.CpAllegiance.team )
                     {
                         if( tgt.guid == flow.CpBattleFlow.targetGuid or
                             dist < aoeRange )
@@ -519,7 +629,7 @@ flowFsm := FSM {
                             flow.CpBattleFlow.damageRecipients.add(tgt.guid)
                         }
                     }
-                    if( tgt.guid != assist.guid and tgt.CpAllegiance.team == party and assist.CpCharacter.stats.heal > 0 )
+                    if( tgt.guid != assist.guid and tgt.CpAllegiance.team == actor.CpAllegiance.team and assist.CpCharacter.stats.heal > 0 )
                     {
                         if( dist < aoeRange )
                         {
@@ -556,7 +666,8 @@ flowFsm := FSM {
             {
                 targetEntity := sim.get_entity( tgtGuid )
                 meToThem := targetEntity.CpPhysicality.position*2 - (actor.CpPhysicality.position + flow.CpBattleFlow.throwOrigin)
-                invertedDirection := meToThem.normalized()
+                invertedDirection := Vector3D( meToThem.normalized().x, meToThem.normalized().y, 0 )
+                
                 step := (actor.CpCharacter.stats.knockback * timeStep) / (100.0 * 0.6)
                 targetEntity.CpPhysicality.position += invertedDirection * step
                 

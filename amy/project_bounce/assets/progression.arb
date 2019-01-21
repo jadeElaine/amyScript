@@ -9,13 +9,13 @@ party
 battlefields
 {
     fight1 <
-        { type victim position < 0.15 0.5 > }
-        { type victim position < 0.3 0.5 > }
-        { type victim position < 0.45 0.5 > }
+        { type slime position < 0.15 0.5 > }
+        { type slime position < 0.3 0.5 > }
+        { type slime position < 0.45 0.5 > }
     >
     
     fight2 <
-        { type victim position < 0.4 0.25 > }
-        { type victim position < 0.4 0.75 > }
+        { type slime position < 0.4 0.25 > }
+        { type slime position < 0.4 0.75 > }
     >
 }
