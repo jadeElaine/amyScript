@@ -58,12 +58,14 @@ CpCharacter := Type {
     name : String()
     color : Color()
     images : Dictionary()
+    imageHeightAdjust : Real()
     stats : Stats()
     
     _Ctor : public Function ( key : String, config : Dictionary ) {
         
         this.name = config.name
         this.color = colors[config.color]
+        this.imageHeightAdjust = config.imageHeightAdjust
         if( assets.contains_key( key + _stand ) )
         {
             this.images = {

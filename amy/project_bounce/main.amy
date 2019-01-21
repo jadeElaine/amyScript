@@ -18,7 +18,8 @@ bouncerRenderFunction := Function( sc : Scene ) {
     
     if( this.CpPhysicality.frame in this.CpCharacter.images )
     {
-        graphics.box_centered( Transform2D( d_char, r_char, s_char ), this.CpCharacter.images[this.CpPhysicality.frame] )
+        imagePos := d_char + Vector2D( 0.0, sizeGuide.to_real() * this.CpCharacter.imageHeightAdjust ).to_integer_vector2d()
+        graphics.box_centered( Transform2D( imagePos, r_char, s_char ), this.CpCharacter.images[this.CpPhysicality.frame] )
     }
     else
     {
@@ -31,6 +32,10 @@ bouncerRenderFunction := Function( sc : Scene ) {
     graphics.box( Transform2D( d_shadow + IntegerVector2D(-sizeGuide/4, sizeGuide/16+1), 0, IntegerVector2D(fillPixels, sizeGuide/8-2) ), Color( H00FF30FF ) )
     
     flow.CpBattleFlow.draw_entity_ui(this)
+}
+
+bouncerSortFunction := Function( sc : Scene ) {
+    return this.CpPhysicality.position.y
 }
 
 stage_battle := Function( key : String ) {
@@ -61,7 +66,7 @@ on_load := Function() {
     sim.create_entity( Array {
         CpPrototype {}
         CpNamed { name: bouncer }
-        CpViewFunction { ortho: bouncerRenderFunction }
+        CpViewFunction { ortho: bouncerRenderFunction, orthoSort: bouncerSortFunction }
     } )
     
     # Load Characters

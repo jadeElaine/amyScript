@@ -1,7 +1,7 @@
 red
 {
     name Red
-    color red
+    color red imageHeightAdjust .025
     health 100
     initiative 200
     weight 800 defense 100 heal 0
@@ -10,16 +10,16 @@ red
 yellow
 {
     name Yellow
-    color yellow
+    color yellow imageHeightAdjust .025
     health 100
     initiative 120
     weight 400 defense 85 heal 0
-    strength 100 damage 800 aoe 0 knockback 5
+    strength 100 damage 800 aoe 5 knockback 5
 }
 black
 {
     name Black
-    color black
+    color black imageHeightAdjust .025
     health 100
     initiative 80
     weight 1200 defense 110 heal 0
@@ -28,7 +28,7 @@ black
 white
 {
     name White
-    color white
+    color white imageHeightAdjust .025
     health 100
     initiative 120
     weight 800 defense 125 heal 40
@@ -38,9 +38,9 @@ white
 slime
 {
     name Slime
-    color purple
+    color purple imageHeightAdjust .1
     health 100
     initiative 50
     weight 400 defense 25 heal 0
-    strength 100 damage 500 aoe 0 knockback 10
+    strength 100 damage 500 aoe 10 knockback 10
 }
