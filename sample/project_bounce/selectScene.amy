@@ -1,34 +1,33 @@
-sceneSelect := create_scene("Select")
-sceneSelect.on_open = Function[Nil] () {
-    music.stop()
-    sim.link_scene(this)
-}
-
-sceneSelect.on_update = Function[Boolean] () {
-
-    if( input.press( escape ) )
-    {
-        return false
+sceneSelect =& create_scene("Select", Dictionary {
+    on_open : Function[Nil] () {
+        music.stop()
+        sim.link_scene(this)
     }
-    
-    if( input.press( "1" ) )
-    {
-        stage_battle( fight1 )
-    }
-    if( input.press( "2" ) )
-    {
-        stage_battle( fight2 )
-    }
-    
-    return true
-}
+    on_update : Function[Boolean] () {
 
-sceneSelect.on_2d = Function[Nil] () {
-    # draw FPS
-    screenCenter := graphics.get_resolution().x/2
-    graphics.print_centered( screenCenter, 24, "FPS: " + time.get_fps().to_string(), colors.white )
-    
-    y := mutable 40
-    graphics.print( 20, y += 20, "\"1\" - first battle", colors.white )
-    graphics.print( 20, y += 20, "\"2\" - second battle", colors.white )
-}
+        if( input.press( escape ) )
+        {
+            return false
+        }
+        
+        if( input.press( "1" ) )
+        {
+            stage_battle( fight1 )
+        }
+        if( input.press( "2" ) )
+        {
+            stage_battle( fight2 )
+        }
+        
+        return true
+    }
+    on_2d : Function[Nil] () {
+        # draw FPS
+        screenCenter =& graphics.get_resolution().x/2
+        graphics.print_centered( screenCenter, 24, "FPS: " + time.get_fps().to_string(), colors.white )
+        
+        y =& mutable 40
+        graphics.print( 20, y += 20, "\"1\" - first battle", colors.white )
+        graphics.print( 20, y += 20, "\"2\" - second battle", colors.white )
+    }
+})

@@ -1,13 +1,13 @@
-userState := mutable Dictionary {
+userState =& mutable Dictionary {
 	controlledObjectId: mutable Guid()
 }
 
-user_fly_ship := Function( ship : Entity ) {
+user_fly_ship =& Function( ship : Entity ) {
 
-	shipSchematic := catalog.shipSchematics[ship.CpShipConfig.schematic]
-	phys := ship.CpPhysicality3DInertial
+	shipSchematic =& catalog.shipSchematics[ship.CpShipConfig.schematic]
+	phys =& ship.CpPhysicality3DInertial
 	
-	torquing := mutable false
+	torquing =& mutable false
 	
     if( input.hold( w ) )
     {
@@ -49,7 +49,7 @@ user_fly_ship := Function( ship : Entity ) {
 	
 	if( !torquing )
 	{
-		step := time.get_delta_time() * 35.0
+		step =& time.get_delta_time() * 35.0
 		if( phys.omega.to_vector3d().magnitude() > step )
 		{
 			phys.omega -= phys.omega.to_vector3d().normalized() * step rad/s

@@ -1,44 +1,40 @@
-scene := create_scene( "playScene" )
+scene =& create_scene( "playScene", Dictionary {
+    on_open : Function[Nil] () {
 
-scene.on_open = Function[Nil] () {
-
-    # 5% grey light ambient "maximume shadow" and the sun coming in from (-1, .1, 0)
-    add_light( Light( colors.white * 0.05 ) )
-    add_light( Light( colors.white, colors.white, Vector3D(1, -.1, 0) ) )
-	
-    # position camera to be 25 units in front of the origin
-    get_3d_camera().position = math.v3forward * 6
-	
-	sim.link_scene(this)
-}
-
-scene.on_update = Function[Boolean] () {
-
-	sim.update()
-
-    if( input.press( escape ) )
-    {
-        return false
+        # 5% grey light ambient "maximume shadow" and the sun coming in from (-1, .1, 0)
+        add_light( Light( colors.white * 0.05 ) )
+        add_light( Light( colors.white, colors.white, Vector3D(1, -.1, 0) ) )
+        
+        # position camera to be 25 units in front of the origin
+        get_3d_camera().position = math.v3forward * 6
+        
+        sim.link_scene(this)
     }
+    on_update : Function[Boolean] () {
 
-    if( !is_nil( userState.controlledObjectId ) )
-    {
-        user_fly_ship( sim.get_entity( userState.controlledObjectId ) )
+        sim.update()
+
+        if( input.press( escape ) )
+        {
+            return false
+        }
+
+        if( !is_nil( userState.controlledObjectId ) )
+        {
+            user_fly_ship( sim.get_entity( userState.controlledObjectId ) )
+        }
+
+        return true
     }
-
-    return true
-}
-
-scene.on_3d_skybox = Function[Nil] () {
-}
-
-scene.on_3d = Function[Nil] () {
-}
-
-scene.on_2d = Function[Nil] () {
-    screenCenter := graphics.get_resolution().x/2
-    
-    cam := get_3d_camera()
-    graphics.print_centered( screenCenter, 8, "Hit Dem WASD (+QE) Keys", colors.white )
-    graphics.print_centered( screenCenter, 24, "FPS: " + time.get_fps().to_string(), colors.white )
-}
+    on_3d_skybox : Function[Nil] () {
+    }
+    on_3d : Function[Nil] () {
+    }
+    on_2d : Function[Nil] () {
+        screenCenter =& graphics.get_resolution().x/2
+        
+        cam =& get_3d_camera()
+        graphics.print_centered( screenCenter, 8, "Hit Dem WASD (+QE) Keys", colors.white )
+        graphics.print_centered( screenCenter, 24, "FPS: " + time.get_fps().to_string(), colors.white )
+    }
+})

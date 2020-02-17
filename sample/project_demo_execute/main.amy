@@ -1,37 +1,32 @@
-scene := create_scene( "Main" )
-
-scene.on_open = Function[Nil] () {
-    add_ui_frame( assets.interaction_ui )
-}
-
-
-
-scene.on_update = Function[Boolean] () {
-
-    if( input.press( escape ) )
-    {
-        return false
+scene =& create_scene( "Main", Dictionary {
+    on_open : Function[Nil] () {
+        add_ui_frame( assets.interaction_ui )
     }
-    
-    return true
-}
+    on_update : Function[Boolean] () {
 
-
-scene.on_2d = Function[Nil] () {
-    ui := get_ui( MainFrame )
-    
-    # We are catching exceptions and printing them ourselves so that the program can keep running through bad user data
-    try
-    {
-        sides := eval( ui.SidesTextField.text ).to_integer()
-        angle := eval( ui.AngleTextField.text ).to_real()
-        size := eval( ui.SizeTextField.text ).to_real()
-        color := eval( ui.ColorTextField.text )
-    
-        graphics.polygon( Transform2D( graphics.get_resolution()/2, angle * math.pi / 180, size ), sides, color )
+        if( input.press( escape ) )
+        {
+            return false
+        }
+        
+        return true
     }
-    catch( Exception e )
-    {
-        graphics.print( 0, 0, character_wrap( "Internal " + e.code + " From UI Fields: " + e.reason, 80), "7d7d7d" )
+    on_2d : Function[Nil] () {
+        ui =& get_ui( MainFrame )
+        
+        # We are catching exceptions and printing them ourselves so that the program can keep running through bad user data
+        try
+        {
+            sides =& eval( ui.SidesTextField.text ).to_integer()
+            angle =& eval( ui.AngleTextField.text ).to_real()
+            size =& eval( ui.SizeTextField.text ).to_real()
+            color =& eval( ui.ColorTextField.text )
+        
+            graphics.polygon( Transform2D( graphics.get_resolution()/2, angle * math.pi / 180, size ), sides, color )
+        }
+        catch( Exception e )
+        {
+            graphics.print( 0, 0, character_wrap( "Internal " + e.code + " From UI Fields: " + e.reason, 80), "7d7d7d" )
+        }
     }
-}
+})

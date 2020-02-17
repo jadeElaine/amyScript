@@ -1,31 +1,29 @@
-scene := create_scene( "Main" )
+scene =& create_scene( "Main", Dictionary {
+    on_update : Function[Boolean] () {
 
-scene.on_update = Function[Boolean] () {
+        if( input.press( escape ) )
+        {
+            return false
+        }
 
-    if( input.press( escape ) )
-    {
-        return false
+        return true
     }
+    on_2d : Function[Nil] () {  
+        graphics.box( Transform2D( IntegerVector2D(0,0), 0, graphics.get_resolution() ), colors.blue )
 
-    return true
-}
-
-
-scene.on_2d = Function[Nil] () {  
-    graphics.box( Transform2D( IntegerVector2D(0,0), 0, graphics.get_resolution() ), colors.blue )
-
-    screenCenter := graphics.get_resolution().x/2
-    graphics.print_centered( screenCenter, 8, "FPS: " + time.get_fps().to_string(), colors.white )
-    
-    draw_shapes( 120, 120 )
-}
+        screenCenter =& graphics.get_resolution().x/2
+        graphics.print_centered( screenCenter, 8, "FPS: " + time.get_fps().to_string(), colors.white )
+        
+        draw_shapes( 120, 120 )
+    }
+})
 
 # Comment For Draw Shapes!
-draw_shapes := Function[Nil] ( xInitial : Integer, y : Integer ) {
-    x := mutable xInitial # making a mutable copy so we can change it
-    size := 80 # in pixels
-    offset := size + 25
-    angle := time.get_time() * math.pi/4 # rotates 45 degrees every second the program runs
+draw_shapes =& Function[Nil] ( xInitial : Integer, y : Integer ) {
+    x =& mutable xInitial # making a mutable copy so we can change it
+    size =& 80 # in pixels
+    offset =& size + 25
+    angle =& time.get_time() * math.pi/4 # rotates 45 degrees every second the program runs
     
     # Each shape is drawn 5 times
     # First, the "empty" version shows how to draw just an outline

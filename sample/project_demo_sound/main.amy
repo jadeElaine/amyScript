@@ -1,61 +1,58 @@
-scene := create_scene( "Main" )
-
-scene.on_open = Function[Nil] () {
-    # the music.play function is in this case playing the music file located at
-    # "assets/captain_alexi_theme.ogg".  All music files will be exported into the
-    # local namespace as long as they have the supported extension ".ogg"
-    
-    music.play( assets.captain_alexi_theme )
-    
-    # Note: We don't support MP3's, its better to just reconvert them to ogg
-}
-
-scene.on_update = Function[Boolean] () {
-
-    if( input.press( escape ) )
-    {
-        return false
+scene =& create_scene( "Main", Dictionary {
+    on_open : Function[Nil] () {
+        # the music.play function is in this case playing the music file located at
+        # "assets/captain_alexi_theme.ogg".  All music files will be exported into the
+        # local namespace as long as they have the supported extension ".ogg"
+        
+        music.play( assets.captain_alexi_theme )
+        
+        # Note: We don't support MP3's, its better to just reconvert them to ogg
     }
-    
-    if( input.press( up ) )
-    {
-        # the sound.play function will play any sound files in the local namespace
-        # loaded from ".wav" files in the project folders
-    
-        sound.play(assets.bleep)
-    }
-    if( input.press( down ) )
-    {
-        # You can specify a second volume parameter on sound.play
-        sound.play(assets.bleep, 0.2)
-    }
-    if( input.press( left ) )
-    {
-        clipChannel := sound.play(assets.bleep)
-        # sound.play returns an integer for which sound-card channel
-        # the sounds is playing on.  You can use this sound channel to
-        # change the panning of the played clip.  Currently only 2.0 surround is supported
-        if( clipChannel != -1 )
+    on_update : Function[Boolean] () {
+
+        if( input.press( escape ) )
         {
-            sound.set_panning( clipChannel, -1 )
+            return false
         }
-    }
-    if( input.press( right ) )
-    {
-        clipChannel := sound.play(assets.bleep)
-        if( clipChannel != -1 )
+        
+        if( input.press( up ) )
         {
-            sound.set_panning( clipChannel, 1 )
+            # the sound.play function will play any sound files in the local namespace
+            # loaded from ".wav" files in the project folders
+        
+            sound.play(assets.bleep)
         }
+        if( input.press( down ) )
+        {
+            # You can specify a second volume parameter on sound.play
+            sound.play(assets.bleep, 0.2)
+        }
+        if( input.press( left ) )
+        {
+            clipChannel =& sound.play(assets.bleep)
+            # sound.play returns an integer for which sound-card channel
+            # the sounds is playing on.  You can use this sound channel to
+            # change the panning of the played clip.  Currently only 2.0 surround is supported
+            if( clipChannel != -1 )
+            {
+                sound.set_panning( clipChannel, -1 )
+            }
+        }
+        if( input.press( right ) )
+        {
+            clipChannel =& sound.play(assets.bleep)
+            if( clipChannel != -1 )
+            {
+                sound.set_panning( clipChannel, 1 )
+            }
+        }
+        
+        return true
     }
-    
-    return true
-}
+    on_2d : Function[Nil] () {  
+        graphics.box( Transform2D( IntegerVector2D(0,0), 0, graphics.get_resolution() ), colors.green )
 
-
-scene.on_2d = Function[Nil] () {  
-    graphics.box( Transform2D( IntegerVector2D(0,0), 0, graphics.get_resolution() ), colors.green )
-
-    screenCenter := graphics.get_resolution().x/2
-    graphics.print_centered( screenCenter, 8, "Press arrow keys to play sound", colors.white )
-}
+        screenCenter =& graphics.get_resolution().x/2
+        graphics.print_centered( screenCenter, 8, "Press arrow keys to play sound", colors.white )
+    }
+})

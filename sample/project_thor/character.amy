@@ -1,16 +1,16 @@
-position := mutable Vector2D(100, 100)
-playerSize := 20
-playerSpeed := 400.0
-hammerSize := 10
-hammerSpeed := 1024.0
-hoverTime := 2.0
-hoverTicker := mutable 0.0
-hammerRestingPosition := Vector2D(-15, -15)
-hammerPosition := mutable hammerRestingPosition
-characterDirection := mutable 0
+position =& mutable Vector2D(100, 100)
+playerSize =& 20
+playerSpeed =& 400.0
+hammerSize =& 10
+hammerSpeed =& 1024.0
+hoverTime =& 2.0
+hoverTicker =& mutable 0.0
+hammerRestingPosition =& Vector2D(-15, -15)
+hammerPosition =& mutable hammerRestingPosition
+characterDirection =& mutable 0
 
-update_player := Function[Nil] () {
-    deltaTime := 1.0/60.0
+update_player =& Function[Nil] () {
+    deltaTime =& 1.0/60.0
 	# wasd movement controls
     if (input.hold(w))
     {
@@ -35,7 +35,7 @@ update_player := Function[Nil] () {
     position = bind_on_screen(position, playerSize)
 
     # arrow hammer controls
-    isHammerControlled := mutable false
+    isHammerControlled =& mutable false
 
     if (input.hold(up))
     {
@@ -72,11 +72,11 @@ update_player := Function[Nil] () {
    	}
 }
 
-load_player := Function[Nil] () {
+load_player =& Function[Nil] () {
     position = (graphics.get_resolution() / 2).to_vector2d()
 }
 
-draw_player := Function[Nil] () {
+draw_player =& Function[Nil] () {
 	graphics.box_centered( Transform2D( position, 0, playerSize * 2), Color(H2e2e2e))
     graphics.box_centered( Transform2D( position + hammerPosition, 0, 10), colors.yellow)
 }

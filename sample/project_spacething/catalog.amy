@@ -1,20 +1,20 @@
-catalog := mutable Dictionary {
+catalog =& mutable Dictionary {
 	components: mutable Dictionary {},
 	shipSchematics: mutable Dictionary {}
 }
 
-define_component := Function( name : String ) {
+define_component =& Function( name : String ) {
     catalog.components.insert( Dictionary { 
         draw: Function[Nil] ( d : Vector3D, r : Quaternion, bounds : Vector3D ) {
-            rcMetal := RenderConfig( assets.metal1 )
-			t := Transform3D(d, r, bounds)
+            rcMetal =& RenderConfig( assets.metal1 )
+			t =& Transform3D(d, r, bounds)
             graphics.cylinder(t, rcMetal)
         }
     }, name )
 }
 
-define_ship_schematic := Function( name : String, data : Dictionary) {
-	newSchematic := {
+define_ship_schematic =& Function( name : String, data : Dictionary) {
+	newSchematic =& {
         componentInstances: mutable Array {},
         thrust: data.thrust,
         twist: Vector3D(data.twist[0], data.twist[1], data.twist[2])
@@ -31,7 +31,7 @@ define_ship_schematic := Function( name : String, data : Dictionary) {
     catalog.shipSchematics.insert( newSchematic, name )
 }
 
-initialize_catalog := Function() {
+initialize_catalog =& Function() {
     define_component( "tank" )
 	
 	for( schematic in assets.schematics )

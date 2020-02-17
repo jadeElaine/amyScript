@@ -1,24 +1,24 @@
-sim := Ecs { SyPrototypeInstantiator, SySceneLink }
-flow := mutable Entity()
+sim =& mutable Ecs { SyPrototypeInstantiator, SySceneLink }
+flow =& mutable Entity()
 
-characters := Dictionary()
+actors =& mutable Dictionary()
 
-bouncerRenderFunction := Function( sc : Scene ) {
+bouncerRenderFunction =& Function( sc : Scene ) {
 
-    sizeGuide := graphics.get_resolution().x/10;
-    s_shadow := IntegerVector2D( sizeGuide/3, sizeGuide/5 )
-    s_char := IntegerVector2D( sizeGuide, sizeGuide )
+    sizeGuide =& graphics.get_resolution().x/10;
+    s_shadow =& IntegerVector2D( sizeGuide/3, sizeGuide/5 )
+    s_char =& IntegerVector2D( sizeGuide, sizeGuide )
 
-    d_shadow := this.CpPhysicality.get_2d_position_shadow()
-    d_char := this.CpPhysicality.get_2d_position() - IntegerVector2D( 0, sizeGuide/2 )
+    d_shadow =& this.CpPhysicality.get_2d_position_shadow()
+    d_char =& this.CpPhysicality.get_2d_position() - IntegerVector2D( 0, sizeGuide/2 )
     
-    r_char := this.CpPhysicality.angle
+    r_char =& this.CpPhysicality.angle
     
     graphics.circle( Transform2D( d_shadow, 0, s_shadow ), Color( H3F3F3F2F ) )
     
     if( this.CpPhysicality.frame in this.CpCharacter.images )
     {
-        imagePos := d_char + Vector2D( 0.0, sizeGuide.to_real() * this.CpCharacter.imageHeightAdjust ).to_integer_vector2d()
+        imagePos =& d_char + Vector2D( 0.0, sizeGuide.to_real() * this.CpCharacter.imageHeightAdjust ).to_integer_vector2d()
         graphics.box_centered( Transform2D( imagePos, r_char, s_char ), this.CpCharacter.images[this.CpPhysicality.frame] )
     }
     else
@@ -27,29 +27,29 @@ bouncerRenderFunction := Function( sc : Scene ) {
     }
     
     graphics.box_centered( Transform2D( d_shadow + IntegerVector2D(0, sizeGuide/8), 0, IntegerVector2D(sizeGuide/2, sizeGuide/8) ), Color( HFF0000FF ) )
-    healthPercent := this.CpVulnerable.health.to_real() / this.CpCharacter.stats.health.to_real()
-    fillPixels := ((sizeGuide/2-2).to_real() * healthPercent).to_integer()
+    healthPercent =& this.CpVulnerable.health.to_real() / this.CpCharacter.stats.health.to_real()
+    fillPixels =& ((sizeGuide/2-2).to_real() * healthPercent).to_integer()
     graphics.box( Transform2D( d_shadow + IntegerVector2D(-sizeGuide/4, sizeGuide/16+1), 0, IntegerVector2D(fillPixels, sizeGuide/8-2) ), Color( H00FF30FF ) )
     
     flow.CpBattleFlow.draw_entity_ui(this)
 }
 
-bouncerSortFunction := Function( sc : Scene ) {
+bouncerSortFunction =& Function( sc : Scene ) {
     return this.CpPhysicality.position.y
 }
 
-stage_battle := Function( key : String ) {
+stage_battle =& Function( key : String ) {
     sim.condemn_entity_by_name(battleFlow)
     sim.condemn_all_instances()
     # Populate Battlefield
     for( fighter in assets.progression.party )
     {
-        characters[fighter.type].instantiate( sim, fighter.position, party )
+        actors[fighter.type].instantiate( sim, fighter.position, party )
     }
     
     for( fighter in assets.progression.battlefields.key )
     {
-        characters[fighter.type].instantiate( sim, fighter.position, enemy )
+        actors[fighter.type].instantiate( sim, fighter.position, enemy )
     }
         
     flow = sim.create_entity( Array {
@@ -61,18 +61,19 @@ stage_battle := Function( key : String ) {
     change_scene("Play")
 }
 
-on_load := Function() {
+on_load =& Function() {
 
     sim.create_entity( Array {
         CpPrototype {}
         CpNamed { name: bouncer }
         CpViewFunction { ortho: bouncerRenderFunction, orthoSort: bouncerSortFunction }
     } )
+    sim.update()
     
-    # Load Characters
+    # Load Actors
     for( character in assets."characters" )
     {
-        characters.insert(CpCharacter(character.key, character.value), character.key)
+        actors.insert(CpCharacter(character.key, character.value), character.key)
     }
 
     change_scene("Select")

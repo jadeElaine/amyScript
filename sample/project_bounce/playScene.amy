@@ -1,58 +1,57 @@
-scenePlay := create_scene("Play")
-scenePlay.on_open = Function[Nil] () {
-    music.play( assets.bouncebattletheme_1 )
-    sim.link_scene(this)
-}
-
-scenePlay.on_update = Function[Boolean] () {
-
-    sim.update()
-    
-    flow.CpBattleFlow.update()
-
-    if( input.press( escape ) )
-    {
-        return false
+scenePlay =& create_scene("Play", Dictionary {
+    on_open : Function[Nil] () {
+        music.play( assets.bouncebattletheme_1 )
+        sim.link_scene(this)
     }
-    
-    return true
-}
+    on_update : Function[Boolean] () {
 
-scenePlay.on_2d = Function[Nil] () {
-    screenCenter := graphics.get_resolution().x/2
-    right := graphics.get_resolution().x
-    bottom := graphics.get_resolution().y
-    horizon := (0.65 * bottom).to_integer()
-    
-    # draw background
-    graphics.box( Transform2D( IntegerVector2D(0,0), 0, IntegerVector2D(right,horizon) ), Color( H3F50CF ) )
-    graphics.box( Transform2D( IntegerVector2D(0,horizon), 0, IntegerVector2D(right,bottom) ), Color( HA07035 ) )
-    
-    # draw turn order
-    x := mutable Integer(20)
-    for( eGuid in flow.CpBattleFlow.turnOrder )
-    {
-        if( sim.has_entity(eGuid) )
+        sim.update()
+        
+        flow.CpBattleFlow.update()
+
+        if( input.press( escape ) )
         {
-            e := sim.get_entity(eGuid)
-            y := mutable 20
-            if( flow.CpBattleFlow.turn >= 0 and flow.CpBattleFlow.turn < flow.CpBattleFlow.turnOrder.size() )
-            {
-                if( eGuid == flow.CpBattleFlow.turnOrder[flow.CpBattleFlow.turn] ) { y = 40 }
-            } 
-            
-            if( e.CpPhysicality.frame in e.CpCharacter.images )
-            {
-                graphics.box_centered( Transform2D( IntegerVector2D( x, y ), 0, 48 ), e.CpCharacter.images[e.CpPhysicality.frame] )
-            }
-            else
-            {
-                graphics.box_centered( Transform2D( IntegerVector2D( x, y ), 0, 48 ), e.CpCharacter.color )
-            }
-            x += 28
+            return false
         }
+        
+        return true
     }
+    on_2d : Function[Nil] () {
+        screenCenter =& graphics.get_resolution().x/2
+        right =& graphics.get_resolution().x
+        bottom =& graphics.get_resolution().y
+        horizon =& (0.65 * bottom).to_integer()
+        
+        # draw background
+        graphics.box( Transform2D( IntegerVector2D(0,0), 0, IntegerVector2D(right,horizon) ), Color( H3F50CF ) )
+        graphics.box( Transform2D( IntegerVector2D(0,horizon), 0, IntegerVector2D(right,bottom) ), Color( HA07035 ) )
+        
+        # draw turn order
+        x =& mutable Integer(20)
+        for( eGuid in flow.CpBattleFlow.turnOrder )
+        {
+            if( sim.has_entity(eGuid) )
+            {
+                e =& sim.get_entity(eGuid)
+                y =& mutable 20
+                if( flow.CpBattleFlow.turn >= 0 and flow.CpBattleFlow.turn < flow.CpBattleFlow.turnOrder.size() )
+                {
+                    if( eGuid == flow.CpBattleFlow.turnOrder[flow.CpBattleFlow.turn] ) { y = 40 }
+                } 
+                
+                if( e.CpPhysicality.frame in e.CpCharacter.images )
+                {
+                    graphics.box_centered( Transform2D( IntegerVector2D( x, y ), 0, 48 ), e.CpCharacter.images[e.CpPhysicality.frame] )
+                }
+                else
+                {
+                    graphics.box_centered( Transform2D( IntegerVector2D( x, y ), 0, 48 ), e.CpCharacter.color )
+                }
+                x += 28
+            }
+        }
 
-    # draw FPS
-    graphics.print_centered( screenCenter, 24, "FPS: " + time.get_fps().to_string(), colors.white )
-}
+        # draw FPS
+        graphics.print_centered( screenCenter, 24, "FPS: " + time.get_fps().to_string(), colors.white )
+    }
+})
