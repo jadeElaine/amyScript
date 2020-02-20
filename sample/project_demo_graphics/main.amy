@@ -1,4 +1,4 @@
-scene =& create_scene( "Main", Dictionary {
+Scene(Main) {
     on_update : Function[Boolean] () {
 
         if( input.press( escape ) )
@@ -7,8 +7,8 @@ scene =& create_scene( "Main", Dictionary {
         }
 
         return true
-    }
-    on_2d : Function[Nil] () {  
+    },
+    on_2d : Function() {  
         graphics.box( Transform2D( IntegerVector2D(0,0), 0, graphics.get_resolution() ), colors.blue )
 
         screenCenter =& graphics.get_resolution().x/2
@@ -16,11 +16,11 @@ scene =& create_scene( "Main", Dictionary {
         
         draw_shapes( 120, 120 )
     }
-})
+}
 
 # Comment For Draw Shapes!
 draw_shapes =& Function[Nil] ( xInitial : Integer, y : Integer ) {
-    x =& mutable xInitial # making a mutable copy so we can change it
+    x =& mutable Integer(xInitial)
     size =& 80 # in pixels
     offset =& size + 25
     angle =& time.get_time() * math.pi/4 # rotates 45 degrees every second the program runs

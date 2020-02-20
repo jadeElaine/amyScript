@@ -69,7 +69,7 @@ on_load =& Function() {
         CpViewFunction { ortho: bouncerRenderFunction, orthoSort: bouncerSortFunction }
     } )
     sim.update()
-    
+
     # Load Actors
     for( character in assets."characters" )
     {

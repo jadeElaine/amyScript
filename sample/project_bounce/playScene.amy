@@ -1,8 +1,8 @@
-scenePlay =& create_scene("Play", Dictionary {
-    on_open : Function[Nil] () {
+Scene(Play) {
+    on_open : Function() {
         music.play( assets.bouncebattletheme_1 )
         sim.link_scene(this)
-    }
+    },
     on_update : Function[Boolean] () {
 
         sim.update()
@@ -15,8 +15,8 @@ scenePlay =& create_scene("Play", Dictionary {
         }
         
         return true
-    }
-    on_2d : Function[Nil] () {
+    },
+    on_2d : Function() {
         screenCenter =& graphics.get_resolution().x/2
         right =& graphics.get_resolution().x
         bottom =& graphics.get_resolution().y
@@ -33,7 +33,7 @@ scenePlay =& create_scene("Play", Dictionary {
             if( sim.has_entity(eGuid) )
             {
                 e =& sim.get_entity(eGuid)
-                y =& mutable 20
+                y =& mutable Integer(20)
                 if( flow.CpBattleFlow.turn >= 0 and flow.CpBattleFlow.turn < flow.CpBattleFlow.turnOrder.size() )
                 {
                     if( eGuid == flow.CpBattleFlow.turnOrder[flow.CpBattleFlow.turn] ) { y = 40 }
@@ -54,4 +54,4 @@ scenePlay =& create_scene("Play", Dictionary {
         # draw FPS
         graphics.print_centered( screenCenter, 24, "FPS: " + time.get_fps().to_string(), colors.white )
     }
-})
+}

@@ -1,15 +1,15 @@
-scene =& create_scene( "Main", Dictionary {
-    on_open : Function[Nil] () {
+Scene(Main) {
+    on_open : Function() {
 
         # pure white sun-light, and a camera pulled out 16 units
         add_light( Light( colors.white, colors.white, Vector3D(-1,-1,-1) ) )
         get_3d_camera().position = math.v3forward * 16
-    }
+    },
     on_update : Function[Boolean] () {
 
         return !input.press( escape )
-    }
-    on_3d : Function[Nil] () {
+    },
+    on_3d : Function() {
         # two textures are supplies
         # - a diffuse texture is loaded with the "Smooth" and "Mipmap" flags
         # - a self-illumination texture is loaded with just the "Smooth" flag
@@ -40,4 +40,4 @@ scene =& create_scene( "Main", Dictionary {
         
         graphics.mesh( Transform3D( math.v3zero, spin, 1 ), compositeRc, assets.birdofprey_mesh, shaderConfig )
     }
-})
+}

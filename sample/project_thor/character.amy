@@ -4,10 +4,10 @@ playerSpeed =& 400.0
 hammerSize =& 10
 hammerSpeed =& 1024.0
 hoverTime =& 2.0
-hoverTicker =& mutable 0.0
+hoverTicker =& mutable Real(0.0)
 hammerRestingPosition =& Vector2D(-15, -15)
-hammerPosition =& mutable hammerRestingPosition
-characterDirection =& mutable 0
+hammerPosition =& mutable Vector2D(hammerRestingPosition)
+characterDirection =& mutable Integer(0)
 
 update_player =& Function[Nil] () {
     deltaTime =& 1.0/60.0
@@ -35,7 +35,7 @@ update_player =& Function[Nil] () {
     position = bind_on_screen(position, playerSize)
 
     # arrow hammer controls
-    isHammerControlled =& mutable false
+    isHammerControlled =& mutable Boolean(false)
 
     if (input.hold(up))
     {
@@ -57,19 +57,19 @@ update_player =& Function[Nil] () {
         hammerPosition.x += hammerSpeed * deltaTime
         isHammerControlled = true
     }
-	
+
     if (isHammerControlled) 
     {
-    	hoverTicker = 0.0
+        hoverTicker = 0.0
     }
     else
-   	{
-   		hoverTicker += deltaTime
-   		if (hoverTicker > hoverTime)
-   		{
-   			hammerPosition = move_to_point(hammerPosition, hammerRestingPosition, hammerSpeed * deltaTime)
-   		}
-   	}
+    {
+        hoverTicker += deltaTime
+        if (hoverTicker > hoverTime)
+        {
+            hammerPosition = move_to_point(hammerPosition, hammerRestingPosition, hammerSpeed * deltaTime)
+        }
+    }
 }
 
 load_player =& Function[Nil] () {
@@ -77,6 +77,6 @@ load_player =& Function[Nil] () {
 }
 
 draw_player =& Function[Nil] () {
-	graphics.box_centered( Transform2D( position, 0, playerSize * 2), Color(H2e2e2e))
+    graphics.box_centered( Transform2D( position, 0, playerSize * 2), Color(H2e2e2e))
     graphics.box_centered( Transform2D( position + hammerPosition, 0, 10), colors.yellow)
 }

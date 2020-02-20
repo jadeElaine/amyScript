@@ -1,4 +1,6 @@
-catalog =& mutable Dictionary {
+language.require_version("0.2.0")
+
+catalog =& mutable Dictionary[mutable Auto] {
 	components: mutable Dictionary {},
 	shipSchematics: mutable Dictionary {}
 }

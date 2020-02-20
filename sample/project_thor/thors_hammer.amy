@@ -1,11 +1,11 @@
-scene =& create_scene( "Main", Dictionary {
-    on_open : Function[Nil] () {
+Scene(Main) {
+    on_open : Function() {
         console.print(position.to_string())
         console.print(graphics.get_resolution().to_string())
         
         input.hide_mouse()
         load_player()
-    }
+    },
     on_update : Function[Boolean] () {
 
         if( input.press( escape ) )
@@ -16,8 +16,8 @@ scene =& create_scene( "Main", Dictionary {
         update_player()
 
         return true
-    }
-    on_2d : Function[Nil] () {  
+    },
+    on_2d : Function() {  
         graphics.box( Transform2D( IntegerVector2D(0,0), 0, graphics.get_resolution() ), Color( H9e9e9e ) )
 
         screenCenter =& graphics.get_resolution().x/2
@@ -33,4 +33,4 @@ scene =& create_scene( "Main", Dictionary {
         graphics.print_centered( screenCenter, 30, "Thor's coordinates: " + position.x.to_string()+ " "+ position.y.to_string(), Color( H000000 ) )
         graphics.print_centered( screenCenter, 60, "Hammer coordinates: " + hammerPosition.x.to_string()+ " "+ hammerPosition.y.to_string(), Color( H000000 ) )
     }
-})
+}

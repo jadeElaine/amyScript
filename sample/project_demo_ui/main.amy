@@ -1,5 +1,5 @@
-scene =& create_scene( "Main", Dictionary {
-    on_open : Function[Nil] () {
+Scene(Main) {
+    on_open : Function() {
         zoneUI =& UIFrame( assets.zone_ui )
         add_ui_frame( zoneUI )
         add_ui_frame( assets.constraint_ui )
@@ -13,7 +13,7 @@ scene =& create_scene( "Main", Dictionary {
             hostFrame =& get_parent()
             hostFrame.TestLabel."set_text"( "Inside of AmyScript, you can add ui to the current scene using . delimited asset file paths. The scene allows you to grab ui frames by name - though note these are the internal names specified in the files, not the filenames themselves.  Once loaded, the original filename is no longer known by the ui.  Then, as shown in the script, you can reference all child members as properties of the frames, and children of them the same way.  All ui elements expose a few functions, for example buttons can recieve callback functions, and labels can have their text changed." )
         } )
-    }
+    },
     on_update : Function[Boolean] () {
 
         if( input.press( escape ) )
@@ -23,4 +23,4 @@ scene =& create_scene( "Main", Dictionary {
         
         return true
     }
-})
+}

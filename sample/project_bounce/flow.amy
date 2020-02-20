@@ -385,7 +385,7 @@ flowFsm =& mutable FSM {
             }
             scoreJumpApproach =& Function(src : Entity, e : Entity) {
                 dist =& (src.CpPhysicality.position - e.CpPhysicality.position).magnitude()
-                result =& mutable 0
+                result =& mutable Integer(0)
                 if( dist <= src.CpCharacter.get_jump_range() ) { return 0 }
 
                 spacing =& dist - src.CpCharacter.get_jump_range()
@@ -393,7 +393,7 @@ flowFsm =& mutable FSM {
             }
             scoreThrowTarget =& Function(src : Entity, assist : Entity, e : Entity) {
                 dist =& (assist.CpPhysicality.position - e.CpPhysicality.position).magnitude()
-                result =& mutable 0
+                result =& mutable Integer(0)
                 if( dist > src.CpCharacter.get_throw_range(assist) ) { return 0 }
                 
                 damage =& assist.CpCharacter.stats.damage / e.CpCharacter.stats.defense
@@ -402,7 +402,7 @@ flowFsm =& mutable FSM {
             }
             scoreThrowApproach =& Function(src : Entity, assist : Entity, e : Entity) {
                 dist =& (assist.CpPhysicality.position - e.CpPhysicality.position).magnitude()
-                result =& mutable 0
+                result =& mutable Integer(0)
                 if( dist <= src.CpCharacter.get_throw_range(assist) ) { return 0 }
                 
                 spacing =& dist - src.CpCharacter.get_throw_range(assist)
@@ -411,10 +411,9 @@ flowFsm =& mutable FSM {
             
             all =& sim.get_entities_with_component("CpPhysicality")
 
-            bestScore =& mutable 0
-            
             enemies =& for( i in all if i.CpAllegiance.team == party ) { i }
             
+            bestScore =& mutable Integer(0)
             for( i in enemies )
             {
                 tScore =& scoreJumpTarget( actor, i )

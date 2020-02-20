@@ -1,8 +1,8 @@
-sceneSelect =& create_scene("Select", Dictionary {
-    on_open : Function[Nil] () {
+Scene(Select) {
+    on_open : Function() {
         music.stop()
         sim.link_scene(this)
-    }
+    },
     on_update : Function[Boolean] () {
 
         if( input.press( escape ) )
@@ -20,14 +20,14 @@ sceneSelect =& create_scene("Select", Dictionary {
         }
         
         return true
-    }
-    on_2d : Function[Nil] () {
+    },
+    on_2d : Function() {
         # draw FPS
         screenCenter =& graphics.get_resolution().x/2
         graphics.print_centered( screenCenter, 24, "FPS: " + time.get_fps().to_string(), colors.white )
         
-        y =& mutable 40
+        y =& mutable Integer(40)
         graphics.print( 20, y += 20, "\"1\" - first battle", colors.white )
         graphics.print( 20, y += 20, "\"2\" - second battle", colors.white )
     }
-})
+}

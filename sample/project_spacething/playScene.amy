@@ -1,5 +1,7 @@
-scene =& create_scene( "playScene", Dictionary {
-    on_open : Function[Nil] () {
+language.require_version("0.2.0")
+
+Scene(playScene) {
+    on_open : Function() {
 
         # 5% grey light ambient "maximume shadow" and the sun coming in from (-1, .1, 0)
         add_light( Light( colors.white * 0.05 ) )
@@ -9,7 +11,7 @@ scene =& create_scene( "playScene", Dictionary {
         get_3d_camera().position = math.v3forward * 6
         
         sim.link_scene(this)
-    }
+    },
     on_update : Function[Boolean] () {
 
         sim.update()
@@ -25,16 +27,16 @@ scene =& create_scene( "playScene", Dictionary {
         }
 
         return true
-    }
-    on_3d_skybox : Function[Nil] () {
-    }
-    on_3d : Function[Nil] () {
-    }
-    on_2d : Function[Nil] () {
+    },
+    on_3d_skybox : Function() {
+    },
+    on_3d : Function() {
+    },
+    on_2d : Function() {
         screenCenter =& graphics.get_resolution().x/2
         
         cam =& get_3d_camera()
         graphics.print_centered( screenCenter, 8, "Hit Dem WASD (+QE) Keys", colors.white )
         graphics.print_centered( screenCenter, 24, "FPS: " + time.get_fps().to_string(), colors.white )
     }
-})
+}

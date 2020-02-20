@@ -1,5 +1,5 @@
-scene =& create_scene( "Main", Dictionary {
-    on_open : Function[Nil] () {
+Scene(Main) {
+    on_open : Function() {
         # the music.play function is in this case playing the music file located at
         # "assets/captain_alexi_theme.ogg".  All music files will be exported into the
         # local namespace as long as they have the supported extension ".ogg"
@@ -7,7 +7,7 @@ scene =& create_scene( "Main", Dictionary {
         music.play( assets.captain_alexi_theme )
         
         # Note: We don't support MP3's, its better to just reconvert them to ogg
-    }
+    },
     on_update : Function[Boolean] () {
 
         if( input.press( escape ) )
@@ -48,11 +48,11 @@ scene =& create_scene( "Main", Dictionary {
         }
         
         return true
-    }
-    on_2d : Function[Nil] () {  
+    },
+    on_2d : Function() {  
         graphics.box( Transform2D( IntegerVector2D(0,0), 0, graphics.get_resolution() ), colors.green )
 
         screenCenter =& graphics.get_resolution().x/2
         graphics.print_centered( screenCenter, 8, "Press arrow keys to play sound", colors.white )
     }
-})
+}

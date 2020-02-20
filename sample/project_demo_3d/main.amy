@@ -1,5 +1,5 @@
-scene =& create_scene( "Main", Dictionary {
-    on_open : Function[Nil] () {
+Scene(Main) {
+    on_open : Function() {
 
         # create an ambient light of 5% grey
         add_light( Light( colors.white * 0.05 ) )
@@ -10,7 +10,7 @@ scene =& create_scene( "Main", Dictionary {
         
         # position camera to be 25 units in front of the origin
         get_3d_camera().position = math.v3forward * 6
-    }
+    },
     on_update : Function[Boolean] () {
 
         if( input.press( escape ) )
@@ -36,8 +36,8 @@ scene =& create_scene( "Main", Dictionary {
         }
 
         return true
-    }
-    on_3d : Function[Nil] () {
+    },
+    on_3d : Function() {
         # Set up a rendering config that uses the grate texture, 
         # and shaders which respond to lighting
         rc =& RenderConfig( assets.grate, graphics.lit )
@@ -47,11 +47,11 @@ scene =& create_scene( "Main", Dictionary {
         # draw a spinning spherical shell, with a smaller sphere inside of it
         graphics.sphere_shell( Transform3D( math.v3zero, spin, 1.5 ), rc )
         graphics.sphere( Transform3D( math.v3zero, spin, 1 ), rc )
-    }
-    on_2d : Function[Nil] () {
+    },
+    on_2d : Function() {
         screenCenter =& graphics.get_resolution().x/2
         
         cam =& get_3d_camera()
         graphics.print_centered( screenCenter, 8, "Adjust camera with arrow keys", colors.white )
     }
-})
+}
