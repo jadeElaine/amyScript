@@ -1,44 +1,42 @@
-scene := create_scene( "playScene" )
+language.require_version("0.2.0")
 
-scene.on_open = Function[Nil] () {
+Scene(playScene) {
+    on_open : Function() {
 
-    # 5% grey light ambient "maximume shadow" and the sun coming in from (-1, .1, 0)
-    add_light( Light( colors.white * 0.05 ) )
-    add_light( Light( colors.white, colors.white, Vector3D(1, -.1, 0) ) )
-	
-    # position camera to be 25 units in front of the origin
-    get_3d_camera().position = math.v3forward * 6
-	
-	sim.link_scene(this)
-}
+        # 5% grey light ambient "maximume shadow" and the sun coming in from (-1, .1, 0)
+        add_light( Light( colors.white * 0.05 ) )
+        add_light( Light( colors.white, colors.white, Vector3D(1, -.1, 0) ) )
+        
+        # position camera to be 25 units in front of the origin
+        get_3d_camera().position = math.v3forward * 6
+        
+        sim.link_scene(this)
+    },
+    on_update : Function[Boolean] () {
 
-scene.on_update = Function[Boolean] () {
+        sim.update()
 
-	sim.update()
+        if( input.press( escape ) )
+        {
+            return false
+        }
 
-    if( input.press( escape ) )
-    {
-        return false
+        if( !is_nil( userState.controlledObjectId ) )
+        {
+            user_fly_ship( sim.get_entity( userState.controlledObjectId ) )
+        }
+
+        return true
+    },
+    on_3d_skybox : Function() {
+    },
+    on_3d : Function() {
+    },
+    on_2d : Function() {
+        screenCenter =& graphics.get_resolution().x/2
+        
+        cam =& get_3d_camera()
+        graphics.print_centered( screenCenter, 8, "Hit Dem WASD (+QE) Keys", colors.white )
+        graphics.print_centered( screenCenter, 24, "FPS: " + time.get_fps().to_string(), colors.white )
     }
-
-    if( !is_nil( userState.controlledObjectId ) )
-    {
-        user_fly_ship( sim.get_entity( userState.controlledObjectId ) )
-    }
-
-    return true
-}
-
-scene.on_3d_skybox = Function[Nil] () {
-}
-
-scene.on_3d = Function[Nil] () {
-}
-
-scene.on_2d = Function[Nil] () {
-    screenCenter := graphics.get_resolution().x/2
-    
-    cam := get_3d_camera()
-    graphics.print_centered( screenCenter, 8, "Hit Dem WASD (+QE) Keys", colors.white )
-    graphics.print_centered( screenCenter, 24, "FPS: " + time.get_fps().to_string(), colors.white )
 }

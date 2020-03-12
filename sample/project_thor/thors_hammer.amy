@@ -1,39 +1,36 @@
-scene := create_scene( "Main" )
+Scene(Main) {
+    on_open : Function() {
+        console.print(position.to_string())
+        console.print(graphics.get_resolution().to_string())
+        
+        input.hide_mouse()
+        load_player()
+    },
+    on_update : Function[Boolean] () {
 
-scene.on_open = Function[Nil] () {
-	console.print(position.to_string())
-	console.print(graphics.get_resolution().to_string())
-	
-    input.hide_mouse()
-    load_player()
-}
+        if( input.press( escape ) )
+        {
+            return false
+        }
+        
+        update_player()
 
-scene.on_update = Function[Boolean] () {
+        return true
+    },
+    on_2d : Function() {  
+        graphics.box( Transform2D( IntegerVector2D(0,0), 0, graphics.get_resolution() ), Color( H9e9e9e ) )
 
-    if( input.press( escape ) )
-    {
-        return false
+        screenCenter =& graphics.get_resolution().x/2
+        graphics.print_centered( screenCenter, 8, "Press escape to quit", Color( H000000 ) )
+        
+        mouseCursor =& input.cursor()
+        graphics.line(mouseCursor, mouseCursor + IntegerVector2D(-10, 5), 1, colors.yellow )
+        graphics.line(mouseCursor, mouseCursor + IntegerVector2D(10, 5), 1, colors.yellow )
+        graphics.line(mouseCursor, mouseCursor + IntegerVector2D(0, -10), 1, colors.yellow )
+        
+        draw_player()
+        
+        graphics.print_centered( screenCenter, 30, "Thor's coordinates: " + position.x.to_string()+ " "+ position.y.to_string(), Color( H000000 ) )
+        graphics.print_centered( screenCenter, 60, "Hammer coordinates: " + hammerPosition.x.to_string()+ " "+ hammerPosition.y.to_string(), Color( H000000 ) )
     }
-    
-    update_player()
-
-    return true
-}
-
-
-scene.on_2d = Function[Nil] () {  
-    graphics.box( Transform2D( IntegerVector2D(0,0), 0, graphics.get_resolution() ), Color( H9e9e9e ) )
-
-    screenCenter := graphics.get_resolution().x/2
-    graphics.print_centered( screenCenter, 8, "Press escape to quit", Color( H000000 ) )
-    
-    mouseCursor := input.cursor()
-    graphics.line(mouseCursor, mouseCursor + IntegerVector2D(-10, 5), 1, colors.yellow )
-    graphics.line(mouseCursor, mouseCursor + IntegerVector2D(10, 5), 1, colors.yellow )
-    graphics.line(mouseCursor, mouseCursor + IntegerVector2D(0, -10), 1, colors.yellow )
-    
-    draw_player()
-    
-    graphics.print_centered( screenCenter, 30, "Thor's coordinates: " + position.x.to_string()+ " "+ position.y.to_string(), Color( H000000 ) )
-    graphics.print_centered( screenCenter, 60, "Hammer coordinates: " + hammerPosition.x.to_string()+ " "+ hammerPosition.y.to_string(), Color( H000000 ) )
 }

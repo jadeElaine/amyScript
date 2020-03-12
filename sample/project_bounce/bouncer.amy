@@ -1,4 +1,4 @@
-Stats := Type {
+Stats =& Type {
     health : public Integer()
     weight : public Integer()
     strength : public Integer()
@@ -23,38 +23,38 @@ Stats := Type {
     }
 }
 
-CpPhysicality := Type {
+CpPhysicality =& Type {
     position : mutable Vector3D()
     angle : mutable Real()
     frame : mutable String(stand)
     
     get_2d_position : public Function() {
-        right := graphics.get_resolution().x
-        bottom := graphics.get_resolution().y
-        horizon := (0.65 * bottom).to_integer()
-        margin := bottom - horizon
-        
+        right =& graphics.get_resolution().x
+        bottom =& graphics.get_resolution().y
+        horizon =& (0.65 * bottom).to_integer()
+        margin =& bottom - horizon
+
         return Vector2D(this.position.x * right, this.position.y * margin + horizon - this.position.z * margin).to_integer_vector2d()
     }
     get_2d_position_shadow : public Function() {
-        right := graphics.get_resolution().x
-        bottom := graphics.get_resolution().y
-        horizon := (0.65 * bottom).to_integer()
-        margin := bottom - horizon
+        right =& graphics.get_resolution().x
+        bottom =& graphics.get_resolution().y
+        horizon =& (0.65 * bottom).to_integer()
+        margin =& bottom - horizon
         
         return Vector2D(this.position.x * right, (this.position.y * margin + horizon)).to_integer_vector2d()
     }
 }
 
-CpVulnerable := Type {
+CpVulnerable =& Type {
     health : mutable Integer()
 }
 
-CpAllegiance := Type {
+CpAllegiance =& Type {
     team : mutable String()
 }
 
-CpCharacter := Type {
+CpCharacter =& Type {
     name : String()
     color : Color()
     images : Dictionary()
@@ -78,9 +78,9 @@ CpCharacter := Type {
     }
     
     instantiate : public Function[Entity] ( sim : Ecs, xyArray : Array, team : String ) {
-        entity := sim."instantiate"(bouncer)
+        entity =& sim."instantiate"(bouncer)
         entity.add_component( this )
-        spawnLocation := Vector3D( xyArray[0],  xyArray[1], 0 )
+        spawnLocation =& Vector3D( xyArray[0],  xyArray[1], 0 )
         entity.add_component( CpAllegiance { "team" : team } )
         entity.add_component( CpPhysicality { position : spawnLocation } )
         entity.add_component( CpVulnerable { health : this.stats.health } )
@@ -96,7 +96,7 @@ CpCharacter := Type {
     }
 }
 
-CpInitiative := Type {
+CpInitiative =& Type {
     initiative : mutable Real()
     hasMoved : mutable Boolean()
     

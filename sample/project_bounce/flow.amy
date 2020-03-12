@@ -1,8 +1,8 @@
-flowFsm := FSM {
+flowFsm =& mutable FSM {
     nextRound : {
         on_update : Function[String] ( timeStep : Real ) {
             flow.CpBattleFlow.turnOrder.clear()
-            all := sim.get_entities_with_component("CpInitiative")
+            all =& sim.get_entities_with_component("CpInitiative")
             for( e in all )
             {
                 e.CpInitiative.roll(e.CpCharacter)
@@ -28,9 +28,9 @@ flowFsm := FSM {
             flow.CpBattleFlow.targetGuid = Guid()
             
             #TODO: Validate victory
-            all := sim.get_entities_with_component("CpPhysicality")
-            haveWon := mutable Boolean(true)
-            haveLost := mutable Boolean(true)
+            all =& sim.get_entities_with_component("CpPhysicality")
+            haveWon =& mutable Boolean(true)
+            haveLost =& mutable Boolean(true)
             for( tgt in all )
             {
                 if( tgt.CpAllegiance.team == enemy ) { haveWon = false }
@@ -61,14 +61,14 @@ flowFsm := FSM {
             {
                 return "nextRound" 
             }
-            entityGuid := flow.CpBattleFlow.turnOrder[flow.CpBattleFlow.turn]
+            entityGuid =& flow.CpBattleFlow.turnOrder[flow.CpBattleFlow.turn]
             
             if( !sim.has_entity(entityGuid) )
             {
                 return ""
             }
             
-            entity := sim.get_entity(entityGuid)
+            entity =& sim.get_entity(entityGuid)
             
             if( entity.CpAllegiance.team == party )
             {
@@ -110,14 +110,14 @@ flowFsm := FSM {
             #check for assists and target locks
             flow.CpBattleFlow.assistGuid = Guid()
             flow.CpBattleFlow.targetGuid = Guid()
-            all := sim.get_entities_with_component("CpPhysicality")
-            actor := sim.get_entity( flow.CpBattleFlow.selectedGuid )
-            closestDist := mutable Real(math.infinity)
-            throwDirection := Vector3D( math.cos(flow.CpBattleFlow.throwAngle), math.sin(flow.CpBattleFlow.throwAngle), 0 )
+            all =& sim.get_entities_with_component("CpPhysicality")
+            actor =& sim.get_entity( flow.CpBattleFlow.selectedGuid )
+            closestDist =& mutable Real(math.infinity)
+            throwDirection =& Vector3D( math.cos(flow.CpBattleFlow.throwAngle), math.sin(flow.CpBattleFlow.throwAngle), 0 )
             for( tgt in all )
             {
-                meToThem := tgt.CpPhysicality.position - actor.CpPhysicality.position
-                dist := meToThem.magnitude()
+                meToThem =& tgt.CpPhysicality.position - actor.CpPhysicality.position
+                dist =& meToThem.magnitude()
                 if( tgt.CpAllegiance.team == party and tgt.guid != flow.CpBattleFlow.selectedGuid )
                 {
                     if( meToThem.normalized() * throwDirection > 0.95 and 
@@ -180,61 +180,61 @@ flowFsm := FSM {
         }
         draw_entity_ui : Function(entity : Entity) {
 
-            isMyTurn := entity.guid == flow.CpBattleFlow.turnOrder[flow.CpBattleFlow.turn]
+            isMyTurn =& entity.guid == flow.CpBattleFlow.turnOrder[flow.CpBattleFlow.turn]
         
             if( isMyTurn )
             {
-                arrowYOffset := (math.sin(time.get_time() * 180)*8).to_integer() - 64
+                arrowYOffset =& (math.sin(time.get_time() * 180)*8).to_integer() - 64
                 
-                d_charReal := entity.CpPhysicality.get_2d_position()
+                d_charReal =& entity.CpPhysicality.get_2d_position()
                 graphics.polygon( Transform2D( d_charReal + IntegerVector2D(0, arrowYOffset - 48), math.pi, IntegerVector2D(64,32) ), 3, colors.lime )
                 
                 if( flow.CpBattleFlow.assistGuid.is_valid() )
                 {
-                    assistEntity := sim.get_entity( flow.CpBattleFlow.assistGuid )
-                    d_assistReal := assistEntity.CpPhysicality.get_2d_position()
+                    assistEntity =& sim.get_entity( flow.CpBattleFlow.assistGuid )
+                    d_assistReal =& assistEntity.CpPhysicality.get_2d_position()
                     graphics.polygon( Transform2D( d_assistReal + IntegerVector2D(0, arrowYOffset - 48), math.pi, IntegerVector2D(64,32) ), 3, colors.blue )
                     
                     for( i in 7 )
                     {
-                        percent := (i+1).to_real() / 8.0;
-                        leadPoint := math.lerp(d_charReal.to_vector2d(), d_assistReal.to_vector2d(), percent).to_integer_vector2d()
+                        percent =& (i+1).to_real() / 8.0;
+                        leadPoint =& math.lerp(d_charReal.to_vector2d(), d_assistReal.to_vector2d(), percent).to_integer_vector2d()
                         graphics.circle( Transform2D(leadPoint, 0, 8), Color(0.0,0.0,1.0,0.125) )
                     }
                 }
                 else if( flow.CpBattleFlow.targetGuid.is_valid() )
                 {
-                    targetEntity := sim.get_entity( flow.CpBattleFlow.targetGuid )
-                    d_targetReal := targetEntity.CpPhysicality.get_2d_position()
+                    targetEntity =& sim.get_entity( flow.CpBattleFlow.targetGuid )
+                    d_targetReal =& targetEntity.CpPhysicality.get_2d_position()
                     graphics.polygon( Transform2D( d_targetReal + IntegerVector2D(0, arrowYOffset - 48), math.pi, IntegerVector2D(64,32) ), 3, colors.red )
                     
                     for( i in 7 )
                     {
-                        percent := (i+1).to_real() / 8.0;
-                        height := (math.sin(percent * 180) * graphics.get_resolution().y/6).to_integer()
-                        leadPoint := math.lerp(d_charReal.to_vector2d(), d_targetReal.to_vector2d(), percent).to_integer_vector2d() - IntegerVector2D(0, height)
+                        percent =& (i+1).to_real() / 8.0;
+                        height =& (math.sin(percent * 180) * graphics.get_resolution().y/6).to_integer()
+                        leadPoint =& math.lerp(d_charReal.to_vector2d(), d_targetReal.to_vector2d(), percent).to_integer_vector2d() - IntegerVector2D(0, height)
                         graphics.circle( Transform2D(leadPoint, 0, 8), Color(1.0,0.0,0.0,0.125) )
                     }
                 }
                 else
                 {
-                    throwDirection := Vector3D( math.cos(flow.CpBattleFlow.throwAngle), math.sin(flow.CpBattleFlow.throwAngle), 0 )
-                    targetPoint := mutable Vector3D( entity.CpPhysicality.position + throwDirection * flow.CpBattleFlow.throwPower * entity.CpCharacter.get_jump_range() )
+                    throwDirection =& Vector3D( math.cos(flow.CpBattleFlow.throwAngle), math.sin(flow.CpBattleFlow.throwAngle), 0 )
+                    targetPoint =& mutable Vector3D( entity.CpPhysicality.position + throwDirection * flow.CpBattleFlow.throwPower * entity.CpCharacter.get_jump_range() )
                     targetPoint.x = clamp( targetPoint.x, 0.0, 1.0 )
                     targetPoint.y = clamp( targetPoint.y, 0.0, 1.0 )
                     
-                    right := graphics.get_resolution().x
-                    bottom := graphics.get_resolution().y
-                    horizon := (0.65 * bottom).to_integer()
-                    margin := bottom - horizon
-                    impactPoint := Vector2D( targetPoint.x * right, targetPoint.y * margin + horizon )
-                    aoeRadius := ( entity.CpCharacter.stats.aoe.to_real() * graphics.get_resolution().x.to_real() / 100.0 ).to_integer()
+                    right =& graphics.get_resolution().x
+                    bottom =& graphics.get_resolution().y
+                    horizon =& (0.65 * bottom).to_integer()
+                    margin =& bottom - horizon
+                    impactPoint =& Vector2D( targetPoint.x * right, targetPoint.y * margin + horizon )
+                    aoeRadius =& ( entity.CpCharacter.stats.aoe.to_real() * graphics.get_resolution().x.to_real() / 100.0 ).to_integer()
                     graphics.circle( Transform2D(impactPoint.to_integer_vector2d(), 0, IntegerVector2D(aoeRadius,aoeRadius/2)), Color(1.0,0.5,0.0,0.25) )
                     for( i in 7 )
                     {
-                        percent := (i+1).to_real() / 8.0;
-                        height := (math.sin(percent * 180) * graphics.get_resolution().y/6).to_integer()
-                        leadPoint := math.lerp(d_charReal.to_vector2d(), impactPoint, percent).to_integer_vector2d() - IntegerVector2D(0, height)
+                        percent =& (i+1).to_real() / 8.0;
+                        height =& (math.sin(percent * 180) * graphics.get_resolution().y/6).to_integer()
+                        leadPoint =& math.lerp(d_charReal.to_vector2d(), impactPoint, percent).to_integer_vector2d() - IntegerVector2D(0, height)
                         graphics.circle( Transform2D(leadPoint, 0, 8), Color(1.0,0.5,0.0,0.125) )
                     }
                 }
@@ -263,15 +263,15 @@ flowFsm := FSM {
             
             #check for target locks
             flow.CpBattleFlow.targetGuid = Guid()
-            all := sim.get_entities_with_component("CpPhysicality")
-            actor := sim.get_entity( flow.CpBattleFlow.selectedGuid )
-            assist := sim.get_entity( flow.CpBattleFlow.assistGuid )
-            closestDist := mutable Real(math.infinity)
-            throwDirection := Vector3D( math.cos(flow.CpBattleFlow.throwAngle), math.sin(flow.CpBattleFlow.throwAngle), 0 )
+            all =& sim.get_entities_with_component("CpPhysicality")
+            actor =& sim.get_entity( flow.CpBattleFlow.selectedGuid )
+            assist =& sim.get_entity( flow.CpBattleFlow.assistGuid )
+            closestDist =& mutable Real(math.infinity)
+            throwDirection =& Vector3D( math.cos(flow.CpBattleFlow.throwAngle), math.sin(flow.CpBattleFlow.throwAngle), 0 )
             for( tgt in all )
             {
-                meToThem := tgt.CpPhysicality.position - assist.CpPhysicality.position
-                dist := meToThem.magnitude()
+                meToThem =& tgt.CpPhysicality.position - assist.CpPhysicality.position
+                dist =& meToThem.magnitude()
                 if( tgt.CpAllegiance.team == enemy )
                 {
                     if( meToThem.normalized() * throwDirection > 0.95 and 
@@ -309,7 +309,7 @@ flowFsm := FSM {
             
             if( input.press( backspace ) )
             {
-                meToThem := assist.CpPhysicality.position - actor.CpPhysicality.position
+                meToThem =& assist.CpPhysicality.position - actor.CpPhysicality.position
                 flow.CpBattleFlow.throwAngle = math.arctan(Vector2D(meToThem.x, meToThem.y))
                 flow.CpBattleFlow.throwPower = 1.0
                 return "userTargetSelect"
@@ -318,52 +318,52 @@ flowFsm := FSM {
             return ""
         }
         draw_entity_ui : Function(entity : Entity) {
-            isMyTurn := entity.guid == flow.CpBattleFlow.turnOrder[flow.CpBattleFlow.turn]
+            isMyTurn =& entity.guid == flow.CpBattleFlow.turnOrder[flow.CpBattleFlow.turn]
         
             if( isMyTurn )
             {
-                arrowYOffset := (math.sin(time.get_time() * 180)*8).to_integer() - 64
+                arrowYOffset =& (math.sin(time.get_time() * 180)*8).to_integer() - 64
                 
-                d_charReal := entity.CpPhysicality.get_2d_position()
+                d_charReal =& entity.CpPhysicality.get_2d_position()
                 graphics.polygon( Transform2D( d_charReal + IntegerVector2D(0, arrowYOffset - 48), math.pi, IntegerVector2D(64,32) ), 3, colors.lime )
 
-                assistEntity := sim.get_entity( flow.CpBattleFlow.assistGuid )
-                d_assistReal := assistEntity.CpPhysicality.get_2d_position()
+                assistEntity =& sim.get_entity( flow.CpBattleFlow.assistGuid )
+                d_assistReal =& assistEntity.CpPhysicality.get_2d_position()
                 graphics.polygon( Transform2D( d_assistReal + IntegerVector2D(0, arrowYOffset - 48), math.pi, IntegerVector2D(64,32) ), 3, colors.blue )
                 
                 if( flow.CpBattleFlow.targetGuid.is_valid() )
                 {
-                    targetEntity := sim.get_entity( flow.CpBattleFlow.targetGuid )
-                    d_targetReal := targetEntity.CpPhysicality.get_2d_position()
+                    targetEntity =& sim.get_entity( flow.CpBattleFlow.targetGuid )
+                    d_targetReal =& targetEntity.CpPhysicality.get_2d_position()
                     graphics.polygon( Transform2D( d_targetReal + IntegerVector2D(0, arrowYOffset - 48), math.pi, IntegerVector2D(64,32) ), 3, colors.red )
                     
                     for( i in 7 )
                     {
-                        percent := (i+1).to_real() / 8.0;
-                        height := (math.sin(percent * 180) * graphics.get_resolution().y/6).to_integer()
-                        leadPoint := math.lerp(d_assistReal.to_vector2d(), d_targetReal.to_vector2d(), percent).to_integer_vector2d() - IntegerVector2D(0, height)
+                        percent =& (i+1).to_real() / 8.0;
+                        height =& (math.sin(percent * 180) * graphics.get_resolution().y/6).to_integer()
+                        leadPoint =& math.lerp(d_assistReal.to_vector2d(), d_targetReal.to_vector2d(), percent).to_integer_vector2d() - IntegerVector2D(0, height)
                         graphics.circle( Transform2D(leadPoint, 0, 8), Color(1.0,0.0,0.0,0.125) )
                     }
                 }
                 else
                 {
-                    throwDirection := Vector3D( math.cos(flow.CpBattleFlow.throwAngle), math.sin(flow.CpBattleFlow.throwAngle), 0 )
-                    targetPoint := mutable Vector3D( assistEntity.CpPhysicality.position + throwDirection * flow.CpBattleFlow.throwPower * entity.CpCharacter.get_throw_range( assistEntity ) )
+                    throwDirection =& Vector3D( math.cos(flow.CpBattleFlow.throwAngle), math.sin(flow.CpBattleFlow.throwAngle), 0 )
+                    targetPoint =& mutable Vector3D( assistEntity.CpPhysicality.position + throwDirection * flow.CpBattleFlow.throwPower * entity.CpCharacter.get_throw_range( assistEntity ) )
                     targetPoint.x = clamp( targetPoint.x, 0.0, 1.0 )
                     targetPoint.y = clamp( targetPoint.y, 0.0, 1.0 )
                     
-                    right := graphics.get_resolution().x
-                    bottom := graphics.get_resolution().y
-                    horizon := (0.65 * bottom).to_integer()
-                    margin := bottom - horizon
-                    impactPoint := Vector2D( targetPoint.x * right, targetPoint.y * margin + horizon )
-                    aoeRadius := ( assistEntity.CpCharacter.stats.aoe.to_real() * graphics.get_resolution().x.to_real() / 100.0 ).to_integer()
+                    right =& graphics.get_resolution().x
+                    bottom =& graphics.get_resolution().y
+                    horizon =& (0.65 * bottom).to_integer()
+                    margin =& bottom - horizon
+                    impactPoint =& Vector2D( targetPoint.x * right, targetPoint.y * margin + horizon )
+                    aoeRadius =& ( assistEntity.CpCharacter.stats.aoe.to_real() * graphics.get_resolution().x.to_real() / 100.0 ).to_integer()
                     graphics.circle( Transform2D(impactPoint.to_integer_vector2d(), 0, IntegerVector2D(aoeRadius,aoeRadius/2)), Color(1.0,0.5,0.0,0.25) )
                     for( i in 7 )
                     {
-                        percent := (i+1).to_real() / 8.0;
-                        height := (math.sin(percent * 180) * graphics.get_resolution().y/6).to_integer()
-                        leadPoint := math.lerp(d_assistReal.to_vector2d(), impactPoint, percent).to_integer_vector2d() - IntegerVector2D(0, height)
+                        percent =& (i+1).to_real() / 8.0;
+                        height =& (math.sin(percent * 180) * graphics.get_resolution().y/6).to_integer()
+                        leadPoint =& math.lerp(d_assistReal.to_vector2d(), impactPoint, percent).to_integer_vector2d() - IntegerVector2D(0, height)
                         graphics.circle( Transform2D(leadPoint, 0, 8), Color(1.0,0.5,0.0,0.125) )
                     }
                 }
@@ -372,52 +372,51 @@ flowFsm := FSM {
     }
     enemyTargetSelect : {
         on_update : Function[String] ( timeStep : Real ) {
-            actor := sim.get_entity( flow.CpBattleFlow.selectedGuid )
+            actor =& sim.get_entity( flow.CpBattleFlow.selectedGuid )
 
             # Rank all possible targets via jump & all available throws
-            scoreJumpTarget := Function(src : Entity, e : Entity) {
-                dist := (src.CpPhysicality.position - e.CpPhysicality.position).magnitude()
+            scoreJumpTarget =& Function(src : Entity, e : Entity) {
+                dist =& (src.CpPhysicality.position - e.CpPhysicality.position).magnitude()
                 if( dist > src.CpCharacter.get_jump_range() ) { return 0 }
 
-                damage := src.CpCharacter.stats.damage / e.CpCharacter.stats.defense
+                damage =& src.CpCharacter.stats.damage / e.CpCharacter.stats.defense
                 if( damage > e.CpVulnerable.health ) { return 300 }
                 return (100 * damage) / e.CpCharacter.stats.health + 100
             }
-            scoreJumpApproach := Function(src : Entity, e : Entity) {
-                dist := (src.CpPhysicality.position - e.CpPhysicality.position).magnitude()
-                result := mutable 0
+            scoreJumpApproach =& Function(src : Entity, e : Entity) {
+                dist =& (src.CpPhysicality.position - e.CpPhysicality.position).magnitude()
+                result =& mutable Integer(0)
                 if( dist <= src.CpCharacter.get_jump_range() ) { return 0 }
 
-                spacing := dist - src.CpCharacter.get_jump_range()
+                spacing =& dist - src.CpCharacter.get_jump_range()
                 return 100 - (100 * spacing).to_integer()
             }
-            scoreThrowTarget := Function(src : Entity, assist : Entity, e : Entity) {
-                dist := (assist.CpPhysicality.position - e.CpPhysicality.position).magnitude()
-                result := mutable 0
+            scoreThrowTarget =& Function(src : Entity, assist : Entity, e : Entity) {
+                dist =& (assist.CpPhysicality.position - e.CpPhysicality.position).magnitude()
+                result =& mutable Integer(0)
                 if( dist > src.CpCharacter.get_throw_range(assist) ) { return 0 }
                 
-                damage := assist.CpCharacter.stats.damage / e.CpCharacter.stats.defense
+                damage =& assist.CpCharacter.stats.damage / e.CpCharacter.stats.defense
                 if( damage > e.CpVulnerable.health ) { return 450 }
                 return (150 * damage) / e.CpCharacter.stats.health + 150
             }
-            scoreThrowApproach := Function(src : Entity, assist : Entity, e : Entity) {
-                dist := (assist.CpPhysicality.position - e.CpPhysicality.position).magnitude()
-                result := mutable 0
+            scoreThrowApproach =& Function(src : Entity, assist : Entity, e : Entity) {
+                dist =& (assist.CpPhysicality.position - e.CpPhysicality.position).magnitude()
+                result =& mutable Integer(0)
                 if( dist <= src.CpCharacter.get_throw_range(assist) ) { return 0 }
                 
-                spacing := dist - src.CpCharacter.get_throw_range(assist)
+                spacing =& dist - src.CpCharacter.get_throw_range(assist)
                 return 150 - (100 * spacing).to_integer()
             }
             
-            all := sim.get_entities_with_component("CpPhysicality")
+            all =& sim.get_entities_with_component("CpPhysicality")
 
-            bestScore := mutable 0
+            enemies =& for( i in all if i.CpAllegiance.team == party ) { i }
             
-            enemies := for( i in all if i.CpAllegiance.team == party ) { i }
-            
+            bestScore =& mutable Integer(0)
             for( i in enemies )
             {
-                tScore := scoreJumpTarget( actor, i )
+                tScore =& scoreJumpTarget( actor, i )
                 if( tScore > bestScore )
                 {
                     bestScore = tScore
@@ -426,19 +425,19 @@ flowFsm := FSM {
                     flow.CpBattleFlow.throwOrigin = actor.CpPhysicality.position
                     flow.CpBattleFlow.throwTarget = sim.get_entity(flow.CpBattleFlow.targetGuid).CpPhysicality.position
                 }
-                aScore := scoreJumpApproach( actor, i )
+                aScore =& scoreJumpApproach( actor, i )
                 if( aScore > bestScore )
                 {
                     bestScore = aScore
                     flow.CpBattleFlow.assistGuid = Guid()
                     flow.CpBattleFlow.targetGuid = Guid()
                     flow.CpBattleFlow.throwOrigin = actor.CpPhysicality.position
-                    offset := (i.CpPhysicality.position-actor.CpPhysicality.position).normalized() * actor.CpCharacter.get_jump_range()
+                    offset =& (i.CpPhysicality.position-actor.CpPhysicality.position).normalized() * actor.CpCharacter.get_jump_range()
                     flow.CpBattleFlow.throwTarget = flow.CpBattleFlow.throwOrigin + offset
                 }
             }
             
-            allies := for( i in all if i.CpAllegiance.team == enemy and i.guid != actor.guid ) { i }
+            allies =& for( i in all if i.CpAllegiance.team == enemy and i.guid != actor.guid ) { i }
             
             for( assist in allies )
             {
@@ -446,7 +445,7 @@ flowFsm := FSM {
                 {
                     for( i in enemies )
                     {
-                        tScore := scoreThrowTarget( actor, assist, i )
+                        tScore =& scoreThrowTarget( actor, assist, i )
                         if( tScore > bestScore )
                         {
                             bestScore = tScore
@@ -455,14 +454,14 @@ flowFsm := FSM {
                             flow.CpBattleFlow.throwOrigin = actor.CpPhysicality.position
                             flow.CpBattleFlow.throwTarget = sim.get_entity(flow.CpBattleFlow.targetGuid).CpPhysicality.position
                         }
-                        aScore := scoreThrowApproach( actor, assist, i )
+                        aScore =& scoreThrowApproach( actor, assist, i )
                         if( aScore > bestScore )
                         {
                             bestScore = aScore
                             flow.CpBattleFlow.assistGuid = assist.guid
                             flow.CpBattleFlow.targetGuid = Guid()
                             flow.CpBattleFlow.throwOrigin = assist.CpPhysicality.position
-                            offset := (i.CpPhysicality.position-assist.CpPhysicality.position).normalized() * actor.CpCharacter.get_throw_range(assist)
+                            offset =& (i.CpPhysicality.position-assist.CpPhysicality.position).normalized() * actor.CpCharacter.get_throw_range(assist)
                             flow.CpBattleFlow.throwTarget = flow.CpBattleFlow.throwOrigin + offset
                         }
                     }
@@ -489,11 +488,11 @@ flowFsm := FSM {
     performJump : {
         on_update : Function[String] ( timeStep : Real ) {
             flow.CpBattleFlow.ticker += timeStep
-            percent := flow.CpBattleFlow.ticker / 1.2
-            nominalPosition := math.lerp( flow.CpBattleFlow.throwOrigin, flow.CpBattleFlow.throwTarget, percent )
+            percent =& flow.CpBattleFlow.ticker / 1.2
+            nominalPosition =& math.lerp( flow.CpBattleFlow.throwOrigin, flow.CpBattleFlow.throwTarget, percent )
             
-            actor := sim.get_entity( flow.CpBattleFlow.selectedGuid )
-            height := math.sin(percent * 180) * (1.0/3.0)
+            actor =& sim.get_entity( flow.CpBattleFlow.selectedGuid )
+            height =& math.sin(percent * 180) * (1.0/3.0)
             actor.CpPhysicality.position = nominalPosition + Vector3D(0,0,height)
             
             if( percent >= 1.0 )
@@ -504,12 +503,12 @@ flowFsm := FSM {
                 
                 flow.CpBattleFlow.damageRecipients.clear()
                 flow.CpBattleFlow.healRecipients.clear()
-                all := sim.get_entities_with_component("CpPhysicality")
-                aoeRange := actor.CpCharacter.stats.aoe.to_real()/100.0
+                all =& sim.get_entities_with_component("CpPhysicality")
+                aoeRange =& actor.CpCharacter.stats.aoe.to_real()/100.0
                 for( tgt in all )
                 {
-                    meToThem := tgt.CpPhysicality.position - actor.CpPhysicality.position
-                    dist := meToThem.magnitude()
+                    meToThem =& tgt.CpPhysicality.position - actor.CpPhysicality.position
+                    dist =& meToThem.magnitude()
                     if( tgt.CpAllegiance.team != actor.CpAllegiance.team )
                     {
                         if( tgt.guid == flow.CpBattleFlow.targetGuid or
@@ -547,10 +546,10 @@ flowFsm := FSM {
     }
     performWalkTo : {
         on_update : Function[String] ( timeStep : Real ) {
-            actor := sim.get_entity( flow.CpBattleFlow.selectedGuid )
-            assist := sim.get_entity( flow.CpBattleFlow.assistGuid )
-            meToThem := assist.CpPhysicality.position - actor.CpPhysicality.position
-            step := 0.2 * timeStep
+            actor =& sim.get_entity( flow.CpBattleFlow.selectedGuid )
+            assist =& sim.get_entity( flow.CpBattleFlow.assistGuid )
+            meToThem =& assist.CpPhysicality.position - actor.CpPhysicality.position
+            step =& 0.2 * timeStep
             if( meToThem.magnitude() > step )
             {
                 actor.CpPhysicality.position += meToThem.normalized() * step
@@ -570,10 +569,10 @@ flowFsm := FSM {
     performPickup : {
         on_update : Function[String] ( timeStep : Real ) {
             flow.CpBattleFlow.ticker += timeStep
-            percent := flow.CpBattleFlow.ticker / 1.0
+            percent =& flow.CpBattleFlow.ticker / 1.0
             
-            actor := sim.get_entity( flow.CpBattleFlow.selectedGuid )
-            assist := sim.get_entity( flow.CpBattleFlow.assistGuid )
+            actor =& sim.get_entity( flow.CpBattleFlow.selectedGuid )
+            assist =& sim.get_entity( flow.CpBattleFlow.assistGuid )
             assist.CpPhysicality.position = Vector3D(
                 assist.CpPhysicality.position.x,
                 assist.CpPhysicality.position.y,
@@ -596,13 +595,13 @@ flowFsm := FSM {
     }
     performThrow : {
         on_update : Function[String] ( timeStep : Real ) {
-            actor := sim.get_entity( flow.CpBattleFlow.selectedGuid )
+            actor =& sim.get_entity( flow.CpBattleFlow.selectedGuid )
             flow.CpBattleFlow.ticker += timeStep
-            percent := flow.CpBattleFlow.ticker / 1.2
-            nominalPosition := math.lerp( flow.CpBattleFlow.throwOrigin, flow.CpBattleFlow.throwTarget, percent )
+            percent =& flow.CpBattleFlow.ticker / 1.2
+            nominalPosition =& math.lerp( flow.CpBattleFlow.throwOrigin, flow.CpBattleFlow.throwTarget, percent )
             
-            assist := sim.get_entity( flow.CpBattleFlow.assistGuid )
-            height := math.sin(percent * 180) * (1.0/3.0) + math.lerp(0.15, 0.0, percent)
+            assist =& sim.get_entity( flow.CpBattleFlow.assistGuid )
+            height =& math.sin(percent * 180) * (1.0/3.0) + math.lerp(0.15, 0.0, percent)
             assist.CpPhysicality.position = nominalPosition + Vector3D(0,0,height)
             assist.CpPhysicality.angle = (1.0 - percent)*(math.pi/2)
             
@@ -615,12 +614,12 @@ flowFsm := FSM {
                 
                 flow.CpBattleFlow.damageRecipients.clear()
                 flow.CpBattleFlow.healRecipients.clear()
-                all := sim.get_entities_with_component("CpPhysicality")
-                aoeRange := assist.CpCharacter.stats.aoe.to_real()/100.0
+                all =& sim.get_entities_with_component("CpPhysicality")
+                aoeRange =& assist.CpCharacter.stats.aoe.to_real()/100.0
                 for( tgt in all )
                 {
-                    meToThem := tgt.CpPhysicality.position - assist.CpPhysicality.position
-                    dist := meToThem.magnitude()
+                    meToThem =& tgt.CpPhysicality.position - assist.CpPhysicality.position
+                    dist =& meToThem.magnitude()
                     if( tgt.CpAllegiance.team != actor.CpAllegiance.team )
                     {
                         if( tgt.guid == flow.CpBattleFlow.targetGuid or
@@ -660,15 +659,15 @@ flowFsm := FSM {
     performImpact : {
         on_update : Function[String] ( timeStep : Real ) {
             flow.CpBattleFlow.ticker += timeStep
-            percent := flow.CpBattleFlow.ticker / 0.6
-            actor := sim.get_entity( flow.CpBattleFlow.selectedGuid )
+            percent =& flow.CpBattleFlow.ticker / 0.6
+            actor =& sim.get_entity( flow.CpBattleFlow.selectedGuid )
             for( tgtGuid in flow.CpBattleFlow.damageRecipients )
             {
-                targetEntity := sim.get_entity( tgtGuid )
-                meToThem := targetEntity.CpPhysicality.position*2 - (actor.CpPhysicality.position + flow.CpBattleFlow.throwOrigin)
-                invertedDirection := Vector3D( meToThem.normalized().x, meToThem.normalized().y, 0 )
+                targetEntity =& sim.get_entity( tgtGuid )
+                meToThem =& targetEntity.CpPhysicality.position*2 - (actor.CpPhysicality.position + flow.CpBattleFlow.throwOrigin)
+                invertedDirection =& Vector3D( meToThem.normalized().x, meToThem.normalized().y, 0 )
                 
-                step := (actor.CpCharacter.stats.knockback * timeStep) / (100.0 * 0.6)
+                step =& (actor.CpCharacter.stats.knockback * timeStep) / (100.0 * 0.6)
                 targetEntity.CpPhysicality.position += invertedDirection * step
                 
                 targetEntity.CpPhysicality.position = Vector3D(
@@ -681,7 +680,7 @@ flowFsm := FSM {
             }
             for( tgtGuid in flow.CpBattleFlow.healRecipients )
             {
-                targetEntity := sim.get_entity( tgtGuid )
+                targetEntity =& sim.get_entity( tgtGuid )
                 targetEntity.CpPhysicality.frame = lift
             }
             
@@ -693,13 +692,13 @@ flowFsm := FSM {
             return ""
         }
         draw_entity_ui : Function(entity : Entity) {
-            isMyTurn := entity.guid == flow.CpBattleFlow.selectedGuid
+            isMyTurn =& entity.guid == flow.CpBattleFlow.selectedGuid
         
             if( isMyTurn )
             {
-                d_char := entity.CpPhysicality.get_2d_position()
-                aoeRadius := ( entity.CpCharacter.stats.aoe.to_real() * graphics.get_resolution().x.to_real() / 100.0 )
-                scale := (1.0 - (flow.CpBattleFlow.ticker / 0.6)) * aoeRadius
+                d_char =& entity.CpPhysicality.get_2d_position()
+                aoeRadius =& ( entity.CpCharacter.stats.aoe.to_real() * graphics.get_resolution().x.to_real() / 100.0 )
+                scale =& (1.0 - (flow.CpBattleFlow.ticker / 0.6)) * aoeRadius
                 graphics.circle( Transform2D( d_char, 0, Vector2D( scale, scale/2 ).to_integer_vector2d() ), Color( HFF7F002F ) )
             }
         }
@@ -707,23 +706,23 @@ flowFsm := FSM {
     performImpartDamage : {
         on_update : Function[String] ( timeStep : Real ) {
             flow.CpBattleFlow.ticker += timeStep
-            percent := flow.CpBattleFlow.ticker / 1.0
+            percent =& flow.CpBattleFlow.ticker / 1.0
             
             if( percent > 1.0 )
             {
-                actor := sim.get_entity( flow.CpBattleFlow.selectedGuid )
-                healing := actor.CpCharacter.stats.heal
-                damage := actor.CpCharacter.stats.damage
+                actor =& sim.get_entity( flow.CpBattleFlow.selectedGuid )
+                healing =& actor.CpCharacter.stats.heal
+                damage =& actor.CpCharacter.stats.damage
                 
                 for( tgtGuid in flow.CpBattleFlow.healRecipients )
                 {
-                    targetEntity := sim.get_entity( tgtGuid )
+                    targetEntity =& sim.get_entity( tgtGuid )
                     targetEntity.CpVulnerable.health = minimum( targetEntity.CpVulnerable.health + healing, targetEntity.CpCharacter.stats.health )
                     targetEntity.CpPhysicality.frame = stand
                 }
                 for( tgtGuid in flow.CpBattleFlow.damageRecipients )
                 {
-                    targetEntity := sim.get_entity( tgtGuid )
+                    targetEntity =& sim.get_entity( tgtGuid )
                     targetEntity.CpVulnerable.health -= damage / targetEntity.CpCharacter.stats.defense
                     targetEntity.CpPhysicality.frame = stand
                     if( targetEntity.CpVulnerable.health <= 0 )
@@ -738,19 +737,19 @@ flowFsm := FSM {
             return ""
         }
         draw_entity_ui : Function(entity : Entity) {
-            actor := sim.get_entity( flow.CpBattleFlow.selectedGuid )
+            actor =& sim.get_entity( flow.CpBattleFlow.selectedGuid )
             
             if( entity.guid in flow.CpBattleFlow.healRecipients )
             {
-                healing := actor.CpCharacter.stats.heal
+                healing =& actor.CpCharacter.stats.heal
                 
-                pos := entity.CpPhysicality.get_2d_position() - IntegerVector2D(0, graphics.get_resolution().x/10)
+                pos =& entity.CpPhysicality.get_2d_position() - IntegerVector2D(0, graphics.get_resolution().x/10)
                 graphics.print_centered( Transform2D(pos - IntegerVector2D(0, (flow.CpBattleFlow.ticker * 15.0).to_integer()), 0, 1), healing.to_string(), colors.lime )
             }
             if( entity.guid in flow.CpBattleFlow.damageRecipients )
             {
-                damage := actor.CpCharacter.stats.damage / entity.CpCharacter.stats.defense
-                pos := entity.CpPhysicality.get_2d_position() - IntegerVector2D(0, graphics.get_resolution().x/10)
+                damage =& actor.CpCharacter.stats.damage / entity.CpCharacter.stats.defense
+                pos =& entity.CpPhysicality.get_2d_position() - IntegerVector2D(0, graphics.get_resolution().x/10)
                 graphics.print_centered( Transform2D(pos - IntegerVector2D(0, (math.sin(flow.CpBattleFlow.ticker*180.0) * 25.0).to_integer()), 0, 1), damage.to_string(), colors.red )
             }
         }
@@ -794,7 +793,7 @@ flowFsm := FSM {
     }
 }
 
-CpBattleFlow := Type {
+CpBattleFlow =& Type {
     turnOrder : mutable Array[Guid]()
     turn : mutable Integer()
     ticker : mutable Real()
@@ -812,13 +811,13 @@ CpBattleFlow := Type {
     healRecipients : public mutable Array()
     
     fsm : flowFsm
-    init : public Function() {
+    init : public mutating Function() {
         this.fsm.change(nextRound)
     }
-    update : public Function() {
+    update : public mutating Function() {
         this.fsm.force_update( time.get_delta_time() )
     }
-    draw_entity_ui : public Function( entity : Entity ) {
+    draw_entity_ui : public mutating Function( entity : Entity ) {
         this.fsm.get_current_state()."draw_entity_ui"(entity)
     }
 }

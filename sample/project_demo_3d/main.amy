@@ -1,60 +1,57 @@
-scene := create_scene( "Main" )
+Scene(Main) {
+    on_open : Function() {
 
-scene.on_open = Function[Nil] () {
+        # create an ambient light of 5% grey
+        add_light( Light( colors.white * 0.05 ) )
 
-    # create an ambient light of 5% grey
-    add_light( Light( colors.white * 0.05 ) )
+        # add a directional light pointing down and slightly to the right,
+        # with a diffuse color of blue, and a specular color of white
+        add_light( Light( colors.blue, colors.white, Vector3D(0.23, -1, 0) ) )
+        
+        # position camera to be 25 units in front of the origin
+        get_3d_camera().position = math.v3forward * 6
+    },
+    on_update : Function[Boolean] () {
 
-    # add a directional light pointing down and slightly to the right,
-    # with a diffuse color of blue, and a specular color of white
-    add_light( Light( colors.blue, colors.white, Vector3D(0.23, -1, 0) ) )
-    
-    # position camera to be 25 units in front of the origin
-    get_3d_camera().position = math.v3forward * 6
-}
+        if( input.press( escape ) )
+        {
+            return false
+        }
+        
+        if( input.hold( left ) )
+        {
+            get_3d_camera().position += math.v3left * time.get_delta_time()
+        }
+        if( input.hold( right ) )
+        {
+            get_3d_camera().position += math.v3right * time.get_delta_time()
+        }
+        if( input.hold( up ) )
+        {
+            get_3d_camera().position += math.v3backward * time.get_delta_time()
+        }
+        if( input.hold( down ) )
+        {
+            get_3d_camera().position += math.v3forward * time.get_delta_time()
+        }
 
-scene.on_update = Function[Boolean] () {
-
-    if( input.press( escape ) )
-    {
-        return false
+        return true
+    },
+    on_3d : Function() {
+        # Set up a rendering config that uses the grate texture, 
+        # and shaders which respond to lighting
+        rc =& RenderConfig( assets.grate, graphics.lit )
+        
+        spin =& math.yaw(time.get_time() * 25) * math.pitch(-30)
+        
+        # draw a spinning spherical shell, with a smaller sphere inside of it
+        graphics.sphere_shell( Transform3D( math.v3zero, spin, 1.5 ), rc )
+        graphics.sphere( Transform3D( math.v3zero, spin, 1 ), rc )
+    },
+    on_2d : Function() {
+        screenCenter =& graphics.get_resolution().x/2
+        
+        cam =& get_3d_camera()
+        graphics.print_centered( screenCenter, 8, "Adjust camera with arrow keys", colors.white )
     }
-    
-    if( input.hold( left ) )
-    {
-        get_3d_camera().position += math.v3left * time.get_delta_time()
-    }
-    if( input.hold( right ) )
-    {
-        get_3d_camera().position += math.v3right * time.get_delta_time()
-    }
-    if( input.hold( up ) )
-    {
-        get_3d_camera().position += math.v3backward * time.get_delta_time()
-    }
-    if( input.hold( down ) )
-    {
-        get_3d_camera().position += math.v3forward * time.get_delta_time()
-    }
-
-    return true
-}
-
-scene.on_3d = Function[Nil] () {
-    # Set up a rendering config that uses the grate texture, 
-    # and shaders which respond to lighting
-    rc := RenderConfig( assets.grate, graphics.lit )
-    
-    spin := math.yaw(time.get_time() * 25) * math.pitch(-30)
-    
-    # draw a spinning spherical shell, with a smaller sphere inside of it
-    graphics.sphere_shell( Transform3D( math.v3zero, spin, 1.5 ), rc )
-    graphics.sphere( Transform3D( math.v3zero, spin, 1 ), rc )
-}
-
-scene.on_2d = Function[Nil] () {
-    screenCenter := graphics.get_resolution().x/2
-    
-    cam := get_3d_camera()
-    graphics.print_centered( screenCenter, 8, "Adjust camera with arrow keys", colors.white )
 }

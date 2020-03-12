@@ -1,46 +1,43 @@
-scene := create_scene( "Main" )
+Scene(Main) {
+    on_open : Function() {
 
-scene.on_open = Function[Nil] () {
+        # pure white sun-light, and a camera pulled out 16 units
+        add_light( Light( colors.white, colors.white, Vector3D(-1,-1,-1) ) )
+        get_3d_camera().position = math.v3forward * 16
+    },
+    on_update : Function[Boolean] () {
 
-	# pure white sun-light, and a camera pulled out 16 units
-    add_light( Light( colors.white, colors.white, Vector3D(-1,-1,-1) ) )
-    get_3d_camera().position = math.v3forward * 16
+        return !input.press( escape )
+    },
+    on_3d : Function() {
+        # two textures are supplies
+        # - a diffuse texture is loaded with the "Smooth" and "Mipmap" flags
+        # - a self-illumination texture is loaded with just the "Smooth" flag
+        
+        # "Smooth" causes the texture to interpolate between texels so as not to appear pixelated
+        # "Mipmap" generates smaller and squashed versions of each texture in memory, so when the texture is viewed at 
+        #    sharp angles it appears to blend rather then having hard arbitrary boundaries
+
+        # the shader is configured to use a 2-texture (diffuse, self illumination) multipass
+        # - the diffuse texture is used as is to reflect diffuse light
+        # - the diffuse texture's blue channel is used as a monochrome specular map to reflect shine
+        # - the diffuse texture's green channel is used as a bump map, so that the dark lines on the wings appear as groves in the lighting
+        # - the self-illumination channel is applied as an unlit final pass to give the effect of coming from the ship
+        # "pure_bright" is neutral material that has ambient/diffuse/specular/si all cranked up to 100% to give the shader complete control
+        # - the supplied diffuse and SI textures are designed with a nuetral material in mind
+        # - try changing the material to "bronze" or "pearlescent_purple" for other examples, but note that these materials will probably look
+        #        dirty or muted when not used with source textures designed to work well with them.
+        
+        compositeRc =& RenderConfig( Array { assets.birdofprey_diffuse, assets.birdofprey_si }, assets.birdofprey_shader, pure_bright )
+        
+        spin =& math.yaw(time.get_time() * 25) * math.pitch(-30)
+        
+        # we can optionally pass a config to the shaders
+        # the supplied shader allows for tuning of the brightness of the SI channel (i.e. for dimming the engines)
+        shaderConfig =& {
+            graphics.uniformSIKey : Array { 1.0 }
+        }
+        
+        graphics.mesh( Transform3D( math.v3zero, spin, 1 ), compositeRc, assets.birdofprey_mesh, shaderConfig )
+    }
 }
-
-scene.on_update = Function[Boolean] () {
-
-	return !input.press( escape )
-}
-
-scene.on_3d = Function[Nil] () {
-	# two textures are supplies
-	# - a diffuse texture is loaded with the "Smooth" and "Mipmap" flags
-	# - a self-illumination texture is loaded with just the "Smooth" flag
-	
-	# "Smooth" causes the texture to interpolate between texels so as not to appear pixelated
-	# "Mipmap" generates smaller and squashed versions of each texture in memory, so when the texture is viewed at 
-	#    sharp angles it appears to blend rather then having hard arbitrary boundaries
-
-	# the shader is configured to use a 2-texture (diffuse, self illumination) multipass
-	# - the diffuse texture is used as is to reflect diffuse light
-	# - the diffuse texture's blue channel is used as a monochrome specular map to reflect shine
-	# - the diffuse texture's green channel is used as a bump map, so that the dark lines on the wings appear as groves in the lighting
-	# - the self-illumination channel is applied as an unlit final pass to give the effect of coming from the ship
-	# "pure_bright" is neutral material that has ambient/diffuse/specular/si all cranked up to 100% to give the shader complete control
-	# - the supplied diffuse and SI textures are designed with a nuetral material in mind
-	# - try changing the material to "bronze" or "pearlescent_purple" for other examples, but note that these materials will probably look
-	#        dirty or muted when not used with source textures designed to work well with them.
-	
-	compositeRc := RenderConfig( Array { assets.birdofprey_diffuse, assets.birdofprey_si }, assets.birdofprey_shader, pure_bright )
-    
-    spin := math.yaw(time.get_time() * 25) * math.pitch(-30)
-    
-	# we can optionally pass a config to the shaders
-	# the supplied shader allows for tuning of the brightness of the SI channel (i.e. for dimming the engines)
-	shaderConfig := {
-		graphics.uniformSIKey : Array { 1.0 }
-	}
-	
-	graphics.mesh( Transform3D( math.v3zero, spin, 1 ), compositeRc, assets.birdofprey_mesh, shaderConfig )
-}
-

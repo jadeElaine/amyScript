@@ -1,10 +1,12 @@
-game_vars := mutable Dictionary {
-	current_score: mutable Integer(0),
+language.require_version("0.2.0")
+
+game_vars =& mutable Dictionary[mutable Auto] {
+	current_score: mutable Integer( 0 ),
 	p_lvl: mutable Integer( 1 ),
 	multiplier: 5
 }
 
-lvl_vars := {
+lvl_vars =& {
 	100,
 	255,
 	500,
@@ -17,8 +19,8 @@ lvl_vars := {
 	6000
 }
 
-lvl_check := Function[Nil] () {
-	for( i := mutable 0, i<lvl_vars.size(), i+=1 )
+lvl_check =& Function[Nil] () {
+	for( i in lvl_vars.size() )
 	{
 		if( game_vars.current_score > lvl_vars[i] )
 		{
@@ -37,47 +39,46 @@ lvl_check := Function[Nil] () {
 	}
 }
 
-add_score := Function[Nil] () {
+add_score =& Function[Nil] () {
 	game_vars.current_score += ( (game_vars.multiplier ^ game_vars.p_lvl) / game_vars.p_lvl ).to_integer()
 }
 
-scene := create_scene( "Main" )
+Scene(Main) {
+    on_update : Function[Boolean] () {
 
-scene.on_update = Function[Boolean] () {
+        if( input.press( escape ) )
+        {
+            return false
+        }
 
-    if( input.press( escape ) )
-    {
-        return false
+        if( input.press( space ) )
+        {
+            add_score()
+            lvl_check()
+        }
+        
+        if( input.press( l ) )
+        {
+            # if nothing is found, default to whatever we have (i.e. ignore loading)
+            game_vars = read_local( "PlayerSaveKey", game_vars )
+        }
+        if( input.press( s ) )
+        {
+            # most amy variables and containers can auto-serialize to reads/writes.
+            # Basically, you can write a nested collections of arrays and dictionaries
+            # as long as you don't have like, a ui element or reference to core c++ function somewhere in there
+            
+            write_local( "PlayerSaveKey", game_vars )
+        }
+        
+        return true
+    },
+    on_2d : Function() {  
+        screenCenter =& graphics.get_resolution().x/2
+        
+        graphics.print_centered( screenCenter, 8, "Press Spacebar to get more experience, s to save, l to load, escape to quit", colors.white )
+        
+        graphics.print( 0, 40, "Level: " + game_vars.p_lvl, Color( H7d7d7d ) )
+        graphics.print( 0, 80, "Experience: " + game_vars.current_score, Color( H7e7e7e ) )
     }
-
-    if( input.press( space ) )
-    {
-		add_score()
-		lvl_check()
-    }
-	
-	if( input.press( l ) )
-	{
-		# if nothing is found, default to whatever we have (i.e. ignore loading)
-		game_vars = read_local( "PlayerSaveKey", game_vars )
-	}
-	if( input.press( s ) )
-	{
-		# most amy variables and containers can auto-serialize to reads/writes.
-		# Basically, you can write a nested collections of arrays and dictionaries
-		# as long as you don't have like, a ui element or reference to core c++ function somewhere in there
-		
-		write_local( "PlayerSaveKey", game_vars )
-	}
-    
-    return true
-}
-
-scene.on_2d = Function[Nil] () {  
-    screenCenter := graphics.get_resolution().x/2
-    
-    graphics.print_centered( screenCenter, 8, "Press Spacebar to get more experience, s to save, l to load, escape to quit", colors.white )
-    
-    graphics.print( 0, 40, "Level: " + game_vars.p_lvl, Color( H7d7d7d ) )
-    graphics.print( 0, 80, "Experience: " + game_vars.current_score, Color( H7e7e7e ) )
 }

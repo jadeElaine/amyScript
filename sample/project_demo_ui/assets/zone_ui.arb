@@ -34,7 +34,7 @@ Children
 	Label
 	{
 		Name TestLabel
-        Zone < 10 120 680 220 >
+        Zone < 10 140 680 220 >
 		Text "Press a button^  Note that one button has multiple images for unpressed, pressed, and highlighted state, while the other uses tinting to augment state.  The pressed/highlight will inherit from the unpressed state if nothing is specified."
 	}
 }
