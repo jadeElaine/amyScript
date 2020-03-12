@@ -3,6 +3,7 @@ flow =& mutable Entity()
 
 actors =& mutable Dictionary()
 
+#Injected component function
 bouncerRenderFunction =& Function( sc : Scene ) {
 
     sizeGuide =& graphics.get_resolution().x/10;

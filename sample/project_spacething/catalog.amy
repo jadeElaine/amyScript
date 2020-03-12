@@ -16,7 +16,7 @@ define_component =& Function( name : String ) {
 }
 
 define_ship_schematic =& Function( name : String, data : Dictionary) {
-	newSchematic =& {
+	newSchematic =& mutable Dictionary[mutable Auto] {
         componentInstances: mutable Array {},
         thrust: data.thrust,
         twist: Vector3D(data.twist[0], data.twist[1], data.twist[2])

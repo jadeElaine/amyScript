@@ -811,13 +811,13 @@ CpBattleFlow =& Type {
     healRecipients : public mutable Array()
     
     fsm : flowFsm
-    init : public Function() {
+    init : public mutating Function() {
         this.fsm.change(nextRound)
     }
-    update : public Function() {
+    update : public mutating Function() {
         this.fsm.force_update( time.get_delta_time() )
     }
-    draw_entity_ui : public Function( entity : Entity ) {
+    draw_entity_ui : public mutating Function( entity : Entity ) {
         this.fsm.get_current_state()."draw_entity_ui"(entity)
     }
 }

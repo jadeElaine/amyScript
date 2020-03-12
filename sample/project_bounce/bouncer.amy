@@ -33,7 +33,7 @@ CpPhysicality =& Type {
         bottom =& graphics.get_resolution().y
         horizon =& (0.65 * bottom).to_integer()
         margin =& bottom - horizon
-        
+
         return Vector2D(this.position.x * right, this.position.y * margin + horizon - this.position.z * margin).to_integer_vector2d()
     }
     get_2d_position_shadow : public Function() {
