@@ -3,7 +3,7 @@ Scene(Main) {
 
         # pure white sun-light, and a camera pulled out 16 units
         add_light( Light( colors.white, colors.white, Vector3D(-1,-1,-1) ) )
-        get_3d_camera().position = math.v3forward * 16
+        get_3d_camera().position = math.v3r.forward * 16
     },
     on_update : Function[Boolean] () {
 
@@ -38,6 +38,6 @@ Scene(Main) {
             graphics.uniformSIKey : Array { 1.0 }
         }
         
-        graphics.mesh( Transform3D( math.v3zero, spin, 1 ), compositeRc, assets.birdofprey_mesh, shaderConfig )
+        graphics.mesh( Transform3D( math.v3r.zero, spin, 1 ), compositeRc, assets.birdofprey_mesh, shaderConfig )
     }
 }

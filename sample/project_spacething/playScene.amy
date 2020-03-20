@@ -8,7 +8,7 @@ Scene(playScene) {
         add_light( Light( colors.white, colors.white, Vector3D(1, -.1, 0) ) )
         
         # position camera to be 25 units in front of the origin
-        get_3d_camera().position = math.v3forward * 6
+        get_3d_camera().position = math.v3r.forward * 6
         
         sim.link_scene(this)
     },

@@ -24,7 +24,7 @@ on_load =& Function[Nil] () {
         CpPhysicality3DDiscrete {}
         CpViewFunction { skybox: Function( sc : Scene ) {
             rcStars =& RenderConfig( assets.starfield, graphics.unlit )
-            graphics.sphere_shell( Transform3D( math.v3zero, math.pitch(90), 10.0 ), rcStars )
+            graphics.sphere_shell( Transform3D( math.v3r.zero, math.pitch(90), 10.0 ), rcStars )
         } }
     } )
 

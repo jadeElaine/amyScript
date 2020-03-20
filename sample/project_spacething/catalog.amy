@@ -1,43 +1,43 @@
 language.require_version("0.2.0")
 
 catalog =& mutable Dictionary[mutable Auto] {
-	components: mutable Dictionary {},
-	shipSchematics: mutable Dictionary {}
+    components: mutable Dictionary {},
+    shipSchematics: mutable Dictionary {}
 }
 
 define_component =& Function( name : String ) {
     catalog.components.insert( Dictionary { 
         draw: Function[Nil] ( d : Vector3D, r : Quaternion, bounds : Vector3D ) {
             rcMetal =& RenderConfig( assets.metal1 )
-			t =& Transform3D(d, r, bounds)
+            t =& Transform3D(d, r, bounds)
             graphics.cylinder(t, rcMetal)
         }
     }, name )
 }
 
 define_ship_schematic =& Function( name : String, data : Dictionary) {
-	newSchematic =& mutable Dictionary[mutable Auto] {
+    newSchematic =& mutable Dictionary[mutable Auto] {
         componentInstances: mutable Array {},
         thrust: data.thrust,
         twist: Vector3D(data.twist[0], data.twist[1], data.twist[2])
     }
-	for( i in data.componentInstances )
-	{
-		newSchematic.componentInstances.add( Dictionary {
-			type: i.type,
-			d:Vector3D( i.offset[0], i.offset[1], i.offset[2] ),
-			r:math.euler( i.rotation[0], i.rotation[1], i.rotation[2] ),
-			bounds:Vector3D( i.bounds[0], i.bounds[1], i.bounds[2] ),
-		} )
-	}
+    for( i in data.componentInstances )
+    {
+        newSchematic.componentInstances.add( Dictionary {
+            type: i.type,
+            d:Vector3D( i.offset[0], i.offset[1], i.offset[2] ),
+            r:math.euler( i.rotation[0], i.rotation[1], i.rotation[2] ),
+            bounds:Vector3D( i.bounds[0], i.bounds[1], i.bounds[2] ),
+        } )
+    }
     catalog.shipSchematics.insert( newSchematic, name )
 }
 
 initialize_catalog =& Function() {
     define_component( "tank" )
-	
-	for( schematic in assets.schematics )
-	{
-		define_ship_schematic( schematic.key, schematic.value )
-	}
+    
+    for( schematic in assets.schematics )
+    {
+        define_ship_schematic( schematic.key, schematic.value )
+    }
 }

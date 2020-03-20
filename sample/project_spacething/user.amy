@@ -13,40 +13,40 @@ user_fly_ship =& Function( ship : Entity ) {
 
     if( input.hold( w ) )
     {
-        phys.omega -= math.v3right * time.get_delta_time() * shipSchematic.twist.x rad/s
+        phys.omega -= math.v3r.right * time.get_delta_time() * shipSchematic.twist.x rad/s
         torquing = true
     }
     if( input.hold( s ) )
     {
-        phys.omega += math.v3right * time.get_delta_time() * shipSchematic.twist.x rad/s
+        phys.omega += math.v3r.right * time.get_delta_time() * shipSchematic.twist.x rad/s
         torquing = true
     }
 
     if( input.hold( a ) )
     {
-        phys.omega += math.v3up * time.get_delta_time() * shipSchematic.twist.y rad/s
+        phys.omega += math.v3r.up * time.get_delta_time() * shipSchematic.twist.y rad/s
         torquing = true
     }
     if( input.hold( d ) )
     {
-        phys.omega -= math.v3up * time.get_delta_time() * shipSchematic.twist.y rad/s
+        phys.omega -= math.v3r.up * time.get_delta_time() * shipSchematic.twist.y rad/s
         torquing = true
     }
 
     if( input.hold( q ) )
     {
-        phys.omega += math.v3forward * time.get_delta_time() * shipSchematic.twist.z rad/s
+        phys.omega += math.v3r.forward * time.get_delta_time() * shipSchematic.twist.z rad/s
         torquing = true
     }
     if( input.hold( e ) )
     {
-        phys.omega -= math.v3forward * time.get_delta_time() * shipSchematic.twist.z rad/s
+        phys.omega -= math.v3r.forward * time.get_delta_time() * shipSchematic.twist.z rad/s
         torquing = true
     }
 
     if( input.hold( space ) )
     {
-        phys.velocity += (math.v3forward * phys.rotation) * time.get_delta_time() * shipSchematic.thrust m/s
+        phys.velocity += (math.v3r.forward * phys.rotation) * time.get_delta_time() * shipSchematic.thrust m/s
     }
 
     if( !torquing )
@@ -58,7 +58,7 @@ user_fly_ship =& Function( ship : Entity ) {
         }
         else
         {
-            phys.omega = math.v3zero rad/s
+            phys.omega = math.v3r.zero rad/s
         }
     }
 }

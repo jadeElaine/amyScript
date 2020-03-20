@@ -9,7 +9,7 @@ Scene(Main) {
         add_light( Light( colors.blue, colors.white, Vector3D(0.23, -1, 0) ) )
         
         # position camera to be 25 units in front of the origin
-        get_3d_camera().position = math.v3forward * 6
+        get_3d_camera().position = math.v3r.forward * 6
     },
     on_update : Function[Boolean] () {
 
@@ -20,19 +20,19 @@ Scene(Main) {
         
         if( input.hold( left ) )
         {
-            get_3d_camera().position += math.v3left * time.get_delta_time()
+            get_3d_camera().position += math.v3r.left * time.get_delta_time()
         }
         if( input.hold( right ) )
         {
-            get_3d_camera().position += math.v3right * time.get_delta_time()
+            get_3d_camera().position += math.v3r.right * time.get_delta_time()
         }
         if( input.hold( up ) )
         {
-            get_3d_camera().position += math.v3backward * time.get_delta_time()
+            get_3d_camera().position += math.v3r.backward * time.get_delta_time()
         }
         if( input.hold( down ) )
         {
-            get_3d_camera().position += math.v3forward * time.get_delta_time()
+            get_3d_camera().position += math.v3r.forward * time.get_delta_time()
         }
 
         return true
@@ -45,8 +45,8 @@ Scene(Main) {
         spin =& math.yaw(time.get_time() * 25) * math.pitch(-30)
         
         # draw a spinning spherical shell, with a smaller sphere inside of it
-        graphics.sphere_shell( Transform3D( math.v3zero, spin, 1.5 ), rc )
-        graphics.sphere( Transform3D( math.v3zero, spin, 1 ), rc )
+        graphics.sphere_shell( Transform3D( math.v3r.zero, spin, 1.5 ), rc )
+        graphics.sphere( Transform3D( math.v3r.zero, spin, 1 ), rc )
     },
     on_2d : Function() {
         screenCenter =& graphics.get_resolution().x/2
