@@ -28,7 +28,7 @@ Scene(Main) {
         # - try changing the material to "bronze" or "pearlescent_purple" for other examples, but note that these materials will probably look
         #        dirty or muted when not used with source textures designed to work well with them.
         
-        compositeRc =& RenderConfig( Array { assets.birdofprey_diffuse, assets.birdofprey_si }, assets.birdofprey_shader, pure_bright )
+        compositeRc =& RenderConfig { Array { assets.birdofprey_diffuse, assets.birdofprey_si }, assets.birdofprey_shader, pure_bright }
         
         spin =& math.yaw(time.get_time() * 25) * math.pitch(-30)
         

@@ -23,14 +23,14 @@ on_load =& Function[Nil] () {
     sim.create_entity( Array {
         CpPhysicality3DDiscrete {}
         CpViewFunction { skybox: Function( sc : Scene ) {
-            rcStars =& RenderConfig( assets.starfield, graphics.unlit )
+            rcStars =& RenderConfig { assets.starfield, graphics.unlit }
             graphics.sphere_shell( Transform3D( math.v3r.zero, math.pitch(90), 10.0 ), rcStars )
         } }
     } )
 
     # Planet
     worldRenderFunction =& Function( sc : Scene ) {
-        rc =& RenderConfig( this.CpPlanetConfig.texture, graphics.lit )
+        rc =& RenderConfig { this.CpPlanetConfig.texture, graphics.lit }
 
         angle =& time.get_time() * 360.0 / this.CpPlanetConfig.dayLength
         spin =& math.pitch(90) * math.yaw(angle) * this.CpPhysicality3DKinematic.rotation

@@ -8,7 +8,7 @@ catalog =& mutable Dictionary[mutable Auto] {
 define_component =& Function( name : String ) {
     catalog.components.insert( Dictionary { 
         draw: Function[Nil] ( d : Vector3D, r : Quaternion, bounds : Vector3D ) {
-            rcMetal =& RenderConfig( assets.metal1 )
+            rcMetal =& RenderConfig { assets.metal1 }
             t =& Transform3D(d, r, bounds)
             graphics.cylinder(t, rcMetal)
         }

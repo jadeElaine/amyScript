@@ -40,7 +40,7 @@ Scene(Main) {
     on_3d : Function() {
         # Set up a rendering config that uses the grate texture, 
         # and shaders which respond to lighting
-        rc =& RenderConfig( assets.grate, graphics.lit )
+        rc =& RenderConfig { assets.grate, graphics.lit }
         
         spin =& math.yaw(time.get_time() * 25) * math.pitch(-30)
         
