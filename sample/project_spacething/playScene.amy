@@ -36,7 +36,7 @@ Scene(playScene) {
         screenCenter =& graphics.get_resolution().x/2
         
         cam =& get_3d_camera()
-        graphics.print_centered( screenCenter, 8, "Hit Dem WASD (+QE) Keys", colors.white )
+        graphics.print_centered( screenCenter, 8, "Hit the WASD (+QE) Keys, and spacebar", colors.white )
         graphics.print_centered( screenCenter, 24, "FPS: " + time.get_fps().to_string(), colors.white )
     }
 }
