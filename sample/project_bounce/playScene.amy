@@ -1,6 +1,6 @@
 Scene(Play) {
     on_open : Function() {
-        music.play( assets.bouncebattletheme_1 )
+        music.play( assets.bouncebattletheme_3 )
         sim.link_scene(this)
     },
     on_update : Function[Boolean] () {
