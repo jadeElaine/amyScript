@@ -537,7 +537,7 @@ flowFsm =& mutable FSM {
             }
             else
             {
-                actor.CpPhysicality.frame = aaaa
+                actor.CpPhysicality.frame = impact
             }
             return ""
         }
@@ -583,7 +583,7 @@ flowFsm =& mutable FSM {
             if( percent > 1.0 )
             {
                 actor.CpPhysicality.frame = stand
-                assist.CpPhysicality.frame = aaaa
+                assist.CpPhysicality.frame = impact
                 flow.CpBattleFlow.throwOrigin = assist.CpPhysicality.position
                 flow.CpBattleFlow.ticker = 0.0
                 return "performThrow"
@@ -649,7 +649,7 @@ flowFsm =& mutable FSM {
             }
             else
             {
-                assist.CpPhysicality.frame = aaaa
+                assist.CpPhysicality.frame = impact
             }
             return ""
         }
@@ -676,7 +676,7 @@ flowFsm =& mutable FSM {
                     targetEntity.CpPhysicality.position.z
                 )
 
-                targetEntity.CpPhysicality.frame = aaaa
+                targetEntity.CpPhysicality.frame = impact
             }
             for( tgtGuid in flow.CpBattleFlow.healRecipients )
             {

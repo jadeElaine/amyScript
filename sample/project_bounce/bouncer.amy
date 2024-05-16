@@ -8,6 +8,10 @@ Stats =& Type {
     heal : public Integer()
     knockback : public Integer()
     initiative : public Integer()
+    impact_element : public String()
+    break_element : public String()
+    break_turns : public Integer()
+    break_count : public Integer()
     
     _Ctor : public Function () {}
     _Ctor : public Function ( d : Dictionary ) {
@@ -20,6 +24,22 @@ Stats =& Type {
         this.heal = d.heal
         this.knockback = d.knockback
         this.initiative = d.initiative
+        this.impact_element = d.impact_element
+        this.break_element = d.break_element
+        this.break_turns = d.break_turns
+        this.break_count = d.break_count
+    }
+}
+
+Skill =& Type {
+    cooldown : public Integer(0)
+    usable : public String(always)
+    child : public String()
+
+    _Ctor : public Function ( d : Dictionary ) {
+        this.cooldown = ( if( d.contains_key(cooldown) ) { d.cooldown } else {0} )
+        this.usable = ( if( d.contains_key(usable) ) { d.usable } else {always} )
+        this.child = ( if( d.contains_key(child) ) { d.child } else {""} )
     }
 }
 
@@ -50,6 +70,11 @@ CpVulnerable =& Type {
     health : mutable Integer()
 }
 
+CpBreakable =& Type {
+    break_count : mutable Integer()
+    break_turns_remaining : mutable Integer()
+}
+
 CpAllegiance =& Type {
     team : mutable String()
 }
@@ -58,23 +83,28 @@ CpCharacter =& Type {
     name : String()
     color : Color()
     images : Dictionary()
+    scale : Real()
     imageHeightAdjust : Real()
     stats : Stats()
+    skills : Dictionary()
     
     _Ctor : public Function ( key : String, config : Dictionary ) {
         
         this.name = config.name
         this.color = colors[config.color]
+        this.scale = config.scale
         this.imageHeightAdjust = config.imageHeightAdjust
-        if( assets.contains_key( key + _stand ) )
-        {
-            this.images = {
-                stand : assets[key + _stand],
-                lift : assets[key + _lift],
-                aaaa : assets[key + _aaaa]
-            }
+
+        this.images = {
+            stand : if(config.images.contains_key(stand)) {assets[config.images.stand]} else {nil},
+            lift : if(config.images.contains_key(lift)) {assets[config.images.lift]} else {nil},
+            impact : if(config.images.contains_key(impact)) {assets[config.images.impact]} else {nil},
+            break_stand : if(config.images.contains_key(break_stand)) {assets[config.images.break_stand]} else {nil},
+            break_impact : if(config.images.contains_key(break_impact)) {assets[config.images.break_impact]} else {nil}
         }
+
         this.stats = Stats( config )
+        this.skills = Dictionary()
     }
     
     instantiate : public Function[Entity] ( sim : Ecs, xyArray : Array, team : String ) {
@@ -84,6 +114,7 @@ CpCharacter =& Type {
         entity.add_component( CpAllegiance { "team" : team } )
         entity.add_component( CpPhysicality { position : spawnLocation } )
         entity.add_component( CpVulnerable { health : this.stats.health } )
+        entity.add_component( CpBreakable {} )
         entity.add_component( CpInitiative {} )
         return entity
     }

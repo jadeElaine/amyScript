@@ -6,7 +6,8 @@ actors =& mutable Dictionary()
 #Injected component function
 bouncerRenderFunction =& Function( sc : Scene ) {
 
-    sizeGuide =& graphics.get_resolution().x/10;
+    #sizeGuide =& Integer( Real(graphics.get_resolution().x) * this.CpCharacter.scale / 10.0 )
+    sizeGuide =& round(graphics.get_resolution().x * this.CpCharacter.scale / 10.0)
     s_shadow =& IntegerVector2D( sizeGuide/3, sizeGuide/5 )
     s_char =& IntegerVector2D( sizeGuide, sizeGuide )
 

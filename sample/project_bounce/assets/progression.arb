@@ -22,4 +22,8 @@ battlefields
         { type slime position < 0.62 0.25 > }
         { type slime position < 0.6 0.75 > }
     >
+
+    fightFrogBoss <
+        { type bossFrog position < 0.3 0.5 > }
+    >
 }

@@ -18,6 +18,10 @@ Scene(Select) {
         {
             stage_battle( fight2 )
         }
+        if( input.press( "f" ) )
+        {
+            stage_battle( fightFrogBoss )
+        }
         
         return true
     },
@@ -29,5 +33,6 @@ Scene(Select) {
         y =& mutable Integer(40)
         graphics.print( 20, y += 20, "\"1\" - first battle", colors.white )
         graphics.print( 20, y += 20, "\"2\" - second battle", colors.white )
+        graphics.print( 20, y += 20, "\"F\" - frog battle", colors.white )
     }
 }

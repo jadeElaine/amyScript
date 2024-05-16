@@ -1,46 +1,86 @@
 red
 {
     name Red
-    color red imageHeightAdjust .025
+    color red scale 1.0 imageHeightAdjust .025
+    images { stand red_stand lift red_lift impact red_aaaa }
     health 100
     initiative 200
     weight 800 defense 100 heal 0
     strength 130 damage 1000 aoe 25 knockback 25
+    impact_element red
+    break_element none break_turns 0 break_count 0
+    skills { lift { cooldown 0 useable always } }
 }
 yellow
 {
     name Yellow
-    color yellow imageHeightAdjust .025
+    color yellow scale 1.0 imageHeightAdjust .025
+    images { stand yellow_stand lift yellow_lift impact yellow_aaaa }
     health 100
     initiative 120
     weight 240 defense 85 heal 0
     strength 100 damage 800 aoe 5 knockback 5
+    impact_element yellow
+    break_element none break_turns 0 break_count 0
+    skills { lift { cooldown 0 useable always } }
 }
 black
 {
     name Black
-    color black imageHeightAdjust .025
+    color black scale 1.0 imageHeightAdjust .025
+    images { stand black_stand lift black_lift impact black_aaaa }
     health 100
     initiative 80
     weight 1200 defense 110 heal 0
     strength 250 damage 1600 aoe 10 knockback 10
+    impact_element black
+    break_element none break_turns 0 break_count 0
+    skills { lift { cooldown 0 useable always } }
 }
 white
 {
     name White
-    color white imageHeightAdjust .025
+    color white scale 1.0 imageHeightAdjust .025
+    images { stand white_stand lift white_lift impact white_aaaa }
     health 100
     initiative 120
     weight 500 defense 125 heal 40
     strength 100 damage 250 aoe 14 knockback 5
+    impact_element white
+    break_element none break_turns 0 break_count 0
+    skills { lift { cooldown 0 useable always } }
 }
 
 slime
 {
     name Slime
-    color purple imageHeightAdjust .1
+    color purple scale 1.0 imageHeightAdjust .1
+    images { stand slime_stand lift slime_lift impact slime_aaaa }
     health 100
     initiative 50
     weight 400 defense 25 heal 0
     strength 100 damage 1000 aoe 10 knockback 10
+    impact_element none
+    break_element none break_turns 0 break_count 0
+    skills { lift { cooldown 0 useable always } }
+}
+
+bossFrog
+{
+    name Frog
+    color green scale 2.0 imageHeightAdjust 0.1
+    images {
+        stand slime_white_stand
+        lift slime_white_lift
+        impact slime_white_aaaa
+        break_stand slime_red_stand
+        break_impact slime_red_aaaa
+    }
+    health 600
+    initiative 75
+    weight 2000 defense 100 heal 0
+    strength 100 damage 1000 aoe 25 knockback 5
+    impact_element none
+    break_element black break_turns 1 break_count 1
+    skills { vommit { cooldown 2 useable unbroken child slime } }
 }
